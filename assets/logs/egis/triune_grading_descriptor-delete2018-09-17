@@ -1,0 +1,6 @@
+INSERT INTO triune_grading_descriptor VALUES (7, '70', '74', 'Did Not Meet Expectations', 'FAILED', 'rdlagdaan', '2018-09-17 11:02:03');
+INSERT INTO triune_grading_descriptor VALUES (, '', '', '', '', 'rdlagdaan', '2018-09-17 11:06:05');
+INSERT INTO triune_grading_descriptor VALUES (18, '', '', '', '', 'rdlagdaan', '2018-09-17 11:06:09');
+INSERT INTO triune_grading_descriptor VALUES (19, '', '', '', '', 'rdlagdaan', '2018-09-17 11:06:14');
+INSERT INTO triune_grading_descriptor VALUES (30, '', '', '', '', 'rdlagdaan', '2018-09-17 11:06:17');
+INSERT INTO triune_grading_descriptor VALUES (29, '', '', '', '', 'rdlagdaan', '2018-09-17 11:06:20');

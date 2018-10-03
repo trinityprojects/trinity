@@ -1,0 +1,8 @@
+INSERT INTO triune_queue_number VALUES (87, 'IDSys', '2009300672', '0', 'SYSGEN', '2018-07-16 06:15:33');
+INSERT INTO triune_queue_number VALUES (88, 'IDSys', '2009300673', '0', 'SYSGEN', '2018-07-16 06:16:20');
+INSERT INTO triune_queue_number VALUES (89, 'IDSys', '2010300111', '0', 'SYSGEN', '2018-07-16 06:16:46');
+INSERT INTO triune_queue_number VALUES (90, 'IDSys', '2009300123', '0', 'SYSGEN', '2018-07-16 06:17:24');
+INSERT INTO triune_queue_number VALUES (91, 'IDSys', '2010300111', '0', 'SYSGEN', '2018-07-16 06:24:57');
+INSERT INTO triune_queue_number VALUES (92, 'IDSys', '2010300123', '0', 'SYSGEN', '2018-07-16 06:26:54');
+INSERT INTO triune_queue_number VALUES (93, 'IDSys', '2010300155', '0', 'SYSGEN', '2018-07-16 06:28:02');
+INSERT INTO triune_queue_number VALUES (94, 'IDSys', '2012300115', '0', 'SYSGEN', '2018-07-16 06:35:55');

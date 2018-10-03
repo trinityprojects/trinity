@@ -1,0 +1,74 @@
+#dialogoverlay{
+	display: none;
+	opacity: .8;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: rgb(201, 198, 198);
+	width: 100%;
+	z-index: 10;
+}
+#dialogbox{
+	display: none;
+	position: fixed;
+	background: #008000;
+	border-radius:7px; 
+	width:1000px;
+	z-index: 55;
+}
+#dialogbox > div{ background:#FFF; margin:5px; }
+#dialogbox > div > #dialogboxhead{ background: rgb(250, 252, 250); font-size:15px; padding:10px; color:#000000; }
+#dialogbox > div > #dialogboxbody{ background: #006400; padding:10px; color:#FFF; }
+#dialogbox > div > #dialogboxfoot{ background: rgb(250, 252, 250); padding:5px; text-align:right; }
+
+
+
+#dialogoverlay-small{
+	display: none;
+	opacity: .8;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: #FFF;
+	width: 100%;
+	z-index: 10;
+}
+#dialogbox-small{
+	display: none;
+	position: fixed;
+	background: #008000;
+	border-radius:7px; 
+	width:550px;
+	z-index: 10;
+}
+#dialogbox-small > div{ background:#FFF; margin:5px; }
+#dialogbox-small > div > #dialogboxhead-small{ background: rgb(250, 252, 250); font-size:15px; padding:5px; color:#000000; }
+#dialogbox-small > div > #dialogboxbody-small{ background: #006400; padding:10px; color:#FFF; }
+#dialogbox-small > div > #dialogboxfoot-small{ background: rgb(250, 252, 250); padding:5px; text-align:right; }
+
+
+
+#dialogoverlay-long{
+	display: none;
+	opacity: .8;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: #FFF;
+	width: 100%;
+	z-index: 1000;
+}
+#dialogbox-long{
+	display: none;
+	position: fixed;
+	background: #008000;
+	border-radius:7px; 
+	width:1500px;
+	z-index: 1000;
+}
+#dialogbox-long > div{ background:#FFF; margin:5px; }
+#dialogbox-long > div > #dialogboxhead-long{ background: rgb(250, 252, 250); font-size:15px; padding:5px; color:#000000; }
+#dialogbox-long > div > #dialogboxbody-long{ background: #006400; padding:10px; color:#FFF; }
+#dialogbox-long > div > #dialogboxfoot-long{ background: rgb(250, 252, 250); padding:5px; text-align:right; }
+
+

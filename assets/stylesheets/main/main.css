@@ -1,0 +1,92 @@
+/*------------------------------------------------------------------
+AUTHOR: Randy D. Lagdaan
+DESCIPTION: TRINITY - Integrated system for all university processess
+MATERIAL: Main Cascading Style Sheet for TRINITY
+DATE CREATED: June 06, 2018
+DATE UPDATED: June 06, 2018
+--------------------------------------------------------------------*/
+
+*,
+*:before,
+*:after{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial;
+}
+
+
+.container{
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#content{
+    background-color: rgb(128, 150, 128);
+    padding: 1px;
+    margin-left: 255px;
+    min-height: 2000px;
+}
+
+#sticky-sidebar-demo{
+    float: left;
+    width: 245px;
+    color: #0a6625;
+    will-change: min-height;
+}
+
+#sticky-sidebar-demo .sidebar__inner{
+    background-color: lightgray;
+    padding: 2px;
+    position: relative;
+    transform: translate(0, 0);
+    transform: translate3d(0, 0, 0);
+    will-change: position, transform;
+}
+
+div.separator {
+    line-height: 200%;
+}
+
+.topright {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 18px;
+}
+
+.topleft {
+    position: absolute;
+    top: 60px;
+    left: 2px;
+    font-size: 18px;
+}
+
+.button {
+	background-color: darkgreen;
+	border: none;
+	color: white;
+	padding: 5px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	margin: 4px 2px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.button:hover {
+	background-color: white;
+	border: none;
+	color: darkgreen;
+	padding: 5px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	margin: 4px 2px;
+	cursor: pointer;
+	font-weight: bold;
+}

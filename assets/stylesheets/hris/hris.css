@@ -1,0 +1,106 @@
+*{
+	font-family: verdana;
+	/* font-size: 20%; */
+}
+
+.theme-table {
+    border:1px solid black;
+    table-layout: fixed;
+    background:url(image/bg5.png)center center;
+    background-size: cover;
+		border-spacing: 10px;
+}
+
+.detail-table {
+    border: .5px solid grey;
+}
+
+img {
+	border:4px solid #003918;
+	width:150px;
+	height:150px;
+	margin: 5px;
+}
+
+td {
+	padding: 4px;
+	font-size: 12px;
+}
+
+td.sheet:nth-child(2) {
+    font-weight: bold;
+	font-size: 15px;
+	
+}
+
+td.sheet:nth-child(4) {
+    font-weight: bold;
+	font-size: 15px;
+	
+}
+
+td.sheet-large {
+    font-weight: bold;
+	font-size: 25px;
+	color: red;
+	text-align: center;
+	
+}
+
+div#bottom-right {
+  position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    background-color: green;
+    border: 2px solid #4CAF50;}
+
+
+
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+
+.three-column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+
+
+.three-column-60 {
+    float: left;
+    width: 60%;
+    padding: 5px;
+}
+
+.three-column-20 {
+    float: left;
+    width: 20%;
+    padding: 5px;
+}
+
+.three-column-30 {
+    float: left;
+    width: 30%;
+    padding: 5px;
+}
+
+.three-column-40 {
+    float: left;
+    width: 40%;
+    padding: 5px;
+}
+
+.three-column-50 {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}

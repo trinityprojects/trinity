@@ -1,0 +1,2 @@
+UPDATE triune_grading_descriptor SET lowerScale = '80', higherScale = '84', descriptor = 'Satisfactory7', remarks = 'PASSED' WHERE ID = 5
+UPDATE triune_grading_descriptor SET lowerScale = '80', higherScale = '84', descriptor = 'Satisfactory', remarks = 'PASSED' WHERE ID = 5

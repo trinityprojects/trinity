@@ -1,0 +1,295 @@
+/*------------------------------------------------------------------
+AUTHOR: Randy D. Lagdaan
+DESCIPTION: TRINITY - Integrated system for all university processess
+MATERIAL: Main Cascading Style Sheet for TRIUNE
+DATE CREATED: May 27, 2018
+DATE UPDATED: May 27, 2018
+--------------------------------------------------------------------*/
+
+/* addedd css codes by Laudit, Prime */
+* {
+  font-family: Verdana;
+}
+
+.col-12.row-space-25 {
+  height: 60px;
+}
+
+h3, h2 {
+  font-weight: bold;
+}
+
+/* spacing between input textboxes */
+.input-group {
+  margin-bottom: -10px;
+}
+/* spacing between input textboxes */
+
+body {
+  background-color: #ffffff;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 100%;
+  height: auto;
+}
+
+/* spacing between input textboxes */
+input[type=text] {
+  margin-bottom: -10px;
+}
+/* spacing between input textboxes */
+
+.social-media {
+  float: right;
+}
+
+.btn {
+  background-color: #003918;
+}
+
+.btn:hover {
+  background-color: #198c19;
+}
+/* addedd css codes by Laudit, Prime */
+
+div.top-header
+{
+    height: 50px;
+    background-color: #003918; /* background-color changed from #006400 to #003918 by Laudit, Prime */
+}
+
+div.row-space-100 {
+  height: 90px;
+}
+
+div.row-space-50 {
+    height: 50px;
+}
+
+div.row-space-25 {
+    height: 25px
+}
+
+div.footer {
+    text-align: left; /* added css code by Laudit, Prime */
+    padding: 10px 10px 20px 20px;
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 11px;
+    font-style: italic;
+    background-color: #003918; /* background-color changed from #006400 to #003918 by Laudit, Prime */
+    color: white
+}
+
+div.footer  p  {
+    font-size: 13px;
+    font-style: normal;
+}
+
+div.footer  p  em {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: bold
+}
+
+div.form-panel {
+    box-shadow: 10px 10px 5px #747474; /* changed shadow color from grey to #747474 */
+    padding-bottom: 20px;
+    padding-top: 20px;
+    height: 100%;
+    background-color: #d0f0c0; /* background-color changed from #FFF5EE to #e5e5e5 by Laudit, Prime */
+    border-radius: 10px;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+
+div.form-panel-left {
+    background-repeat: no-repeat;
+    background-size: 70% 100%;
+    background-position: center;
+}
+
+h3 > em#capitalize {
+    text-transform: uppercase;
+    font-style: normal
+}
+
+div#error-messages {
+    color:red;
+    font-size:.8em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+
+img.progressImageRight {
+    height: 5%;
+    width: 5%;
+    display:none
+}
+
+i.textBoxMessageAvailableMd {
+    display:none;
+    color:green;
+    padding: .5em;
+    font-size:.7em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+i.textBoxMessageNotAvailableMd {
+    display:none;
+    color:red;
+    padding: .5em;
+    font-size:.7em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+b.jQueryFormValidationMessage {
+    color:red;
+    padding: 1em;
+    font-size:.7em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#bottom-right {
+    position: absolute;
+    bottom: 1px;
+    right: 16px;
+}
+
+#bottom-center {
+    position: absolute;
+    bottom: 75px;
+    text-align: center;
+}
+
+div > em#error-messages {
+    color:red;
+    font-size:.8em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+
+input[type="radio"] {
+    margin-left: auto;
+    background-color: #eee;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+}
+
+label#radio-label {
+    font-size: 12px;
+    font-weight: bold
+}
+
+div#employee-input {
+    display:none;
+}
+
+
+div#guest-input {
+    display:none;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 60%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.navbar-custom {
+    background-color: #006400;
+}
+
+/* change the brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: rgba(255,255,255,.8);
+}
+
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: rgba(255,255,255,.5);
+}
+
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+    color: #ffffff;
+}
+
+/* for dropdown only - change the color of droodown */
+.navbar-custom .dropdown-menu {
+    background-color: #96e296;
+}
+.navbar-custom .dropdown-item {
+    color: #ffffff;
+}
+.navbar-custom .dropdown-item:hover,
+.navbar-custom .dropdown-item:focus {
+    color: #333333;
+    background-color: rgba(255,255,255,.5);
+}

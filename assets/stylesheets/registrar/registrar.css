@@ -1,0 +1,521 @@
+/*------------------------------------------------------------------
+AUTHOR: Randy D. Lagdaan
+DESCIPTION: TRIUNE - Integrated system for all university processess
+MATERIAL: Main Cascading Style Sheet for TRIUNE
+DATE CREATED: June 05, 2018
+DATE UPDATED: June 05, 2018
+--------------------------------------------------------------------*/
+/* Create three equal columns that floats next to each other */
+.three-column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+
+
+.three-column-60 {
+    float: left;
+    width: 60%;
+    padding: 5px;
+}
+
+.three-column-20 {
+    float: left;
+    width: 20%;
+    padding: 5px;
+}
+
+.three-column-30 {
+    float: left;
+    width: 30%;
+    padding: 5px;
+}
+
+.three-column-40 {
+    float: left;
+    width: 40%;
+    padding: 5px;
+}
+
+.three-column-50 {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
+/* Create three equal columns that floats next to each other */
+.two-column {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
+
+
+/* Create three equal columns that floats next to each other */
+.two-column-30 {
+    float: left;
+    width: 30%;
+    padding: 2px;
+}
+
+/* Create three equal columns that floats next to each other */
+.two-column-70 {
+    float: left;
+    width: 70%;
+    padding: 2px;
+}
+
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}
+
+.textbox-confirmation {
+    width: 100%;
+    padding: 2px 2px;
+    border: 2px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+textarea.confirmation {
+    width: 100%;
+    height: 100px;
+    padding: 2px 2px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    
+}
+
+
+textarea.autoExpand {  
+  /* box-sizing: padding-box; */
+  overflow:hidden;
+  /* demo only: */
+  padding:5px;
+  width:70%;
+  font-size:12px;
+  border-radius:10px;
+  border:1px solid #556677;
+  background-color: #e7e4e4;
+
+  }
+
+ textarea.autoExpandWhite {  
+  /* box-sizing: padding-box; */
+  overflow:hidden;
+  /* demo only: */
+  padding:5px;
+  width:70%;
+  font-size:12px;
+  border-radius:10px;
+  border:1px solid #556677;
+  background-color: white;
+
+  } 
+  
+.label {
+    padding: 5px 5px;
+    border: 2px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #73AD21;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 1.2em;
+    background-color: darkgreen;
+    color: white;
+
+}
+
+/* Create three equal columns that floats next to each other */
+.col-25 {
+    float: left;
+    width: 25%;
+    border: .1em solid black;
+}
+
+.col-50 {
+    float: left;
+    width: 50%;
+    border: .1em solid black;
+}
+
+.col-20 {
+    float: left;
+    width: 20%;
+    border: .1em solid black;
+}
+
+
+.col-60 {
+    float: left;
+    width: 60%;
+    border: .1em solid black;
+    
+}
+
+.col-40 {
+    float: left;
+    width: 40%;
+    border: .1em solid black;
+    
+}
+
+
+.col-70 {
+    float: left;
+    width: 70%;
+    border: .1em solid black;
+    
+}
+
+.col-30 {
+    float: left;
+    width: 30%;
+    border: .1em solid black;
+    
+}
+
+.col-100 {
+    float: left;
+    width: 100%;
+    border: .1em solid black;
+}
+
+
+.row-header {
+    font-family: Verdana, Geneva, sans-serif;
+    background-color: white;
+    padding: 2px;
+}
+.row-details {
+    font-family: Verdana, Geneva, sans-serif;
+    background-color: white;
+    padding: 2px;
+
+}
+
+.panel-group {
+    overflow: hidden;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+    background-color: white;
+    color: black;
+    border: 2px solid darkgreen;
+    padding: 5px;
+}
+
+.panel-label {
+    float:left;
+    font-size: 10px;
+    font-family: Arial, Tahoma, sans-serif;
+    font-weight: bold;
+    padding: 1px 5px 1px 1px
+    
+
+}
+
+.panel-detail {
+    font-size: 12px;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 5px 1px 1px 1px
+}
+
+
+
+input#autocomplete { 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1.02em; 
+    border-radius: 0 !important;
+}
+
+div.materials-estimate {
+    padding: 0 10px 0 10px;
+}
+
+#basic-btn {
+    color: white;
+    background: #006400;
+    padding: 5px 5px;
+    display: inline;
+    margin: 5px 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+}
+ 
+#basic-btn:hover {
+    background: #90EE90;
+    text-decoration: none
+}
+
+
+#basic-btn-delete {
+    color: white;
+    background: #aa0404;
+    padding: 5px 5px;
+    display: inline;
+    margin: 5px 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+}
+ 
+#basic-btn-delete:hover {
+    background: rgb(238, 149, 149);
+    text-decoration: none
+}
+
+
+#basic-btn-add {
+    color: white;
+    background: #2504b6;
+    padding: 5px 5px;
+    display: inline;
+    margin: 5px 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+}
+ 
+#basic-btn-add:hover {
+    background: rgb(154, 144, 245);
+    text-decoration: none
+}
+
+.icon-small {
+    height: 5%;
+    width: 5%;
+    display:none    
+}
+
+#message-author {  
+  font-size:12px;
+  font-weight: bold;
+  color: blue;
+  }
+
+#message {  
+  /* box-sizing: padding-box; */
+  display:block;
+  /* demo only: */
+  padding:3px;
+  width:100%;
+  font-size:12px;
+  border-radius:10px;
+  border: #556677;
+  background-color: #e7e4e4;
+
+  }
+  
+  
+  
+  
+body {
+  font-family: Verdana, sans-serif;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.row > .column {
+  padding: 0 8px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column {
+  float: left;
+  width: 25%;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 90%;
+  max-width: 1200px;
+  height: 80%
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mySlides {
+  display: none;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+img {
+  margin-bottom: -4px;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}  
+
+
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    transition: 0.3s;
+    font-size: 12px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+.tabcontentEstimates {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}

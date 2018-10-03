@@ -1,0 +1,3 @@
+INSERT INTO triune_transmutation_k12 VALUES (65, '11.20', '22.19', '71.00', 'rdlagdaan', '2018-10-02 06:35:10');
+INSERT INTO triune_transmutation_k12 VALUES (66, '0.00', '11.19', '70.00', 'rdlagdaan', '2018-10-02 06:35:18');
+INSERT INTO triune_transmutation_k12 VALUES (64, '22.20', '33.19', '72.00', 'rdlagdaan', '2018-10-02 06:35:30');

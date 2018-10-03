@@ -1,0 +1,110 @@
+Course List
+SELECT DISTINCT
+triune_section_senior_high.courseCode
+FROM
+triune_section_senior_high
+WHERE
+triune_section_senior_high.sy = '1819' AND
+triune_section_senior_high.sem = 'A'
+
+
+section List lookup
+SELECT DISTINCT
+triune_section_senior_high.sectionCode
+FROM
+triune_section_senior_high
+WHERE
+triune_section_senior_high.sy = '1819' AND
+triune_section_senior_high.sem = 'A' AND
+triune_section_senior_high.courseCode = '1005ABM'
+
+
+
+
+List of Students By Course
+
+SELECT DISTINCT
+triune_student_roster_senior_high.studentNumber,
+triune_students_k12.lastName,
+triune_students_k12.firstName,
+triune_students_k12.middleName,
+triune_student_roster_senior_high.sectionCode
+FROM
+triune_student_roster_senior_high
+INNER JOIN triune_students_k12 ON triune_student_roster_senior_high.studentNumber = triune_students_k12.studentNumber
+WHERE
+triune_student_roster_senior_high.courseCode = '1005ABM'
+
+
+
+
+
+Course List Elementary
+SELECT DISTINCT
+triune_section_elementary.courseCode,
+triune_section_elementary.yearLevel
+FROM
+triune_section_elementary
+WHERE
+triune_section_elementary.sy = '1819'
+
+
+Section List LookUp
+SELECT DISTINCT
+triune_section_elementary.sectionCode
+FROM
+triune_section_elementary
+WHERE
+triune_section_elementary.sy = '1819' AND
+triune_section_elementary.yearLevel = '5'
+
+
+List of Students by level
+SELECT DISTINCT
+triune_students_k12.studentNumber,
+triune_students_k12.lastName,
+triune_students_k12.firstName,
+triune_students_k12.middleName,
+triune_student_roster_elementary.sectionCode
+FROM
+triune_student_roster_elementary
+INNER JOIN triune_students_k12 ON triune_student_roster_elementary.studentNumber = triune_students_k12.studentNumber
+WHERE
+SUBSTR(triune_student_roster_elementary.sectionCode, 6, 1) = '6'
+
+
+Junior High List
+SELECT DISTINCT
+triune_section_junior_high.courseCode,
+triune_section_junior_high.yearLevel
+FROM
+triune_section_junior_high
+WHERE
+triune_section_junior_high.sy = '1819'
+
+Section List Lookup
+SELECT DISTINCT
+triune_section_junior_high.sectionCode
+FROM
+triune_section_junior_high
+WHERE
+triune_section_junior_high.sy = '1819' AND
+triune_section_junior_high.yearLevel = '1'
+
+
+List of Students By Level
+SELECT DISTINCT
+triune_students_k12.studentNumber,
+triune_students_k12.lastName,
+triune_students_k12.firstName,
+triune_students_k12.middleName,
+triune_student_roster_junior_high.sectionCode
+FROM
+triune_student_roster_junior_high
+INNER JOIN triune_students_k12 ON triune_student_roster_junior_high.studentNumber = triune_students_k12.studentNumber
+WHERE
+SUBSTR(triune_student_roster_junior_high.sectionCode, 6, 1) = '1'
+ORDER BY
+triune_student_roster_junior_high.sectionCode ASC,
+triune_students_k12.lastName ASC,
+triune_students_k12.firstName ASC

@@ -1,0 +1,15 @@
+{
+    "name": "rdlagdaan/mytriune",
+    "description": "triune application",
+    "type": "project",
+    "license": "GPL 3.o",
+    "authors": [
+        {
+            "name": "Randy Lagdaan",
+            "email": "rdlagdaan@gmail.com"
+        }
+    ],
+    "require": {
+        "nexmo/client": "^1.3"
+    }
+}
