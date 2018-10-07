@@ -69,52 +69,6 @@ class trinityDataRegistrar extends MY_Controller {
 			echo json_encode($result);
     }
 
-
-    public function getAllStudentK12ListREGISTRAR() {
-			
-		$post = $this->input->post();  
-		$clean = $this->security->xss_clean($post);
-		
-		$page = isset($clean['page']) ? intval($clean['page']) : 1;
-		$rows = isset($clean['rows']) ? intval($clean['rows']) : 10;
-		$lastName = isset($clean['lastName']) ? $clean['lastName'] : '';
-		$firstName = isset($clean['firstName']) ? $clean['firstName'] : '';
-		$currentDepartment = isset($clean['currentDepartment']) ? $clean['currentDepartment'] : '';
-		$active = isset($clean['active']) ? $clean['active'] : '';
-
-		
-		$offset = ($page-1)*$rows;
-		$result = array();
-		$whereSpcl = "triune_students_k12.lastName like '$lastName%'";
-		$whereSpcl = $whereSpcl . " and triune_students_k12.firstName like '$firstName%'";
-	 
-
-
-		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'), 
-			$tables = array('triune_students_k12'), $fieldName = null, $where = null, $join = null, $joinType = null, 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
-			$whereSpecial = array($whereSpcl), $groupBy = null );
-
-			//$row = mysql_fetch_row($results);
-			$result["total"] = intval($results[0]->totalRecs);
-
-			$results = $this->_getRecordsData($data = array('*'), 
-			$tables = array('triune_students_k12'), 
-			$fieldName = null, $where = null, 
-			$join = null, 
-			$joinType =null, 
-			$sortBy = array('lastName', 'firstName'), $sortOrder = array('asc', 'asc'), 
-			$limit = array($rows, $offset), 
-			$fieldNameLike = null, $like = null, 
-			$whereSpecial = array($whereSpcl), $groupBy = null );
-			
-			$result["rows"] = $results;
-
-			echo json_encode($result);
-    }
-	
-	
 	
 	
 }

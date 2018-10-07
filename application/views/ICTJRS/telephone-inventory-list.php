@@ -6,12 +6,12 @@
 
 
     
-    <table id="dg" class="easyui-datagrid" title="LCD Inventory" style="width:100%;height:450px"
+    <table id="dg" class="easyui-datagrid" title="Telephone Inventory" style="width:100%;height:450px"
             data-options="
                 iconCls: 'icon-edit',
                 singleSelect: true,
                 toolbar: '#tb',
-                url: 'getLCDInventoryICTJRS',
+                url: 'getTelephoneInventoryICTJRS',
                 method: 'get',
                 onClickCell: onClickCell,
                 onEndEdit: onEndEdit
@@ -36,12 +36,8 @@
 								}
 							}">Room Number</th>
 							
-				<th data-options="field:'projectorBrand',width:150,editor:'textbox'">Brand</th>  
-				<th data-options="field:'projectorModel',width:150,editor:'textbox'">Model</th>  
-				<th data-options="field:'projectorLampLimit',width:100,editor:{type:'numberbox',options:{precision:0}}">Lamp Limit</th>  
-				<th data-options="field:'projectorLampCounter',width:100,editor:{type:'numberbox',options:{precision:0}}">Lamp Counter</th>  
-				<th data-options="field:'screenBrand',width:100,editor:'textbox'">Screen Brand</th>  
-				<th data-options="field:'notes',width:350,editor:'textbox'">Notes</th>  
+				<th data-options="field:'phoneUser',width:250,editor:'textbox'">Phone User</th>  
+				<th data-options="field:'phoneNumber',width:150,editor:'textbox'">Phone Number</th>  
 				
 			</tr>
         </thead>
@@ -159,15 +155,11 @@
 		
 		function addRecord(row) {
 			jQuery.ajax({
-				url: "insertLCDInventoryICTJRS",
+				url: "insertTelephoneInventoryICTJRS",
 				data: { 
 					'roomNumber': row.roomNumber, 
-					'projectorBrand': row.projectorBrand, 
-					'projectorModel': row.projectorModel, 
-					'projectorLampLimit': row.projectorLampLimit, 
-					'projectorLampCounter': row.projectorLampCounter, 
-					'screenBrand': row.screenBrand, 
-					'notes': row.notes, 
+					'phoneUser': row.phoneUser, 
+					'phoneNumber': row.phoneNumber, 
 				},
 				type: "POST",
 				success:function(data){
@@ -186,17 +178,12 @@
 		
 		function updateRecord(row) {
 			jQuery.ajax({
-				url: "updateLCDInventoryICTJRS",
+				url: "updateTelephoneInventoryICTJRS",
 				data: { 
 					'ID': row.ID, 
 					'roomNumber': row.roomNumber, 
-					'projectorBrand': row.projectorBrand, 
-					'projectorModel': row.projectorModel, 
-					'projectorLampLimit': row.projectorLampLimit, 
-					'projectorLampCounter': row.projectorLampCounter, 
-					'screenBrand': row.screenBrand, 
-					'notes': row.notes, 
-					
+					'phoneUser': row.phoneUser, 
+					'phoneNumber': row.phoneNumber, 
 				},
 				type: "POST",
 				success:function(data){
@@ -216,7 +203,7 @@
 		function deleteRecord(ID) {
 			//alert(employeeNumber + departmentCode + designationDescription);
 			jQuery.ajax({
-				url: "deleteLCDInventoryICTJRS",
+				url: "deleteTelephoneInventoryICTJRS",
 				data: { 
 					'ID': ID, 
 				},

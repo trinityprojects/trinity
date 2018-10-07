@@ -6,12 +6,12 @@
 
 
     
-    <table id="dg" class="easyui-datagrid" title="LCD Inventory" style="width:100%;height:450px"
+    <table id="dg" class="easyui-datagrid" title="CCTV Inventory" style="width:100%;height:450px"
             data-options="
                 iconCls: 'icon-edit',
                 singleSelect: true,
                 toolbar: '#tb',
-                url: 'getLCDInventoryICTJRS',
+                url: 'getWiFiInventoryICTJRS',
                 method: 'get',
                 onClickCell: onClickCell,
                 onEndEdit: onEndEdit
@@ -19,29 +19,16 @@
         <thead>
             <tr>
 				<th data-options="field:'ID',width:50">ID</th>			
-					<th data-options="field:'locationCode',width:100">Location</th>  
-					<th data-options="field:'floor',width:50">floor</th>  
-					<th data-options="field:'roomNumber',width:250,
-							formatter:function(value,row){
-								return row.roomNumber;
-							},
-							editor:{
-								type:'combobox',
-								options:{
-									valueField:'roomNumber',
-									textField:'roomNumber',
-									method:'get',
-									url:'getRoomsTBAMIMS',
-									required:true
-								}
-							}">Room Number</th>
-							
-				<th data-options="field:'projectorBrand',width:150,editor:'textbox'">Brand</th>  
-				<th data-options="field:'projectorModel',width:150,editor:'textbox'">Model</th>  
-				<th data-options="field:'projectorLampLimit',width:100,editor:{type:'numberbox',options:{precision:0}}">Lamp Limit</th>  
-				<th data-options="field:'projectorLampCounter',width:100,editor:{type:'numberbox',options:{precision:0}}">Lamp Counter</th>  
-				<th data-options="field:'screenBrand',width:100,editor:'textbox'">Screen Brand</th>  
-				<th data-options="field:'notes',width:350,editor:'textbox'">Notes</th>  
+				<th data-options="field:'jurisdiction',width:100,editor:'textbox'">Jurisdiction</th>  
+				<th data-options="field:'location',width:250,editor:'textbox'">Location</th>  
+				<th data-options="field:'floor',width:50,editor:'textbox'">Floor</th>  
+				<th data-options="field:'wifiName',width:200,editor:'textbox'">Name</th>  
+				<th data-options="field:'serialNumber',width:150,editor:'textbox'">Serial Number</th>  
+				<th data-options="field:'status',width:50,editor:'textbox'">Status</th>  
+				<th data-options="field:'iPAddress',width:100,editor:'textbox'">IP Address</th>  
+				<th data-options="field:'model',width:150,editor:'textbox'">Model</th>  
+
+
 				
 			</tr>
         </thead>
@@ -159,15 +146,16 @@
 		
 		function addRecord(row) {
 			jQuery.ajax({
-				url: "insertLCDInventoryICTJRS",
+				url: "insertWIFIInventoryICTJRS",
 				data: { 
-					'roomNumber': row.roomNumber, 
-					'projectorBrand': row.projectorBrand, 
-					'projectorModel': row.projectorModel, 
-					'projectorLampLimit': row.projectorLampLimit, 
-					'projectorLampCounter': row.projectorLampCounter, 
-					'screenBrand': row.screenBrand, 
-					'notes': row.notes, 
+					'location': row.location, 
+					'floor': row.floor, 
+					'wifiName': row.wifiName, 
+					'serialNumber': row.serialNumber, 
+					'status': row.status, 
+					'iPAddress': row.iPAddress, 
+					'model': row.model, 
+					'jurisdiction': row.jurisdiction, 
 				},
 				type: "POST",
 				success:function(data){
@@ -186,16 +174,17 @@
 		
 		function updateRecord(row) {
 			jQuery.ajax({
-				url: "updateLCDInventoryICTJRS",
+				url: "updateWIFIInventoryICTJRS",
 				data: { 
 					'ID': row.ID, 
-					'roomNumber': row.roomNumber, 
-					'projectorBrand': row.projectorBrand, 
-					'projectorModel': row.projectorModel, 
-					'projectorLampLimit': row.projectorLampLimit, 
-					'projectorLampCounter': row.projectorLampCounter, 
-					'screenBrand': row.screenBrand, 
-					'notes': row.notes, 
+					'location': row.location, 
+					'floor': row.floor, 
+					'wifiName': row.wifiName, 
+					'serialNumber': row.serialNumber, 
+					'status': row.status, 
+					'iPAddress': row.iPAddress, 
+					'model': row.model, 
+					'jurisdiction': row.jurisdiction, 
 					
 				},
 				type: "POST",
@@ -216,7 +205,7 @@
 		function deleteRecord(ID) {
 			//alert(employeeNumber + departmentCode + designationDescription);
 			jQuery.ajax({
-				url: "deleteLCDInventoryICTJRS",
+				url: "deleteWIFIInventoryICTJRS",
 				data: { 
 					'ID': ID, 
 				},

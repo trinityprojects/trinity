@@ -38,11 +38,5 @@ class trinityREGISTRAR extends MY_Controller {
         //echo "HELLO WORLD";
         $this->load->view('REGISTRAR/student-profile-list');
     }	
-
-    public function studentListREGISTRARK12() {
-        //echo "HELLO WORLD";
-        $this->load->view('REGISTRAR/student-profile-k12-list');
-    }	
-
 	
 }

@@ -355,15 +355,15 @@ class trinityAuth extends MY_Controller {
  
                     echo $message; //send this in email
 					
-					//$emailSent = $this->_sendMail($toEmail = $clean['emailAddress'], $subject = "Email Verification of your Trinity Portal registration", $message);
-                    //if(!$emailSent) {
+					$emailSent = $this->_sendMail($toEmail = $clean['emailAddress'], $subject = "Email Verification of your Trinity Portal registration", $message);
+                    if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
                         //echo "HELLO";
-                    //} else {
-                    //    $this->session->set_flashdata('emailSent', '1');
-                    //    redirect(base_url().'user-acct/sign-up');
+                    } else {
+                        $this->session->set_flashdata('emailSent', '1');
+                        redirect(base_url().'user-acct/sign-up');
 
-                    //}
+                    }
 				} else {
 					$this->session->set_flashdata('msg', "The personal information you've typed do not matched with your current records!");
 					redirect(base_url().'user-acct/sign-up');

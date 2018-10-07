@@ -85,7 +85,7 @@ function insertDataViaAJAX(requestSummary, requestDetails, requestType) {
                 $('div.window-mask').remove();
                 $('div.window-shadow').remove();
                 $('div.autocomplete-suggestions').remove();
-                displayRequestNumber(resultValue['ID']);
+                displayRequestNumber(resultValue['ID'], resultValue['requestType'], resultValue['requestSummary']);
                 return true;
             } else {
                 return false;
@@ -96,10 +96,10 @@ function insertDataViaAJAX(requestSummary, requestDetails, requestType) {
 } //function insertDataViaAJAX(requestSummary, requestDetails, requestType)
 
 
-function displayRequestNumber(ID, userName) {
+function displayRequestNumber(ID, requestType, requestSummary) {
     jQuery.ajax({
         url: 'ICTJRS/showCreatedRequest',
-        data: 'ID='+ID,
+        data: 'ID='+ID+'&requestType='+requestType+'&requestSummary='+requestSummary,
         type: "POST",
         success: function(response) {
             $('.levelonecontent').html(response);

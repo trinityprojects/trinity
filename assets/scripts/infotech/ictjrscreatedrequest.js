@@ -163,10 +163,20 @@ $('#ff').click(function(){
             if(!validForm) {
                 return validForm;
             } else {
-				var quantity = $('#quantity').val();
-				var unitCode = $('#unitCode').val();
-				var assetName = $('#assetName').val();
-				checkDataItemsViaAJAX(quantity, unitCode, assetName)
+				var requestType = $('#requestType').val();
+				var itemID = '';
+				
+				if(requestType == 'CCTA') {
+					itemID = $('#location').val();
+				} else if(requestType == 'GSAS') {
+					itemID = $('#requestCategory').val();
+				}
+				
+				alert(itemID);
+				var requestNumber = $('#requestNumber').val();
+				var itemDetails = $('#itemDetails').val();
+				
+				checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails)
             }
 
         }
@@ -176,11 +186,11 @@ $('#ff').click(function(){
 
 
 
-function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
+function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) {
 	
     jQuery.ajax({
-        url: "validateRequestItemsASRS",
-        data:'quantity='+quantity+'&unitCode='+unitCode+'&assetName='+assetName,
+        url: "validateRequestItemsICTJRS",
+        data:'itemID='+itemID+'&requestNumber='+requestNumber+'&requestType='+requestType+'&itemDetails='+itemDetails,
         type: "POST",
         success:function(data){
             console.log(data);
@@ -188,25 +198,16 @@ function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
             if(resultValue['success'] == 1) {
                 clearErrorMessages();
 
-				addItem();
-
+				addItem(resultValue['itemID'], resultValue['requestNumber'], resultValue['requestType'], resultValue['itemDetails'] );
 
             } else {
                 var obj = $.parseJSON(data);
-                var quantity = obj['quantity'];
-                var unitCode = obj['unitCode'];
-                var assetName = obj['assetName'];
-
+                var itemID = obj['itemID'];
+                var requestNumber = obj['requestNumber'];
+                var requestType = obj['requestType'];
+                var itemDetails = obj['itemDetails'];
+				
                 $notExistMessage = '';
-                /*if(quantityNotExist != undefined) {
-                    $notExistMessage =  $notExistMessage + quantityNotExist + "<br>";
-                }
-                if(unitCodeNotExist != undefined) {
-                    $notExistMessage =  $notExistMessage + unitCodeNotExist + "<br>";
-                } 
-                if(assetNameNotExist != undefined) {
-                    $notExistMessage =  $notExistMessage + assetNameNotExist + "<br>";
-                } */
                 $('div#error-messages').html($notExistMessage);
                 return false;
             }
@@ -219,34 +220,32 @@ function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
 
  
  
- 	function addItem() {
-
-		var ID = $('#ID').val();
-		var quantity = $('#quantity').val();
-		var unitCode = $('#unitCode').val();
-		var assetName = $('#assetName').val();
-		var unitCodeText = $('#unitCode').combobox('getText');
-		var assetNameText = $('#assetName').combobox('getText');
+ 	function addItem(itemID, requestNumber, requestType, itemDetails) {
 		jQuery.ajax({
-			url: "insertRequestItemsASRS",
+			url: "insertRequestItemsICTJRS",
 			data: { 
-				'ID': ID, 
-				'quantity': quantity, 
-				'unitCode': unitCode, 
-				'assetName': assetName, 
-				'unitCodeText': unitCodeText, 
-				'assetNameText': assetNameText, 
+				'itemID': itemID, 
+				'requestNumber': requestNumber, 
+				'requestType': requestType, 
+				'itemDetails': itemDetails, 
 			},
 			type: "POST",
 			success:function(data){
 
                 var resultValue = $.parseJSON(data);
                 if(resultValue['success'] == 1) {
-					var ID = resultValue['ID'];
+					var itemID = resultValue['itemID'];
+					var requestNumber = resultValue['requestNumber'];
+					var requestType = resultValue['requestType'];
+					var itemDetails = resultValue['itemDetails'];
+					
 					jQuery.ajax({
-						url: "ASRS/showRequestItemsASRS",
+						url: "ICTJRS/showRequestItemsICTJRS",
 						data: {
-							'ID':ID,
+							'itemID':itemID,
+							'requestNumber':requestNumber,
+							'requestType':requestType,
+							'itemDetails':itemDetails,
 							'accessType': 'readWrite'
 						},
 						type: "POST",

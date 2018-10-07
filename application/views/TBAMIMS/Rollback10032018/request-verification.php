@@ -44,7 +44,7 @@
         <form>
         <div class="panel-group" >                    
 
-            <div class="panel-title" > REQUEST DETAILS: </div>
+            <div class="panel-title" > REQUEST DETAILS: <?php echo $completedFlag; ?></div>
             <div class="row-header">
                 <div class="col-20" >
                     <label class="panel-label">Request Number: </label>
@@ -211,13 +211,6 @@
 								</div>
 							<?php }?>
 						<?php }?>
-						<?php if( ($requestStatus == 'E') ) {?>
-
-								<a href="javascript:void(0)" class="link-btn" onclick="SetFundsStatus.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">SET FUND STATUS</a>
-						
-
-						<?php } ?>
-						
 
                 </div>
             </div>
@@ -828,7 +821,7 @@
                     <div class="col-50" style="height:150%; padding: 10px 10px; text-align: center">
 						<?php if($owner != 1) {?>
 								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Open request #<?php echo $ID?> for Approval','update_request','O')" style="width:80px">Open for Approval</a>
-								<a href="javascript:void(0)" class="link-btn" onclick="Return.render('Return request #<?php echo $ID?> for Closing','return_request','R', 'N')" style="width:80px">Return for Closing</a>
+								<a href="javascript:void(0)" class="link-btn" onclick="Return.render('Return request #<?php echo $ID?> for Closing','return_request','R', '<?php echo $requestStatus; ?>')" style="width:80px">Return for Closing</a>
 						<?php } ?>
 						
 						

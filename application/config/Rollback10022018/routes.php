@@ -170,46 +170,15 @@ $route['ICTJRS/requestCreate'] = 'trinityInfoTech/iCTJRSCreateRequest';
 $route['ICTJRS/setCreateRequestConfirmation'] = 'trinityInfoTech/iCTJRSCreateRequestConfirmation';
 $route['ICTJRS/showCreatedRequest'] = 'trinityInfoTech/iCTJRSCreatedRequest';
 $route['ICTJRS/completedRequest'] = 'trinityInfoTech/completedRequest';
-$route['ICTJRS/workstation'] = 'trinityInfoTech/iCTJRSWorkstationInventory';
-$route['ICTJRS/lcd'] = 'trinityInfoTech/iCTJRSLCDInventory';
-$route['ICTJRS/telephone'] = 'trinityInfoTech/iCTJRSTelephoneInventory';
 
-$route['ICTJRS/cctv'] = 'trinityInfoTech/iCTJRSCCTVInventory';
-$route['ICTJRS/wifi'] = 'trinityInfoTech/iCTJRSWIFIInventory';
-$route['ICTJRS/showRequestItemsICTJRS'] = 'trinityInfoTech/iCTJRSRequestItems'; 
 
 
 $route['validateRequestICTJRS'] = 'trinityDataInfoTech/validateRequestICTJRS'; 
 $route['insertRequestICTJRS'] = 'trinityDataInfoTech/insertRequestICTJRS'; 
-$route['getWorkstationInventoryICTJRS'] = 'trinityDataInfoTech/getWorkstationInventoryICTJRS'; 
-$route['getAllStudentsListREGISTRAR'] = 'trinityDataInfoTech/getAllStudentListREGISTRAR'; 
-$route['insertWorkstationInventoryICTJRS'] = 'trinityDataInfoTech/insertWorkstationInventoryICTJRS'; 
-$route['updateWorkstationInventoryICTJRS'] = 'trinityDataInfoTech/updateWorkstationInventoryICTJRS'; 
-$route['deleteWorkstationInventoryICTJRS'] = 'trinityDataInfoTech/deleteWorkstationInventoryICTJRS'; 
-$route['getLCDInventoryICTJRS'] = 'trinityDataInfoTech/getLCDInventoryICTJRS'; 
-$route['insertLCDInventoryICTJRS'] = 'trinityDataInfoTech/insertLCDInventoryICTJRS'; 
-$route['updateLCDInventoryICTJRS'] = 'trinityDataInfoTech/updateLCDInventoryICTJRS'; 
-$route['deleteLCDInventoryICTJRS'] = 'trinityDataInfoTech/deleteLCDInventoryICTJRS'; 
-$route['getTelephoneInventoryICTJRS'] = 'trinityDataInfoTech/getTelephoneInventoryICTJRS'; 
-$route['insertTelephoneInventoryICTJRS'] = 'trinityDataInfoTech/insertTelephoneInventoryICTJRS'; 
-$route['updateTelephoneInventoryICTJRS'] = 'trinityDataInfoTech/updateTelephoneInventoryICTJRS'; 
-$route['deleteTelephoneInventoryICTJRS'] = 'trinityDataInfoTech/deleteTelephoneInventoryICTJRS'; 
 
-$route['getCCTVInventoryICTJRS'] = 'trinityDataInfoTech/getCCTVInventoryICTJRS'; 
-$route['insertCCTVInventoryICTJRS'] = 'trinityDataInfoTech/insertCCTVInventoryICTJRS'; 
-$route['updateCCTVInventoryICTJRS'] = 'trinityDataInfoTech/updateCCTVInventoryICTJRS'; 
-$route['deleteCCTVInventoryICTJRS'] = 'trinityDataInfoTech/deleteCCTVInventoryICTJRS'; 
 
-$route['getWiFiInventoryICTJRS'] = 'trinityDataInfoTech/getWiFiInventoryICTJRS'; 
-$route['insertWIFIInventoryICTJRS'] = 'trinityDataInfoTech/insertWIFIInventoryICTJRS'; 
-$route['updateWIFIInventoryICTJRS'] = 'trinityDataInfoTech/updateWIFIInventoryICTJRS'; 
-$route['deleteWiFiInventoryICTJRS'] = 'trinityDataInfoTech/deleteWiFiInventoryICTJRS'; 
-$route['validateRequestItemsICTJRS'] = 'trinityDataInfoTech/validateRequestItemsICTJRS'; 
-$route['insertRequestItemsICTJRS'] = 'trinityDataInfoTech/insertRequestItemsICTJRS'; 
-$route['showRequestItemsICTJRS'] = 'trinityDataInfoTech/showRequestItemsICTJRS'; 
 
-$route['deleteRequestItemsICTJRS'] = 'trinityDataInfoTech/deleteRequestItemsICTJRS'; 
-$route['getRequestReferenceGSuiteICTJRS'] = 'trinityDataInfoTech/getRequestReferenceGSuiteICTJRS'; 
+
 
 
 
@@ -302,7 +271,6 @@ $route['getOrgUnit'] = 'trinityDataReference/getOrgUnit';
 $route['getRequestType'] = 'trinityDataReference/getRequestType'; 
 $route['getDepartmentK12'] = 'trinityDataReference/getDepartmentK12'; 
 $route['getFacultyListK12'] = 'trinityDataReference/getFacultyListK12'; 
-$route['getEmployeeActiveListTHRIMS'] = 'trinityDataReference/getEmployeeActiveListTHRIMS'; 
 $route['getEmployeeDesignation'] = 'trinityDataReference/getEmployeeDesignation'; 
 $route['getCourseInformationLevelActiveK12'] = 'trinityDataReference/getCourseInformationLevelActiveK12'; 
 $route['getGradeComponentReferenceK12'] = 'trinityDataReference/getGradeComponentReferenceK12'; 
@@ -484,10 +452,9 @@ $route['REGISTRAR/registrar'] = 'trinityMain/sideMenu';
 $route['REGISTRAR/curriculumSetup'] = 'trinityREGISTRAR/curriculumSetupREGISTRAR';
 $route['REGSISTRAR/showCurriculumDetails'] = 'trinityREGISTRAR/showCurriculumDetailsREGISTRAR';
 $route['REGISTRAR/studentList'] = 'trinityREGISTRAR/studentListREGISTRAR';
-$route['REGISTRAR/studentListK12'] = 'trinityREGISTRAR/studentListREGISTRARK12';
 
 $route['getAllStudentsListREGISTRAR'] = 'trinityDataRegistrar/getAllStudentListREGISTRAR'; 
-$route['getAllStudentsListK12REGISTRAR'] = 'trinityDataRegistrar/getAllStudentK12ListREGISTRAR'; 
+
 
 
 $route['StudentPortal/studentPortal'] = 'trinityMain/sideMenu';

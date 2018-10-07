@@ -16,8 +16,8 @@
 			</script> 
 
 		<table id="tt" class="easyui-datagrid" style="width:100%;max-width:100%;padding:5px 5px;font-size: 5px;"
-				url="getAllStudentsListREGISTRAR" toolbar="#tb"
-				title="Student List" iconCls="icon-save"
+				url="getAllStudentsListK12REGISTRAR" toolbar="#tb"
+				title="K12 Student List" iconCls="icon-save"
 				rownumbers="true" pagination="true" data-options="singleSelect: true,
 				rowStyler: function(){
 								return 'padding:5px;';

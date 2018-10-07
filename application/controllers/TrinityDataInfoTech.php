@@ -136,7 +136,7 @@ class trinityDataInfoTech extends MY_Controller {
 				'sy' => $_SESSION['sy'],
 				'requestSummary' => $requestSummary,
 				'requestDetails' => $requestDetails,
-				'requestStatus' => $this->_getRequestStatus('NEW', 'ICTJRS'),
+				'requestStatus' => $this->_getRequestStatus('ASSIGNED', 'ICTJRS'),
 				'requestType' => $requestType,
 				'departmentUnit' => $departmentUnit,
 				'assignedTo' => $assignedTo,
@@ -165,7 +165,7 @@ class trinityDataInfoTech extends MY_Controller {
 			$insertData2 = array(
 				'sy' => $_SESSION['sy'],
 				'requestNumber' =>$insertedRecord1,
-				'requestStatus' => $this->_getRequestStatus('NEW', 'ICTJRS'),
+				'requestStatus' => $this->_getRequestStatus('ASSIGNED', 'ICTJRS'),
 				'assignedTo' => $assignedTo,
 				'userName' => $userName,
 				'workstationID' => $this->_getIPAddress(),
@@ -198,7 +198,7 @@ class trinityDataInfoTech extends MY_Controller {
 			$text1 = $text1 .  "'".$_SESSION['sy'] . "', ";
 			$text1 = $text1 .  "'".$requestSummary . "', ";
 			$text1 = $text1 .  "'".$requestDetails . "', ";
-			$text1 = $text1 .  "'".$this->_getRequestStatus('NEW', 'ICTJRS') . "', ";
+			$text1 = $text1 .  "'".$this->_getRequestStatus('ASSIGNED', 'ICTJRS') . "', ";
 			$text1 = $text1 .  "'".$requestType . "', ";
 			$text1 = $text1 .  "'".$departmentUnit . "', ";
 			$text1 = $text1 .  "'".$assignedTo . "', ";
@@ -218,7 +218,7 @@ class trinityDataInfoTech extends MY_Controller {
 			$text2 = $text2 .  "VALUES (" .  $insertedRecord2 . ", ";
 			$text2 = $text2 .  "'".$_SESSION['sy'] . "', ";
 			$text2 = $text2 .  "'".$insertedRecord1 . "', ";
-			$text2 = $text2 .  "'".$this->_getRequestStatus('NEW', 'ICTJRS') . "', ";
+			$text2 = $text2 .  "'".$this->_getRequestStatus('ASSIGNED', 'ICTJRS') . "', ";
 			$text1 = $text1 .  "'', ";
 			$text1 = $text1 .  "'".$assignedTo . "', ";
 			$text2 = $text2 .  "'".$userName . "', ";
@@ -234,38 +234,41 @@ class trinityDataInfoTech extends MY_Controller {
 				return FALSE;  
 			} 
 
-			$rE = $this->_getRecordsData($data = array('receiverEmail'), 
-			$tables = array('triune_email_receiver'), $fieldName = array('systemName', 'role'), $where = array('ICTJRS', 'N'), 
-			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null, 
-			$whereSpecial = null, $groupBy = null );
+			//$rE = $this->_getRecordsData($data = array('triune_user.emailAddress'), 
+			//$tables = array('triune_user'), $fieldName = array('triune_user.userNumber'), $where = array($assignedTo), 
+			//$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null, 
+			//$whereSpecial = null, $groupBy = null );
 			
-			$receiverEmail =  $rE[0]->receiverEmail;
+			//$receiverEmail =  $rE[0]->emailAddress;
 			//$receiverEmail = 'rdlagdaan@tua.edu.ph';
 			
-            $message = '';                     
-            $message .= '<strong>New ICTJRS Request from user ' . $userName . ' for<u> ' . $requestSummary . '</u></strong><br>';
-            $message .= '<strong>Request Type<u> ' . $requestType . '</u></strong><br>';
-            $message .= '<strong>With the following details: <u>' . $requestDetails . '</u></strong><br>';
+            //$message = '';                     
+            //$message .= '<strong>New ICTJRS Request from user ' . $userName . ' for<u> ' . $requestSummary . '</u></strong><br>';
+            //$message .= '<strong>Request Type<u> ' . $requestType . '</u></strong><br>';
+            //$message .= '<strong>With the following details: <u>' . $requestDetails . '</u></strong><br>';
  
 					
-			$emailSent = $this->_sendMail($toEmail = $receiverEmail, $subject = "Email Notification from: " . $userName . "(NEW)" , $message);
-            if($emailSent) {
-                $this->session->set_flashdata('emailSent', '1');
+			//$emailSent = $this->_sendMail($toEmail = $receiverEmail, $subject = "Email Notification from: " . $userName . "(ASSIGNED)" , $message);
+            //if($emailSent) {
+                //$this->session->set_flashdata('emailSent', '1');
                 //echo "HELLO";
 				$returnValue = array();
 				$returnValue['ID'] = $insertedRecord1;
+				$returnValue['requestType'] = $requestType;		
+				$returnValue['requestSummary'] = $requestSummary;				
 				$returnValue['success'] = 1;
 				echo json_encode($returnValue);
 				
-            } else {
-                $this->session->set_flashdata('emailSent', '0');
-				$returnValue = array();
-				$returnValue['ID'] = $insertedRecord1;
-				$returnValue['success'] = 0;
-				echo json_encode($returnValue);
+            //} else {
+            //    $this->session->set_flashdata('emailSent', '0');
+			//	$returnValue = array();
+			//	$returnValue['ID'] = $insertedRecord1;
+			//	$returnValue['requestType'] = $requestType;				
+			//	$returnValue['success'] = 0;
+			//	echo json_encode($returnValue);
 				
                 //redirect(base_url().'user-acct/sign-up');
-            }
+            //}
 			
 			
 			//$returnValue = array();
@@ -868,6 +871,850 @@ class trinityDataInfoTech extends MY_Controller {
 		echo json_encode($returnValue);
 
 	}	
+	
+
+    public function getTelephoneInventoryICTJRS() {
+		$selectField = "triune_inventory_telephone.*";
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_telephone'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('locationCode', 'floor'), $sortOrder = array('asc', 'asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+
+	
+	
+	public function insertTelephoneInventoryICTJRS() {
+		$roomNumber = $_POST["roomNumber"];
+		$phoneUser = $_POST["phoneUser"];
+		$phoneNumber = $_POST["phoneNumber"];
+		
+		$userName = $this->_getUserName(1);
+
+		$transactionExist = $this->_getRecordsData($data = array('ID'), 
+		$tables = array('triune_inventory_telephone'), $fieldName = array('roomNumber', 'phoneUser', 'phoneNumber'), 
+		$where = array($roomNumber, $phoneUser, $phoneNumber), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+
+		if(empty($transactionExist)) {
+
+			$systemForAuditName = "ICTJRS";
+			$moduleName = "TELEPHONEINVENTORYCREATE";
+			
+
+			$location = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_rooms'), $fieldName = array('roomNumber'), 
+			$where = array($roomNumber), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+			$floor = null;
+			$locationCode = null;
+			if(!empty($location)) {
+				$floor = $location[0]->floor;
+				$locationCode = $location[0]->locationCode;
+			}
+			
+			$insertData1 = null;
+			$insertData1 = array(
+				'roomNumber' => $roomNumber,
+				'floor' => $floor,
+				'locationCode' => $locationCode,
+				'phoneUser' => $phoneUser,
+				'phoneNumber' => $phoneNumber,
+				'workstationID' => $this->_getIPAddress(),
+				'userNumber' => $userName,
+				'timeStamp' => $this->_getTimeStamp(),
+			);				 
+
+			$this->db->trans_start();
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_inventory_telephone', $insertData1);        			 
+
+
+				$actionName1 = "Insert Telephone Inventory";
+				$for1 = $insertedRecord1 . ";" . $userName;
+				$oldValue1 = null;
+				$newValue1 =  $insertData1;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			$this->db->trans_complete();
+		
+			$fileName1 = "triune_inventory_telephone-" . $this->_getCurrentDate();
+			$text1 = "INSERT INTO triune_inventory_telephone ";
+			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
+			$text1 = $text1 .  "'".$floor . "', ";
+			$text1 = $text1 .  "'".$locationCode . "', ";
+			$text1 = $text1 .  "'".$phoneUser . "', ";
+			$text1 = $text1 .  "'".$phoneNumber . "', ";
+			$text1 = $text1 .  "'".$this->_getIPAddress() . "', ";
+			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$this->_getTimeStamp(). "'";
+			$text1 = $text1 . ");";
+			$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+			if($this->db->trans_status() === FALSE) {
+				$this->_transactionFailed();
+				return FALSE;  
+			} 
+
+                 /*   $message = '';                     
+                    $message .= '<strong>Request from user</strong>' . $userName . '<br>';
+ 
+					
+					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+                    if(!$emailSent) {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //echo "HELLO";
+                    } else {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //redirect(base_url().'user-acct/sign-up');
+
+                    }*/
+			
+			
+			$returnValue = array();
+			$returnValue['success'] = 1;
+			echo json_encode($returnValue);
+
+		} else  {//if(empty($transactionExist))
+			$returnValue = array();
+			$returnValue['success'] = 0;
+			echo json_encode($returnValue);
+		
+		}
+	}
+
+
+	public function updateTelephoneInventoryICTJRS() {
+		$roomNumber = $_POST["roomNumber"];
+		$phoneUser = $_POST["phoneUser"];
+		$phoneNumber = $_POST["phoneNumber"];
+
+		$ID = $_POST["ID"];
+
+		$userName = $this->_getUserName(1);
+
+	
+		$systemForAuditName = "ICTJRS";
+		$moduleName = "TELEPHONEINVENTORYUPDATE";
+
+		$this->db->trans_start();
+
+			$location = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_rooms'), $fieldName = array('roomNumber'), 
+			$where = array($roomNumber), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+			$floor = null;
+			$locationCode = null;
+			if(!empty($location)) {
+				$floor = $location[0]->floor;
+				$locationCode = $location[0]->locationCode;
+			}
+		
+		
+			$recordUpdate = array(
+				'roomNumber' => $roomNumber,
+				'floor' => $floor,
+				'locationCode' => $locationCode,
+				'phoneUser' => $phoneUser,
+				'phoneNumber' => $phoneNumber,
+				'workstationID' => $this->_getIPAddress(),
+				'userNumber' => $userName,
+				'timeStamp' => $this->_getTimeStamp(),
+			);
+		
+			$this->_updateRecords($tableName = 'triune_inventory_telephone', 
+			$fieldName = array('ID'), 
+			$where = array($ID), $recordUpdate);
+
+
+			$actionName1 = "Update Telephone Inventory";
+			$for1 =  $userName;
+			$oldValue1 = null;
+			$newValue1 =  $recordUpdate;
+			$userType = 1;
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			
+		$this->db->trans_complete();
+
+		$record = $this->_getRecordsData($data = array('*'), 
+		$tables = array('triune_inventory_telephone'), $fieldName = array('ID'), 
+		$where = array($ID), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+	
+		$fileName1 = "triune_inventory_telephone-update-" . $this->_getCurrentDate();
+		$text1 = "UPDATE triune_inventory_telephone ";
+		$text1 = $text1 .  "SET roomNumber = '" .  $record[0]->roomNumber . "', ";
+		$text1 = $text1 .  "floor = '" .  $record[0]->floor . "', ";
+		$text1 = $text1 .  "locationCode = '" .  $record[0]->locationCode . "' ";
+		$text1 = $text1 .  "phoneUser = '" .  $record[0]->phoneUser . "' ";
+		$text1 = $text1 .  "phoneNumber = '" .  $record[0]->phoneNumber . "' ";
+		$text1 = $text1 .  "WHERE ID = ".$ID;
+		$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+		if($this->db->trans_status() === FALSE) {
+			$this->_transactionFailed();
+			return FALSE;  
+		} 
+
+			 /*   $message = '';                     
+				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
+
+				
+				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+				if(!$emailSent) {
+					//$this->session->set_flashdata('emailSent', '1');
+					//echo "HELLO";
+				} else {
+					//$this->session->set_flashdata('emailSent', '1');
+					//redirect(base_url().'user-acct/sign-up');
+
+				}*/
+		
+		
+		$returnValue = array();
+		$returnValue['success'] = 1;
+		echo json_encode($returnValue);
+
+	}	
+
+    public function getCCTVInventoryICTJRS() {
+		$selectField = "triune_inventory_cctv.*";
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_cctv'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('jurisdiction', 'location'), $sortOrder = array('asc', 'asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+
+
+
+
+	public function insertCCTVInventoryICTJRS() {
+		$location = $_POST["location"];
+		$serialNumber = $_POST["serialNumber"];
+		$status = $_POST["status"];
+		$iPAddress = $_POST["iPAddress"];
+		$model = $_POST["model"];
+		$jurisdiction = $_POST["jurisdiction"];
+		
+		$userName = $this->_getUserName(1);
+
+		$transactionExist = $this->_getRecordsData($data = array('ID'), 
+		$tables = array('triune_inventory_cctv'), $fieldName = array('location', 'serialNumber', 'iPAddress', 'model'), 
+		$where = array($location, $serialNumber, $iPAddress, $model), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+
+		if(empty($transactionExist)) {
+
+			$systemForAuditName = "ICTJRS";
+			$moduleName = "CCTVINVENTORYCREATE";
+			
+			$insertData1 = null;
+			$insertData1 = array(
+				'location' => $location,
+				'serialNumber' => $serialNumber,
+				'status' => $status,
+				'iPAddress' => $iPAddress,
+				'model' => $model,
+				'jurisdiction' => $jurisdiction,
+				'workstationID' => $this->_getIPAddress(),
+				'userNumber' => $userName,
+				'timeStamp' => $this->_getTimeStamp(),
+			);				 
+
+			$this->db->trans_start();
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_inventory_cctv', $insertData1);        			 
+
+
+				$actionName1 = "Insert CCTV Inventory";
+				$for1 = $insertedRecord1 . ";" . $userName;
+				$oldValue1 = null;
+				$newValue1 =  $insertData1;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			$this->db->trans_complete();
+		
+			$fileName1 = "triune_inventory_cctv-" . $this->_getCurrentDate();
+			$text1 = "INSERT INTO triune_inventory_cctv ";
+			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
+			$text1 = $text1 .  "'".$location . "', ";
+			$text1 = $text1 .  "'".$serialNumber . "', ";
+			$text1 = $text1 .  "'".$status . "', ";
+			$text1 = $text1 .  "'".$iPAddress . "', ";
+			$text1 = $text1 .  "'".$model . "', ";
+			$text1 = $text1 .  "'".$jurisdiction . "', ";
+			$text1 = $text1 .  "'".$this->_getIPAddress() . "', ";
+			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$this->_getTimeStamp(). "'";
+			$text1 = $text1 . ");";
+			$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+			if($this->db->trans_status() === FALSE) {
+				$this->_transactionFailed();
+				return FALSE;  
+			} 
+
+                 /*   $message = '';                     
+                    $message .= '<strong>Request from user</strong>' . $userName . '<br>';
+ 
+					
+					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+                    if(!$emailSent) {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //echo "HELLO";
+                    } else {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //redirect(base_url().'user-acct/sign-up');
+
+                    }*/
+			
+			
+			$returnValue = array();
+			$returnValue['success'] = 1;
+			echo json_encode($returnValue);
+
+		} else  {//if(empty($transactionExist))
+			$returnValue = array();
+			$returnValue['success'] = 0;
+			echo json_encode($returnValue);
+		
+		}
+	}
+
+
+	public function updateCCTVInventoryICTJRS() {
+		$location = $_POST["location"];
+		$serialNumber = $_POST["serialNumber"];
+		$status = $_POST["status"];
+		$iPAddress = $_POST["iPAddress"];
+		$model = $_POST["model"];
+		$jurisdiction = $_POST["jurisdiction"];
+
+		$ID = $_POST["ID"];
+
+		$userName = $this->_getUserName(1);
+
+	
+		$systemForAuditName = "ICTJRS";
+		$moduleName = "CCTVINVENTORYUPDATE";
+
+		$this->db->trans_start();
+
+		
+		
+			$recordUpdate = array(
+				'location' => $location,
+				'serialNumber' => $serialNumber,
+				'status' => $status,
+				'iPAddress' => $iPAddress,
+				'model' => $model,
+				'jurisdiction' => $jurisdiction,
+				'workstationID' => $this->_getIPAddress(),
+				'userNumber' => $userName,
+				'timeStamp' => $this->_getTimeStamp(),
+			);
+		
+			$this->_updateRecords($tableName = 'triune_inventory_cctv', 
+			$fieldName = array('ID'), 
+			$where = array($ID), $recordUpdate);
+
+
+			$actionName1 = "Update CCTV Inventory";
+			$for1 =  $userName;
+			$oldValue1 = null;
+			$newValue1 =  $recordUpdate;
+			$userType = 1;
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			
+		$this->db->trans_complete();
+
+		$record = $this->_getRecordsData($data = array('*'), 
+		$tables = array('triune_inventory_cctv'), $fieldName = array('ID'), 
+		$where = array($ID), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+	
+		$fileName1 = "triune_inventory_cctv-update-" . $this->_getCurrentDate();
+		$text1 = "UPDATE triune_inventory_cctv ";
+		$text1 = $text1 .  "SET location = '" .  $record[0]->location . "', ";
+		$text1 = $text1 .  "serialNumber = '" .  $record[0]->serialNumber . "', ";
+		$text1 = $text1 .  "status = '" .  $record[0]->status . "' ";
+		$text1 = $text1 .  "iPAddress = '" .  $record[0]->iPAddress . "' ";
+		$text1 = $text1 .  "model = '" .  $record[0]->model . "' ";
+		$text1 = $text1 .  "jurisdiction = '" .  $record[0]->jurisdiction . "' ";
+		$text1 = $text1 .  "WHERE ID = ".$ID;
+		$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+		if($this->db->trans_status() === FALSE) {
+			$this->_transactionFailed();
+			return FALSE;  
+		} 
+
+			 /*   $message = '';                     
+				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
+
+				
+				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+				if(!$emailSent) {
+					//$this->session->set_flashdata('emailSent', '1');
+					//echo "HELLO";
+				} else {
+					//$this->session->set_flashdata('emailSent', '1');
+					//redirect(base_url().'user-acct/sign-up');
+
+				}*/
+		
+		
+		$returnValue = array();
+		$returnValue['success'] = 1;
+		echo json_encode($returnValue);
+
+	}	
+
+    public function getWiFiInventoryICTJRS() {
+		$selectField = "triune_inventory_wifi.*";
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_wifi'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('jurisdiction', 'location'), $sortOrder = array('asc', 'asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+
+
+	public function insertWIFIInventoryICTJRS() {
+		$location = $_POST["location"];
+		$floor = $_POST["floor"];
+		$wifiName = $_POST["wifiName"];
+		$serialNumber = $_POST["serialNumber"];
+		$status = $_POST["status"];
+		$iPAddress = $_POST["iPAddress"];
+		$model = $_POST["model"];
+		$jurisdiction = $_POST["jurisdiction"];
+		
+		$userName = $this->_getUserName(1);
+
+		$transactionExist = $this->_getRecordsData($data = array('ID'), 
+		$tables = array('triune_inventory_wifi'), $fieldName = array('location', 'floor', 'wifiName', 'serialNumber', 'iPAddress', 'model'), 
+		$where = array($location, $floor, $wifiName, $serialNumber, $iPAddress, $model), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+
+		if(empty($transactionExist)) {
+
+			$systemForAuditName = "ICTJRS";
+			$moduleName = "WIFIINVENTORYCREATE";
+			
+			$insertData1 = null;
+			$insertData1 = array(
+				'location' => $location,
+				'floor' => $floor,
+				'wifiName' => $wifiName,
+				'serialNumber' => $serialNumber,
+				'status' => $status,
+				'iPAddress' => $iPAddress,
+				'model' => $model,
+				'jurisdiction' => $jurisdiction,
+				'workstationID' => $this->_getIPAddress(),
+				'userNumber' => $userName,
+				'timeStamp' => $this->_getTimeStamp(),
+			);				 
+
+			$this->db->trans_start();
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_inventory_wifi', $insertData1);        			 
+
+
+				$actionName1 = "Insert WIFI Inventory";
+				$for1 = $insertedRecord1 . ";" . $userName;
+				$oldValue1 = null;
+				$newValue1 =  $insertData1;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			$this->db->trans_complete();
+		
+			$fileName1 = "triune_inventory_wifi-" . $this->_getCurrentDate();
+			$text1 = "INSERT INTO triune_inventory_wifi ";
+			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
+			$text1 = $text1 .  "'".$location . "', ";
+			$text1 = $text1 .  "'".$floor . "', ";
+			$text1 = $text1 .  "'".$wifiName . "', ";
+			$text1 = $text1 .  "'".$serialNumber . "', ";
+			$text1 = $text1 .  "'".$status . "', ";
+			$text1 = $text1 .  "'".$iPAddress . "', ";
+			$text1 = $text1 .  "'".$model . "', ";
+			$text1 = $text1 .  "'".$jurisdiction . "', ";
+			$text1 = $text1 .  "'".$this->_getIPAddress() . "', ";
+			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$this->_getTimeStamp(). "'";
+			$text1 = $text1 . ");";
+			$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+			if($this->db->trans_status() === FALSE) {
+				$this->_transactionFailed();
+				return FALSE;  
+			} 
+
+                 /*   $message = '';                     
+                    $message .= '<strong>Request from user</strong>' . $userName . '<br>';
+ 
+					
+					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+                    if(!$emailSent) {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //echo "HELLO";
+                    } else {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //redirect(base_url().'user-acct/sign-up');
+
+                    }*/
+			
+			
+			$returnValue = array();
+			$returnValue['success'] = 1;
+			echo json_encode($returnValue);
+
+		} else  {//if(empty($transactionExist))
+			$returnValue = array();
+			$returnValue['success'] = 0;
+			echo json_encode($returnValue);
+		
+		}
+	}
+
+
+	public function updateWIFIInventoryICTJRS() {
+		$location = $_POST["location"];
+		$floor = $_POST["floor"];
+		$wifiName = $_POST["wifiName"];
+		$serialNumber = $_POST["serialNumber"];
+		$status = $_POST["status"];
+		$iPAddress = $_POST["iPAddress"];
+		$model = $_POST["model"];
+		$jurisdiction = $_POST["jurisdiction"];
+
+		$ID = $_POST["ID"];
+
+		$userName = $this->_getUserName(1);
+
+	
+		$systemForAuditName = "ICTJRS";
+		$moduleName = "CCTVINVENTORYUPDATE";
+
+		$this->db->trans_start();
+
+		
+		
+			$recordUpdate = array(
+				'location' => $location,
+				'floor' => $floor,
+				'wifiName' => $wifiName,
+				'serialNumber' => $serialNumber,
+				'status' => $status,
+				'iPAddress' => $iPAddress,
+				'model' => $model,
+				'jurisdiction' => $jurisdiction,
+				'workstationID' => $this->_getIPAddress(),
+				'userNumber' => $userName,
+				'timeStamp' => $this->_getTimeStamp(),
+			);
+		
+			$this->_updateRecords($tableName = 'triune_inventory_wifi', 
+			$fieldName = array('ID'), 
+			$where = array($ID), $recordUpdate);
+
+
+			$actionName1 = "Update CCTV Inventory";
+			$for1 =  $userName;
+			$oldValue1 = null;
+			$newValue1 =  $recordUpdate;
+			$userType = 1;
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			
+		$this->db->trans_complete();
+
+		$record = $this->_getRecordsData($data = array('*'), 
+		$tables = array('triune_inventory_wifi'), $fieldName = array('ID'), 
+		$where = array($ID), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+	
+		$fileName1 = "triune_inventory_wifi-update-" . $this->_getCurrentDate();
+		$text1 = "UPDATE triune_inventory_wifi ";
+		$text1 = $text1 .  "SET location = '" .  $record[0]->location . "', ";
+		$text1 = $text1 .  "floor = '" .  $record[0]->floor . "', ";
+		$text1 = $text1 .  "wifiName = '" .  $record[0]->wifiName . "', ";
+		$text1 = $text1 .  "serialNumber = '" .  $record[0]->serialNumber . "', ";
+		$text1 = $text1 .  "status = '" .  $record[0]->status . "' ";
+		$text1 = $text1 .  "iPAddress = '" .  $record[0]->iPAddress . "' ";
+		$text1 = $text1 .  "model = '" .  $record[0]->model . "' ";
+		$text1 = $text1 .  "jurisdiction = '" .  $record[0]->jurisdiction . "' ";
+		$text1 = $text1 .  "WHERE ID = ".$ID;
+		$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+		if($this->db->trans_status() === FALSE) {
+			$this->_transactionFailed();
+			return FALSE;  
+		} 
+
+			 /*   $message = '';                     
+				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
+
+				
+				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+				if(!$emailSent) {
+					//$this->session->set_flashdata('emailSent', '1');
+					//echo "HELLO";
+				} else {
+					//$this->session->set_flashdata('emailSent', '1');
+					//redirect(base_url().'user-acct/sign-up');
+
+				}*/
+		
+		$returnValue = array();
+		$returnValue['success'] = 1;
+		echo json_encode($returnValue);
+
+	}	
+
+
+
+	public function validateRequestItemsICTJRS() {
+
+		$this->form_validation->set_rules('itemID', 'itemID', 'required');
+		$this->form_validation->set_rules('requestNumber', 'requestNumber', 'required');
+		$this->form_validation->set_rules('requestType', 'requestType', 'required');
+		$this->form_validation->set_rules('itemDetails', 'itemDetails', 'required');
+
+		$itemID = $_POST["itemID"];
+		$requestNumber = $_POST["requestNumber"];
+		$requestType = $_POST["requestType"];
+		$itemDetails = $_POST["itemDetails"];
+
+		$this->session->set_flashdata('itemID', $itemID);
+		$this->session->set_flashdata('requestNumber', $requestNumber);
+		$this->session->set_flashdata('requestType', $requestType);
+		$this->session->set_flashdata('itemDetails', $itemDetails);
+
+		if ($this->form_validation->run() == FALSE) {   
+			echo json_encode($this->form_validation->error_array());
+		}else{    
+
+			$returnValue = array();
+			$returnValue['itemID'] = $itemID;
+			$returnValue['requestNumber'] = $requestNumber;
+			$returnValue['requestType'] = $requestType;
+			$returnValue['itemDetails'] = $itemDetails;
+
+			$returnValue['success'] = 1;
+			echo json_encode($returnValue);
+			
+		}	
+
+	}
+
+
+	public function insertRequestItemsICTJRS() {
+		$itemID = $_POST["itemID"];
+		$requestNumber = $_POST["requestNumber"];
+		$requestType = $_POST["requestType"];
+		$itemDetails = $_POST["itemDetails"];
+
+		$item = null;
+		$inventory = null;
+		
+		$userName = $this->_getUserName(1);
+
+		if($requestType == "CCTA") {
+			$inventory = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_inventory_cctv'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			
+			
+			if(!empty($inventory)) {
+				$item = $inventory[0]->location;
+			}
+		} else if($requestType == "GSAS") {
+			$inventory = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_request_reference_gsuite'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			
+			
+			if(!empty($inventory)) {
+				$item = $inventory[0]->requestCategory;
+			}
+			
+		}
+
+		$transactionExist = $this->_getRecordsData($data = array('*'), 
+		$tables = array('triune_job_request_transaction_ict_request_items'), $fieldName = array('requestNumber', 'item'), $where = array($requestNumber, $item), 
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, 
+		$whereSpecial = null, $groupBy = null );
+		
+		
+
+		if(empty($transactionExist)) {
+
+			$systemForAuditName = "ICTJRS";
+			$moduleName = "REQUESTITEMSCREATE";
+
+			$insertData1 = null;
+			$insertData1 = array(
+				'requestType' => $requestType,
+				'requestNumber' => $requestNumber,
+				'itemID' => $itemID,
+				'item' => $item,
+				'itemDetails' => $itemDetails,
+				'userName' => $userName,
+				'workstationID' => $this->_getIPAddress(),
+				'timeStamp' => $this->_getTimeStamp(),
+			);				 
+
+			$this->db->trans_start();
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_ict_request_items', $insertData1);        			 
+
+
+				$actionName1 = "Insert New Transaction Request";
+				$for1 = $insertedRecord1 . ";" . $userName;
+				$oldValue1 = null;
+				$newValue1 =  $insertData1;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			$this->db->trans_complete();
+		
+			$fileName1 = "triune_job_request_transaction_ict_request_items-" . $this->_getCurrentDate();
+			$text1 = "INSERT INTO triune_job_request_transaction_ict_request_items ";
+			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
+			$text1 = $text1 .  "'".$requestType . "', ";
+			$text1 = $text1 .  "'".$requestNumber . "', ";
+			$text1 = $text1 .  "'".$itemID . "', ";
+			$text1 = $text1 .  "'".$item . "', ";
+			$text1 = $text1 .  "'".$itemDetails . "', ";
+			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$this->_getIPAddress() . "', ";
+			$text1 = $text1 .  "'".$this->_getTimeStamp();
+			$text1 = $text1 . "');";
+			$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
+
+			if($this->db->trans_status() === FALSE) {
+				$this->_transactionFailed();
+				return FALSE;  
+			} 
+
+                 /*   $message = '';                     
+                    $message .= '<strong>Request from user</strong>' . $userName . '<br>';
+ 
+					
+					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
+                    if(!$emailSent) {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //echo "HELLO";
+                    } else {
+                        //$this->session->set_flashdata('emailSent', '1');
+                        //redirect(base_url().'user-acct/sign-up');
+
+                    }*/
+			
+			
+			$returnValue = array();
+			$returnValue['itemID'] = $itemID;
+			$returnValue['requestNumber'] = $requestNumber;
+			$returnValue['requestType'] = $requestType;
+			$returnValue['itemDetails'] = $itemDetails;
+			$returnValue['success'] = 1;
+			echo json_encode($returnValue);
+
+		} else  {//if(empty($transactionExist))
+			$returnValue = array();
+			$returnValue['itemID'] = $itemID;
+			$returnValue['requestNumber'] = $requestNumber;
+			$returnValue['requestType'] = $requestType;
+			$returnValue['itemDetails'] = $itemDetails;
+			
+			$returnValue['success'] = 0;
+			echo json_encode($returnValue);
+		
+		}
+	}
+
+
+
+	public function deleteRequestItemsICTJRS() {
+		$ID = $_POST["ID"];
+		$userName = $this->_getUserName(1);
+
+
+		$systemForAuditName = "ICTJRS";
+		$moduleName = "REQUESTITEMSDELETE";
+
+
+			//DELETE ITEMS
+			$where = array($ID);
+			$fieldName = array('ID');
+			//DELETE ITEMS
+			
+			$this->db->trans_start();
+				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_ict_request_items', $fieldName, $where);       			 
+
+
+				$actionName1 = "Delete ICTJRS Item";
+				$for1 = $insertedRecord1 . ";" . $userName;
+				$oldValue1 = $ID;
+				$newValue1 =  null;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+
+			$this->db->trans_complete();
+		
+			/*$fileName1 = "triune_job_request_transaction_asrs_items-" . $this->_getCurrentDate();
+			$text1 = "INSERT INTO triune_job_request_transaction_asrs_items ";
+			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
+			$text1 = $text1 .  "'".$ID . "', ";
+			$text1 = $text1 .  "'".$quantity . "', ";
+			$text1 = $text1 .  "'".$unitCode . "', ";
+			$text1 = $text1 .  "'".$unitCodeText . "', ";
+			$text1 = $text1 .  "'".$assetGroupCd . "', ";
+			$text1 = $text1 .  "'".$assetSubGroupCd . "', ";
+			$text1 = $text1 .  "'".$assetCompGroupCd . "', ";
+			$text1 = $text1 .  "'".$assetNameText . "', ";
+			$text1 = $text1 .  "'".$this->_getCurrentDate() . "', ";
+			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$this->_getIPAddress() . "', ";
+			$text1 = $text1 .  "'".$this->_getTimeStamp();
+			$text1 = $text1 . "');";
+			$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);*/
+
+			if($this->db->trans_status() === FALSE) {
+				$this->_transactionFailed();
+				return FALSE;  
+			} 
+
+			
+			$returnValue = array();
+			
+
+			$returnValue['ID'] = $ID;
+			$returnValue['success'] = 1;
+			echo json_encode($returnValue);
+
+	}
+
+
+    public function getRequestReferenceGSuiteICTJRS() {
+		$selectField = "triune_request_reference_gsuite.*";
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_request_reference_gsuite'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('requestCategory'), $sortOrder = array('asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
 	
 	
 }
