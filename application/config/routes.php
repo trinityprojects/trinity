@@ -210,6 +210,7 @@ $route['showRequestItemsICTJRS'] = 'trinityDataInfoTech/showRequestItemsICTJRS';
 
 $route['deleteRequestItemsICTJRS'] = 'trinityDataInfoTech/deleteRequestItemsICTJRS'; 
 $route['getRequestReferenceGSuiteICTJRS'] = 'trinityDataInfoTech/getRequestReferenceGSuiteICTJRS'; 
+$route['getRequestHardwareICTJRS'] = 'trinityDataInfoTech/getRequestHardwareICTJRS'; 
 
 
 
@@ -336,6 +337,7 @@ $route['getLocationTBAMIMS'] = 'trinityDataReference/getLocationTBAMIMS';
 $route['getLocationTypeTBAMIMS'] = 'trinityDataReference/getLocationTypeTBAMIMS'; 
 $route['getRoomTypeTBAMIMS'] = 'trinityDataReference/getRoomTypeTBAMIMS'; 
 $route['getRoomsTBAMIMS'] = 'trinityDataReference/getRoomsTBAMIMS'; 
+$route['getConnectionType'] = 'trinityDataReference/getConnectionType'; 
 
 
 

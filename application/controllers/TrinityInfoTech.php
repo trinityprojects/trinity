@@ -38,7 +38,6 @@ class trinityInfoTech extends MY_Controller {
 		$data['ID'] = $_POST["ID"];
 		$data['requestType'] = $_POST["requestType"];
 		$data['requestSummary'] = $_POST["requestSummary"];
-		
 		$userName = $this->_getUserName(1);
 		
 		$selectFields = "triune_employee_data.employeeNumber, ";
@@ -63,79 +62,78 @@ class trinityInfoTech extends MY_Controller {
 		$data['deliveryDate'] = null;
 		
 		$data['currentDate'] = $this->_getCurrentDate();
+		
 		if(!empty($result1)) {
 			$sla = $result1[0]->serviceLevelAgreementPeriod;
 			$data['serviceLevelAgreementPeriod'] = $sla;
 			if($sla <> -1) {
-				$data['deliveryDate'] =  date('Y-m-d', strtotime($data['currentDate']. ' + ' . $sla . 'days'));
+				$data['deliveryDate'] =  $this->_endDateAutoAssignSLA($sla, $data['currentDate']);
 			} else {
 				$data['deliveryDate'] = "NO SLA";
 			}
 		}
 		
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		
 		if($data['requestType'] == "HWRS") {
+
+			//DELETE ITEMS
+			$where = array($userName);
+			$fieldName = array('userNumber');
+			//DELETE ITEMS
+			
+			$this->db->trans_start();
+			$insertedRecord1 = $this->_deleteRecords('triune_request_reference_workstation', $fieldName, $where);       			 
+		
+		
+			$user = $this->_getRecordsData($rec1 = array('*'), 
+			$tables = array('triune_user'), $fieldName = array('userName'), $where = array($userName), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			$userNumber = null;
+			if(!empty($user)) {
+				$userNumber = $user[0]->userNumber;
+			}
 			
 			$result2 = $this->_getRecordsData($rec2 = array('*'), 
-			$tables = array('triune_inventory_workstation'), $fieldName = array('assignedTo'), $where = array($userName), $join = null, $joinType = null, 
+			$tables = array('triune_inventory_workstation'), $fieldName = array('assignedTo'), $where = array($userNumber), $join = null, $joinType = null, 
 			$sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 			$itemHardware = array();
 			if(!empty($result2)) {
-				$itemHardware[0] = 	$result2[0]->roomNumber;
-				$itemHardware[1] = 	$result2[0]->hardwareSpecs;
-				$itemHardware[2] = 	$result2[0]->peripheralsSpecs;
-				$itemHardware[3] = 	$result2[0]->printerSpecs;
-				$itemHardware[4] = 	$result2[0]->systemSoftwareSpecs;
-				$itemHardware[5] = 	$result2[0]->applicationSoftwareSpecs;
-				$itemHardware[6] = 	$result2[0]->processorSpecs;
-				$itemHardware[7] = 	$result2[0]->hardDiskSpecs;
-				$itemHardware[8] = 	$result2[0]->memorySpecs;
-				$itemHardware[9] = 	$result2[0]->monitorSpecs;
-				$itemHardware[10] = 	$result2[0]->mouseSpecs;
-				$itemHardware[11] = 	$result2[0]->keyboardSpecs;
-				$itemHardware[12] = 	$result2[0]->internetAccessFlag;
-				$itemHardware[13] = 	$result2[0]->iPAddress;
-				$itemHardware[14] = 	$result2[0]->subnetMask;
-				$itemHardware[15] = 	$result2[0]->defaultGateway;
-				$itemHardware[15] = 	$result2[0]->dNS;
+				$itemHardware[0] = 	"(Room Number):" . $result2[0]->roomNumber;
+				$itemHardware[1] = 	"(Hardware Specs):" . $result2[0]->hardwareSpecs;
+				$itemHardware[2] = 	"(Peripheral Specs):" . $result2[0]->peripheralsSpecs;
+				$itemHardware[3] = 	"(Printer Specs):" . $result2[0]->printerSpecs;
+				$itemHardware[4] = 	"(System Software Specs):" . $result2[0]->systemSoftwareSpecs;
+				$itemHardware[5] = 	"(Application Software Specs):" . $result2[0]->applicationSoftwareSpecs;
+				$itemHardware[6] = 	"(Processor Specs):" . $result2[0]->processorSpecs;
+				$itemHardware[7] = 	"(Hard Disk Specs):" . $result2[0]->hardDiskSpecs;
+				$itemHardware[8] = 	"(Memory Specs):" . $result2[0]->memorySpecs;
+				$itemHardware[9] = 	"(Monitor Specs):" . $result2[0]->monitorSpecs;
+				$itemHardware[10] =  "(Mouse Specs):" . $result2[0]->mouseSpecs;
+				$itemHardware[11] =  "(Keyboard Specs):" . $result2[0]->keyboardSpecs;
+				$itemHardware[12] =  "(Internet Access):" . $result2[0]->internetAccessFlag;
+				$itemHardware[13] =  "(IP Address):" . $result2[0]->iPAddress;
+				$itemHardware[14] =  "(Subnet Mask):" . $result2[0]->subnetMask;
+				$itemHardware[15] =  "(Default Gateway):" . $result2[0]->defaultGateway;
+				$itemHardware[16] =  "(DNS):" . $result2[0]->dNS;
+				$itemHardware[17] =  "(OTHER):Other";
 				
 			}
 			
-			foreach($result2 as $row) {
+			for($i = 0; $i < count($itemHardware); $i++) {
 
 				$insertData1 = null;
 				$insertData1 = array(
-					'requestCategory' => $row->,
-					'userName' => $userName,
+					'requestCategory' => $itemHardware[$i],
+					'userNumber' => $userName,
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					
 				);				 
 
-				$this->db->trans_start();
-					$insertedRecord1 = $this->_insertRecords($tableName = 'triune_job_request_transaction_ict', $insertData1);        			 
-				$this->db->trans_complete();
-			
+					$insertedRecord1 = $this->_insertRecords($tableName = 'triune_request_reference_workstation', $insertData1);        			 
 			}
+			$this->db->trans_complete();
 		}
 
         $this->load->view('ICTJRS/request-created-details', $data);
@@ -165,6 +163,8 @@ class trinityInfoTech extends MY_Controller {
 		$data['itemID'] = $_POST["itemID"];
 		$data['requestNumber'] = $_POST["requestNumber"];
 		$data['requestType'] = $_POST["requestType"];
+
+
 		$data['accessType'] = $_POST["accessType"];
 		
 		//$recs=null;
@@ -184,9 +184,13 @@ class trinityInfoTech extends MY_Controller {
 			
 		//}
 		
-		
 		$data['itemsList'] = $recs;		
-        $this->load->view('ICTJRS/request-items-list', $data);
+
+		if($data['requestType'] == 'ICWA') {
+			$this->load->view('ICTJRS/request-items-list_2', $data);
+		} else {
+			$this->load->view('ICTJRS/request-items-list', $data);
+		}
     }
 
 	

@@ -165,18 +165,25 @@ $('#ff').click(function(){
             } else {
 				var requestType = $('#requestType').val();
 				var itemID = '';
+				var otherDetails = '';
+				var location = '';
 				
 				if(requestType == 'CCTA') {
 					itemID = $('#location').val();
-				} else if(requestType == 'GSAS') {
+				} else if(requestType == 'GSAS' || requestType == 'HWRS') {
 					itemID = $('#requestCategory').val();
+				} else if(requestType == 'ICWA') {
+					itemID = $('#requestCategory').val();
+					otherDetails = $('#connectionType').val();
+					location = $('#roomNumber').val();
 				}
 				
-				alert(itemID);
+				//alert(itemID);
 				var requestNumber = $('#requestNumber').val();
 				var itemDetails = $('#itemDetails').val();
+				var deliveryDate = $('#deliveryDate').val();
 				
-				checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails)
+				checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location)
             }
 
         }
@@ -185,12 +192,11 @@ $('#ff').click(function(){
 
 
 
-
-function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) {
+function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location) {
 	
     jQuery.ajax({
         url: "validateRequestItemsICTJRS",
-        data:'itemID='+itemID+'&requestNumber='+requestNumber+'&requestType='+requestType+'&itemDetails='+itemDetails,
+        data:'itemID='+itemID+'&requestNumber='+requestNumber+'&requestType='+requestType+'&itemDetails='+itemDetails+'&deliveryDate='+deliveryDate+'&otherDetails='+otherDetails+'&location='+location,
         type: "POST",
         success:function(data){
             console.log(data);
@@ -198,7 +204,7 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) 
             if(resultValue['success'] == 1) {
                 clearErrorMessages();
 
-				addItem(resultValue['itemID'], resultValue['requestNumber'], resultValue['requestType'], resultValue['itemDetails'] );
+				addItem(resultValue['itemID'], resultValue['requestNumber'], resultValue['requestType'], resultValue['itemDetails'], resultValue['deliveryDate'], resultValue['otherDetails'], resultValue['location'] );
 
             } else {
                 var obj = $.parseJSON(data);
@@ -206,6 +212,9 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) 
                 var requestNumber = obj['requestNumber'];
                 var requestType = obj['requestType'];
                 var itemDetails = obj['itemDetails'];
+                var deliveryDate = obj['deliveryDate'];
+                var otherDetails = obj['otherDetails'];
+                var location = obj['location'];
 				
                 $notExistMessage = '';
                 $('div#error-messages').html($notExistMessage);
@@ -220,7 +229,7 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) 
 
  
  
- 	function addItem(itemID, requestNumber, requestType, itemDetails) {
+ 	function addItem(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location) {
 		jQuery.ajax({
 			url: "insertRequestItemsICTJRS",
 			data: { 
@@ -228,6 +237,9 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) 
 				'requestNumber': requestNumber, 
 				'requestType': requestType, 
 				'itemDetails': itemDetails, 
+				'deliveryDate': deliveryDate, 
+				'otherDetails': otherDetails, 
+				'location': location, 
 			},
 			type: "POST",
 			success:function(data){
@@ -238,6 +250,9 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) 
 					var requestNumber = resultValue['requestNumber'];
 					var requestType = resultValue['requestType'];
 					var itemDetails = resultValue['itemDetails'];
+					var deliveryDate = resultValue['deliveryDate'];
+					var otherDetails = resultValue['otherDetails'];
+					var location = resultValue['location'];
 					
 					jQuery.ajax({
 						url: "ICTJRS/showRequestItemsICTJRS",
@@ -245,7 +260,6 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails) 
 							'itemID':itemID,
 							'requestNumber':requestNumber,
 							'requestType':requestType,
-							'itemDetails':itemDetails,
 							'accessType': 'readWrite'
 						},
 						type: "POST",

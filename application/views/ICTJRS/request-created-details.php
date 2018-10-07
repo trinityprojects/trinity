@@ -65,6 +65,7 @@
 	<h5>Request Summary: <u><?php echo $requestSummary; ?></u></h5>
 	<div>Your request is now assigned to: <u><?php echo $assignedTo; ?></u></div>
 	<div>This request must be finished on or before: <u><?php echo $deliveryDate; ?></u></div>
+	<input type="hidden" id="deliveryDate" value="<?php echo $deliveryDate ?>" />
 		
 <?php if($requestType == "CCTA") {?>
 	
@@ -121,7 +122,68 @@
 
 	</div>
 <?php } elseif ($requestType == "HWRS") { ?>
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Select Hardware Components" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+							<input class="easyui-combobox" name="requestCategory" id="requestCategory" prompt="Request Category:" style="width:25%" data-options="
+									url:'getRequestHardwareICTJRS',
+									method:'get',
+									valueField:'ID',
+									textField:'requestCategory',
+									panelHeight:200,
+									required:true
+									">
+							<input type="text" class="easyui-textbox" id="itemDetails" data-options="prompt:'Item Details:',required:true" style="width:40%"> 
+			
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Select</a>						
+									
+		</form>
+		</div>
 
+	</div>
+
+	<div id="itemsList" class="col-100" style="border: 0; padding: 10px">
+		<span > </span>
+
+	</div>
+	
+<?php } elseif ($requestType == "ICWA") { ?>
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Select Hardware Components" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+							<input class="easyui-combobox" name="connectionType" id="connectionType" prompt="Connection Type:" style="width:15%" data-options="
+									url:'getConnectionType',
+									method:'get',
+									valueField:'connectionType',
+									textField:'connectionType',
+									panelHeight:100,
+									required:true
+									">
+									
+							<input class="easyui-combobox" name="roomNumber" id="roomNumber" prompt="Room Number:" style="width:25%" data-options="
+									url:'getRoomsTBAMIMS',
+									method:'get',
+									valueField:'roomNumber',
+									textField:'roomNumber',
+									panelHeight:200,
+									required:true
+									">
+									
+							<input type="text" class="easyui-textbox" id="itemDetails" data-options="prompt:'Item Details:',required:true" style="width:40%"> 
+			
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Select</a>						
+									
+		</form>
+		</div>
+
+	</div>
+
+	<div id="itemsList" class="col-100" style="border: 0; padding: 10px">
+		<span > </span>
+
+	</div>
 	
 <?php } ?>
 	</div>	

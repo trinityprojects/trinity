@@ -84,6 +84,11 @@ class trinityDataInfoTech extends MY_Controller {
 		//$requestDetails = '$_POST["requestDetails"]';
 		//$requestType = 'CCTA';
 
+		$requestStatus = $this->_getRequestStatus('ASSIGNED', 'ICTJRS');
+		if($requestType == 'ICWA') {
+			$requestStatus = $this->_getRequestStatus('FOR APPROVAL', 'ICTJRS');
+		}
+		
 		
 		$userName = $this->_getUserName(1);
 
@@ -136,7 +141,7 @@ class trinityDataInfoTech extends MY_Controller {
 				'sy' => $_SESSION['sy'],
 				'requestSummary' => $requestSummary,
 				'requestDetails' => $requestDetails,
-				'requestStatus' => $this->_getRequestStatus('ASSIGNED', 'ICTJRS'),
+				'requestStatus' => $requestStatus,
 				'requestType' => $requestType,
 				'departmentUnit' => $departmentUnit,
 				'assignedTo' => $assignedTo,
@@ -165,7 +170,7 @@ class trinityDataInfoTech extends MY_Controller {
 			$insertData2 = array(
 				'sy' => $_SESSION['sy'],
 				'requestNumber' =>$insertedRecord1,
-				'requestStatus' => $this->_getRequestStatus('ASSIGNED', 'ICTJRS'),
+				'requestStatus' => $requestStatus,
 				'assignedTo' => $assignedTo,
 				'userName' => $userName,
 				'workstationID' => $this->_getIPAddress(),
@@ -198,7 +203,7 @@ class trinityDataInfoTech extends MY_Controller {
 			$text1 = $text1 .  "'".$_SESSION['sy'] . "', ";
 			$text1 = $text1 .  "'".$requestSummary . "', ";
 			$text1 = $text1 .  "'".$requestDetails . "', ";
-			$text1 = $text1 .  "'".$this->_getRequestStatus('ASSIGNED', 'ICTJRS') . "', ";
+			$text1 = $text1 .  "'".$requestStatus . "', ";
 			$text1 = $text1 .  "'".$requestType . "', ";
 			$text1 = $text1 .  "'".$departmentUnit . "', ";
 			$text1 = $text1 .  "'".$assignedTo . "', ";
@@ -218,7 +223,7 @@ class trinityDataInfoTech extends MY_Controller {
 			$text2 = $text2 .  "VALUES (" .  $insertedRecord2 . ", ";
 			$text2 = $text2 .  "'".$_SESSION['sy'] . "', ";
 			$text2 = $text2 .  "'".$insertedRecord1 . "', ";
-			$text2 = $text2 .  "'".$this->_getRequestStatus('ASSIGNED', 'ICTJRS') . "', ";
+			$text2 = $text2 .  "'".$requestStatus . "', ";
 			$text1 = $text1 .  "'', ";
 			$text1 = $text1 .  "'".$assignedTo . "', ";
 			$text2 = $text2 .  "'".$userName . "', ";
@@ -1485,21 +1490,34 @@ class trinityDataInfoTech extends MY_Controller {
 
 
 	public function validateRequestItemsICTJRS() {
+		$requestType = $_POST["requestType"];
 
-		$this->form_validation->set_rules('itemID', 'itemID', 'required');
-		$this->form_validation->set_rules('requestNumber', 'requestNumber', 'required');
-		$this->form_validation->set_rules('requestType', 'requestType', 'required');
-		$this->form_validation->set_rules('itemDetails', 'itemDetails', 'required');
+		if($requestType == "CCTA" || $requestType == "GSAS" || $requestType == "HWRS") {
+			$this->form_validation->set_rules('itemID', 'itemID', 'required');
+			$this->form_validation->set_rules('requestNumber', 'requestNumber', 'required');
+			$this->form_validation->set_rules('requestType', 'requestType', 'required');
+			$this->form_validation->set_rules('itemDetails', 'itemDetails', 'required');
+		} elseif($requestType == "ICWA") {
+			$this->form_validation->set_rules('deliveryDate', 'deliveryDate', 'required');
+			$this->form_validation->set_rules('otherDetails', 'otherDetails', 'required');
+			$this->form_validation->set_rules('location', 'location', 'required');
+		}
 
 		$itemID = $_POST["itemID"];
 		$requestNumber = $_POST["requestNumber"];
 		$requestType = $_POST["requestType"];
 		$itemDetails = $_POST["itemDetails"];
+		$deliveryDate = $_POST["deliveryDate"];
+		$otherDetails = $_POST["otherDetails"];
+		$location = $_POST["location"];
 
 		$this->session->set_flashdata('itemID', $itemID);
 		$this->session->set_flashdata('requestNumber', $requestNumber);
 		$this->session->set_flashdata('requestType', $requestType);
 		$this->session->set_flashdata('itemDetails', $itemDetails);
+		$this->session->set_flashdata('deliveryDate', $deliveryDate);
+		$this->session->set_flashdata('otherDetails', $otherDetails);
+		$this->session->set_flashdata('location', $location);
 
 		if ($this->form_validation->run() == FALSE) {   
 			echo json_encode($this->form_validation->error_array());
@@ -1510,6 +1528,9 @@ class trinityDataInfoTech extends MY_Controller {
 			$returnValue['requestNumber'] = $requestNumber;
 			$returnValue['requestType'] = $requestType;
 			$returnValue['itemDetails'] = $itemDetails;
+			$returnValue['deliveryDate'] = $deliveryDate;
+			$returnValue['otherDetails'] = $otherDetails;
+			$returnValue['location'] = $location;
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
@@ -1524,6 +1545,9 @@ class trinityDataInfoTech extends MY_Controller {
 		$requestNumber = $_POST["requestNumber"];
 		$requestType = $_POST["requestType"];
 		$itemDetails = $_POST["itemDetails"];
+		$deliveryDate = $_POST["deliveryDate"];
+		$otherDetails = $_POST["otherDetails"];
+		$location = $_POST["location"];
 
 		$item = null;
 		$inventory = null;
@@ -1549,14 +1573,37 @@ class trinityDataInfoTech extends MY_Controller {
 				$item = $inventory[0]->requestCategory;
 			}
 			
+		} else if($requestType == "HWRS") {
+			$inventory = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_request_reference_workstation'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			
+			
+			if(!empty($inventory)) {
+				$item = $inventory[0]->requestCategory;
+			}
+			
 		}
+		
+		$transactionExist = null;
+		
+		if($requestType == "CCTA" || $requestType == "GSAS" || $requestType == "HWRS") {
+			$transactionExist = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_job_request_transaction_ict_request_items'), $fieldName = array('requestNumber', 'item'), $where = array($requestNumber, $item), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+		} elseif($requestType == "ICWA") {
+			$transactionExist = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_job_request_transaction_ict_request_items'), $fieldName = array('requestNumber', 'otherDetails', 'location'), 
+			$where = array($requestNumber, $otherDetails, $location), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+		}
+	
 
-		$transactionExist = $this->_getRecordsData($data = array('*'), 
-		$tables = array('triune_job_request_transaction_ict_request_items'), $fieldName = array('requestNumber', 'item'), $where = array($requestNumber, $item), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, 
-		$whereSpecial = null, $groupBy = null );
-		
-		
+
+
+	
 
 		if(empty($transactionExist)) {
 
@@ -1570,6 +1617,10 @@ class trinityDataInfoTech extends MY_Controller {
 				'itemID' => $itemID,
 				'item' => $item,
 				'itemDetails' => $itemDetails,
+				'otherDetails' => $otherDetails,
+				'location' => $location,
+				'startDate' => $deliveryDate,
+				'endDate' => $this->_getCurrentDate(),
 				'userName' => $userName,
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
@@ -1596,7 +1647,10 @@ class trinityDataInfoTech extends MY_Controller {
 			$text1 = $text1 .  "'".$itemID . "', ";
 			$text1 = $text1 .  "'".$item . "', ";
 			$text1 = $text1 .  "'".$itemDetails . "', ";
-			$text1 = $text1 .  "'".$userName . "', ";
+			$text1 = $text1 .  "'".$otherDetails . "', ";
+			$text1 = $text1 .  "'".$location . "', ";
+			$text1 = $text1 .  "'".$deliveryDate . "', ";
+			$text1 = $text1 .  "'".$this->_getCurrentDate() . "', ";
 			$text1 = $text1 .  "'".$userName . "', ";
 			$text1 = $text1 .  "'".$this->_getIPAddress() . "', ";
 			$text1 = $text1 .  "'".$this->_getTimeStamp();
@@ -1716,5 +1770,12 @@ class trinityDataInfoTech extends MY_Controller {
 			echo json_encode($results1);
     }	
 	
-	
+    public function getRequestHardwareICTJRS() {
+		$selectField = "triune_request_reference_workstation.*";
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_request_reference_workstation'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('requestCategory'), $sortOrder = array('asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }		
 }
