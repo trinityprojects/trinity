@@ -85,7 +85,7 @@ class trinityDataInfoTech extends MY_Controller {
 		//$requestType = 'CCTA';
 
 		$requestStatus = $this->_getRequestStatus('ASSIGNED', 'ICTJRS');
-		if($requestType == 'ICWA') {
+		if($requestType == 'ICWA' || $requestType == 'ICSA') {
 			$requestStatus = $this->_getRequestStatus('FOR APPROVAL', 'ICTJRS');
 		}
 		
@@ -1501,6 +1501,13 @@ class trinityDataInfoTech extends MY_Controller {
 			$this->form_validation->set_rules('deliveryDate', 'deliveryDate', 'required');
 			$this->form_validation->set_rules('otherDetails', 'otherDetails', 'required');
 			$this->form_validation->set_rules('location', 'location', 'required');
+		} elseif($requestType == "ICWA") {
+			$this->form_validation->set_rules('item', 'item', 'required');
+			$this->form_validation->set_rules('itemDetails', 'itemDetails', 'required');
+			$this->form_validation->set_rules('otherDetails', 'otherDetails', 'required');
+			$this->form_validation->set_rules('startDate', 'startDate', 'required');
+			$this->form_validation->set_rules('endDate', 'endDate', 'required');
+			
 		}
 
 		$itemID = $_POST["itemID"];

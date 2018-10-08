@@ -4,7 +4,9 @@
     <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/jquery.easyui.min.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/triune.css" />
      <link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/infotech/ictjrs.css" />
-   
+ 	<link rel='stylesheet' type='text/css' media="screen" href='<?php echo base_url();?>assets/scripts/datepicker/datepicker.css' />
+	<script type="text/javascript" src="<?php echo base_url();?>assets/scripts/datepicker/datepicker.js"></script>
+  
     <div id="p" class="easyui-panel" title="Request Created" style="width:100%;height:600px;padding:10px;">
         <p style="font-size:18" >Your request has been created, please use request number: <b style="font-size:24"><u><?php echo $ID ?></u></b> for your reference.</p>
 		<input type="hidden" id="requestNumber" value="<?php echo $ID ?>" />
@@ -185,8 +187,54 @@
 
 	</div>
 	
-<?php } ?>
-	</div>	
+<?php } elseif ($requestType == "ICSA") { ?>
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Set Site Access" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+				<input type="text" class="easyui-textbox" id="contentSite" data-options="prompt:'Content/Site:',required:true" style="width:40%"> 
+									
+				<input type="text" class="easyui-textbox" id="reason" data-options="prompt:'Reason:',required:true" style="width:40%"> 
+				</br></br>	
+
+				<input class="easyui-combobox" name="durationType" id="durationType" prompt="Duration Type:" style="width:15%" data-options="
+						url:'getDurationType',
+						method:'get',
+						valueField:'durationType',
+						textField:'durationType',
+						panelHeight:100,
+						required:true
+						">
+
+				
+				<table id="datepicker" class="dp_calendar" style="display:none;font-size:14px;" cellpadding="0" cellspacing="0"></table>
+				<span style="padding: 10px">
+					Start Date:
+					<input type="text" name="start_date" id="start_date" readonly>
+					<a onclick="DP.open('start_date','doc_single_icon')" id="doc_single_icon"><img src="<?php echo base_url();?>assets/scripts/datepicker/datepicker_cal.gif" /></a>
+				</span>
+				
+				<span style="padding: 10px">
+
+					End Date:
+					<input type="text" name="end_date" id="end_date" readonly>
+					<a onclick="DP.open('end_date','doc_single_icon')" id="doc_single_icon"><img src="<?php echo base_url();?>assets/scripts/datepicker/datepicker_cal.gif" /></a>
+				</span>
+				
+			
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Set</a>						
+									
+		</form>
+		</div>
+
+	</div>
+
+	<div id="itemsList" class="col-100" style="border: 0; padding: 10px">
+		<span > </span>
+
+	</div>
+	
+<?php } ?>	</div>	
 
 </div>
 

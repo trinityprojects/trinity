@@ -167,6 +167,8 @@ $('#ff').click(function(){
 				var itemID = '';
 				var otherDetails = '';
 				var location = '';
+				var startDate = '';
+				var endDate = '';
 				
 				if(requestType == 'CCTA') {
 					itemID = $('#location').val();
@@ -176,6 +178,12 @@ $('#ff').click(function(){
 					itemID = $('#requestCategory').val();
 					otherDetails = $('#connectionType').val();
 					location = $('#roomNumber').val();
+				} else if(requestType == 'ICSA') {
+					item = $('#contentSite').val();
+					itemDetails = $('#reason').val();
+					otherDetails = $('#durationType').val();
+					startDate = $('#start_date').val();
+					endDate = $('#end_date').val();
 				}
 				
 				//alert(itemID);

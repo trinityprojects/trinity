@@ -338,6 +338,7 @@ $route['getLocationTypeTBAMIMS'] = 'trinityDataReference/getLocationTypeTBAMIMS'
 $route['getRoomTypeTBAMIMS'] = 'trinityDataReference/getRoomTypeTBAMIMS'; 
 $route['getRoomsTBAMIMS'] = 'trinityDataReference/getRoomsTBAMIMS'; 
 $route['getConnectionType'] = 'trinityDataReference/getConnectionType'; 
+$route['getDurationType'] = 'trinityDataReference/getDurationType'; 
 
 
 

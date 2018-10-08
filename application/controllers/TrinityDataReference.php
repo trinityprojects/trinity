@@ -489,6 +489,14 @@ class trinityDataReference extends MY_Controller {
 			echo json_encode($results);
 	}
 	
+    public function getDurationType() {
+		$results = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_connection_duration'), $fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('durationType'), $sortOrder = array('asc'), $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
 
+			echo json_encode($results);
+	}
 	
 }
