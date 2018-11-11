@@ -416,7 +416,7 @@ class trinityDataReference extends MY_Controller {
     public function getEmployeeActiveListTHRIMS() {
 		
 		$selectFields = "triune_employee_data.employeeNumber,  ";
-		$selectFields = $selectFields . "concat(triune_employee_data.lastName, ', ' , triune_employee_data.firstName, ' ', triune_employee_data.middleName, ';' , triune_employee_data.employeeNumber) as fullName";
+		$selectFields = $selectFields . "concat(triune_employee_data.lastName, ', ' , triune_employee_data.firstName, ' ', triune_employee_data.middleName,';',triune_employee_data.employeeNumber) as fullName";
 		
 		$results = $this->_getRecordsData($data = array($selectFields), 
 			$tables = array('triune_employee_data'), $fieldName = array('active'), $where = array(-1), 

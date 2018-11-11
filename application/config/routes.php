@@ -119,10 +119,11 @@ $route['TBAMIMS/closedRequest'] = 'trinityBuilding/tBAMIMSRequestList';
 $route['TBAMIMS/completedRequest'] = 'trinityBuilding/tBAMIMSRequestList';
 
 $route['TBAMIMS/showMaterialsList'] = 'trinityBuilding/tBAMIMSMaterialsList';
+$route['TBAMIMS/showMaterialsListWithPrice'] = 'trinityBuilding/tBAMIMSMaterialsListWithPrice';
+
 $route['TBAMIMS/showRequestStatusList'] = 'trinityBuilding/tBAMIMSRequestStatuList';
 $route['TBAMIMS/showUploadedFiles'] = 'trinityBuilding/tBAMIMSShowUploadedFiles';
 $route['TBAMIMS/deleteUploadedFiles'] = 'trinityBuilding/tBAMIMSDeleteUploadedFiles';
-
 $route['TBAMIMS/showWorkerList'] = 'trinityBuilding/tBAMIMSWorkerList';
 $route['TBAMIMS/showJobOrderTBAMIMS'] = 'trinityBuilding/tBAMIMSJobOrder';
 $route['TBAMIMS/showJobOrderEvaluation'] = 'trinityBuilding/tBAMIMSJobOrderEvaluation';
@@ -131,6 +132,8 @@ $route['TBAMIMS/showJobOrderDetails'] = 'trinityBuilding/tBAMIMSJobOrderDetails'
 
 $route['TBAMIMS/location'] = 'trinityBuilding/tBAMIMSLocationList';
 $route['TBAMIMS/rooms'] = 'trinityBuilding/tBAMIMSRoomsList';
+$route['TBAMIMS/notification'] = 'trinityBuilding/tBAMIMSNotification';
+$route['TBAMIMS/showNotifications'] = 'trinityBuilding/tBAMIMSShowNotifications';
 
 
 $route['getLocationCodeTBAMIMS'] = 'trinityDataBuilding/getLocationCodeTBAMIMS'; 
@@ -153,7 +156,11 @@ $route['updateLocationTBAMIMS'] = 'trinityDataBuilding/updateLocationTBAMIMS';
 $route['insertRoomsTBAMIMS'] = 'trinityDataBuilding/insertRoomsTBAMIMS'; 
 $route['updateRoomTBAMIMS'] = 'trinityDataBuilding/updateRoomTBAMIMS'; 
 $route['updateJobOrderTBAMIMS'] = 'trinityDataBuilding/updateJobOrderTBAMIMS'; 
+$route['setupFundStatusRequestTBAMIMS'] = 'trinityDataBuilding/setupFundStatusRequestTBAMIMS'; 
+$route['setupAnnotationTBAMIMS'] = 'trinityDataBuilding/setupAnnotationTBAMIMS'; 
 
+$route['getAllNotificationsTBAMIMS'] = 'trinityDataBuilding/getAllNotificationsTBAMIMS'; 
+$route['setupNotificationTBAMIMS'] = 'trinityDataBuilding/setupNotificationTBAMIMS'; 
 
 
 
@@ -212,6 +219,10 @@ $route['deleteRequestItemsICTJRS'] = 'trinityDataInfoTech/deleteRequestItemsICTJ
 $route['getRequestReferenceGSuiteICTJRS'] = 'trinityDataInfoTech/getRequestReferenceGSuiteICTJRS'; 
 $route['getRequestHardwareICTJRS'] = 'trinityDataInfoTech/getRequestHardwareICTJRS'; 
 
+$route['getDetailedLCDInventoryICTJRS'] = 'trinityDataInfoTech/getDetailedLCDInventoryICTJRS'; 
+$route['getDetailedTelephoneInventoryICTJRS'] = 'trinityDataInfoTech/getDetailedTelephoneInventoryICTJRS'; 
+$route['getSoftwareInventoryICTJRS'] = 'trinityDataInfoTech/getSoftwareInventoryICTJRS'; 
+$route['getLaboratoryList'] = 'trinityDataInfoTech/getLaboratoryList'; 
 
 
 $route['QUEUESYS/customerQueue'] = 'trinityInfoTechQueueSys/queueSysCreateCustomerQueue';
@@ -435,6 +446,8 @@ $route['updateAllowStatusEGIS'] = 'trinityDataEGIS/updateAllowStatusEGIS';
 $route['getGradesPostingEGIS'] = 'trinityDataEGIS/getGradesPostingEGIS';
 $route['updateGradesPostingsEGIS'] = 'trinityDataEGIS/updateGradesPostingsEGIS';
 $route['getYearLevelEGIS'] = 'trinityDataEGIS/getYearLevelEGIS';
+$route['processAllGradesRequestEGIS'] = 'trinityDataEGIS/processAllGradesRequestEGIS';
+$route['updateEmailAddress'] = 'trinityDataEGIS/updateEmailAddress';
 
 
 $route['K12Records/sectioning'] = 'trinityK12Records/sectioningK12Records';
@@ -464,6 +477,7 @@ $route['THRIMS/showEmployeeProfileDetails'] = 'trinityTHRIMS/showEmployeeProfile
 $route['THRIMS/employeeRecords'] = 'trinityTHRIMS/showEmployeeRecordsTHRIMS';
 $route['THRIMS/showReportsDetails'] = 'trinityTHRIMS/showReportsDetailsTHRIMS';
 $route['THRIMS/gender'] = 'trinityTHRIMS/showGenderTHRIMS';
+$route['THRIMS/faculty'] = 'trinityTHRIMS/showFacultyEvaluationTHRIMS';
 
 
 
@@ -480,6 +494,10 @@ $route['getChildrenTHRIMS'] = 'trinityDataTHRIMS/getChildrenTHRIMS';
 $route['insertGenderTHRIMS'] = 'trinityDataTHRIMS/insertGenderTHRIMS'; 
 $route['updateGenderTHRIMS'] = 'trinityDataTHRIMS/updateGenderTHRIMS'; 
 $route['deleteGenderTHRIMS'] = 'trinityDataTHRIMS/deleteGenderTHRIMS'; 
+$route['getEvaluationDetails'] = 'trinityDataTHRIMS/getEvaluationDetailsTHRIMS'; 
+$route['populateEvaluationDetails'] = 'trinityDataTHRIMS/populateEvaluationDetailsTHRIMS'; 
+$route['postEvaluation'] = 'trinityDataTHRIMS/postEvaluationTHRIMS'; 
+$route['checkEvaluationPosting'] = 'trinityDataTHRIMS/checkEvaluationPostingTHRIMS'; 
 
 
 

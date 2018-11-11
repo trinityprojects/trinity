@@ -48,7 +48,7 @@ console.log(pageRefInput);
 			console.log(response);
                 console.log('the page was loaded');
                 //alert(response);
-                $('.levelonecontent').append(response);
+                $('.levelonecontent').html(response);
                // $("div.container").css("margin-left", "255px");
                 //$('#sticky-sidebar-demo').
                 //$('#sticky-sidebar-demo').hide();

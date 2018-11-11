@@ -169,6 +169,8 @@ $('#ff').click(function(){
 				var location = '';
 				var startDate = '';
 				var endDate = '';
+				var item = '';
+				var itemDetails = $('#itemDetails').val();
 				
 				if(requestType == 'CCTA') {
 					itemID = $('#location').val();
@@ -184,14 +186,20 @@ $('#ff').click(function(){
 					otherDetails = $('#durationType').val();
 					startDate = $('#start_date').val();
 					endDate = $('#end_date').val();
+				} else if(requestType == 'LPI') {
+					itemID = $('#projectorDetail').val();
+				} else if(requestType == 'PTRS') {
+					itemID = $('#phoneDetail').val();
+				} else if(requestType == 'SWTI') {
+					itemID = $('#softwareName').val();
 				}
 				
+			
 				//alert(itemID);
 				var requestNumber = $('#requestNumber').val();
-				var itemDetails = $('#itemDetails').val();
 				var deliveryDate = $('#deliveryDate').val();
-				
-				checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location)
+		//alert(itemID);		
+				checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location, item, startDate, endDate)
             }
 
         }
@@ -200,19 +208,17 @@ $('#ff').click(function(){
 
 
 
-function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location) {
-	
-    jQuery.ajax({
+function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location, item, startDate, endDate) {
+	jQuery.ajax({
         url: "validateRequestItemsICTJRS",
-        data:'itemID='+itemID+'&requestNumber='+requestNumber+'&requestType='+requestType+'&itemDetails='+itemDetails+'&deliveryDate='+deliveryDate+'&otherDetails='+otherDetails+'&location='+location,
+        data:'itemID='+itemID+'&requestNumber='+requestNumber+'&requestType='+requestType+'&itemDetails='+itemDetails+'&deliveryDate='+deliveryDate+'&otherDetails='+otherDetails+'&location='+location+'&item='+item+'&startDate='+startDate+'&endDate='+endDate,
         type: "POST",
         success:function(data){
             console.log(data);
             var resultValue = $.parseJSON(data);
             if(resultValue['success'] == 1) {
-                clearErrorMessages();
-
-				addItem(resultValue['itemID'], resultValue['requestNumber'], resultValue['requestType'], resultValue['itemDetails'], resultValue['deliveryDate'], resultValue['otherDetails'], resultValue['location'] );
+				clearErrorMessages();
+				addItem(resultValue['itemID'], resultValue['requestNumber'], resultValue['requestType'], resultValue['itemDetails'], resultValue['deliveryDate'], resultValue['otherDetails'], resultValue['location'], resultValue['item'], resultValue['startDate'], resultValue['endDate'] );
 
             } else {
                 var obj = $.parseJSON(data);
@@ -223,6 +229,9 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, 
                 var deliveryDate = obj['deliveryDate'];
                 var otherDetails = obj['otherDetails'];
                 var location = obj['location'];
+                var item = obj['item'];
+                var startDate = obj['startDate'];
+                var endDate = obj['endDate'];
 				
                 $notExistMessage = '';
                 $('div#error-messages').html($notExistMessage);
@@ -237,7 +246,7 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, 
 
  
  
- 	function addItem(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location) {
+ 	function addItem(itemID, requestNumber, requestType, itemDetails, deliveryDate, otherDetails, location, item, startDate, endDate) {
 		jQuery.ajax({
 			url: "insertRequestItemsICTJRS",
 			data: { 
@@ -247,7 +256,11 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, 
 				'itemDetails': itemDetails, 
 				'deliveryDate': deliveryDate, 
 				'otherDetails': otherDetails, 
-				'location': location, 
+				'location': location,
+				'item': item,
+				'startDate': startDate, 
+				'endDate': endDate, 
+				
 			},
 			type: "POST",
 			success:function(data){
@@ -261,6 +274,9 @@ function checkDataItemsViaAJAX(itemID, requestNumber, requestType, itemDetails, 
 					var deliveryDate = resultValue['deliveryDate'];
 					var otherDetails = resultValue['otherDetails'];
 					var location = resultValue['location'];
+					var item = resultValue['item'];
+					var startDate = resultValue['startDate'];
+					var endDate = resultValue['endDate'];
 					
 					jQuery.ajax({
 						url: "ICTJRS/showRequestItemsICTJRS",

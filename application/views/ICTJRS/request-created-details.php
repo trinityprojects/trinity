@@ -6,7 +6,11 @@
      <link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/infotech/ictjrs.css" />
  	<link rel='stylesheet' type='text/css' media="screen" href='<?php echo base_url();?>assets/scripts/datepicker/datepicker.css' />
 	<script type="text/javascript" src="<?php echo base_url();?>assets/scripts/datepicker/datepicker.js"></script>
-  
+
+ 	<link rel='stylesheet' type='text/css' media="screen" href='<?php echo base_url();?>assets/scripts/timepicker/jquery.timepicker.css' />
+	<script type="text/javascript" src="<?php echo base_url();?>assets/scripts/timepicker/jquery.timepicker.js"></script>
+
+	
     <div id="p" class="easyui-panel" title="Request Created" style="width:100%;height:600px;padding:10px;">
         <p style="font-size:18" >Your request has been created, please use request number: <b style="font-size:24"><u><?php echo $ID ?></u></b> for your reference.</p>
 		<input type="hidden" id="requestNumber" value="<?php echo $ID ?>" />
@@ -152,7 +156,7 @@
 	
 <?php } elseif ($requestType == "ICWA") { ?>
 	<div class="col-100" style="border: 0">
-		<div class="easyui-panel" title="Select Hardware Components" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<div class="easyui-panel" title="Internet Activation" style="width:100%;max-width:100%;padding:5px 5px;"> 
 		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
 			
 							<input class="easyui-combobox" name="connectionType" id="connectionType" prompt="Connection Type:" style="width:15%" data-options="
@@ -233,6 +237,147 @@
 		<span > </span>
 
 	</div>
+<?php } elseif($requestType == "LPI") {?>
+	
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Select LCD Equipment for inspection" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+							<input class="easyui-combobox" name="projectorDetail" id="projectorDetail" prompt="PROJECTOR:" style="width:25%" data-options="
+									url:'getDetailedLCDInventoryICTJRS',
+									method:'get',
+									valueField:'ID',
+									textField:'projectorDetail',
+									panelHeight:200,
+									required:true
+									">
+							<input type="text" class="easyui-textbox" id="itemDetails" data-options="prompt:'Item Details:',required:true" style="width:40%"> 
+			
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Select</a>						
+									
+		</form>
+		</div>
+
+	</div>
+
+	<div id="itemsList" class="col-100" style="border: 0; padding: 10px">
+		<span > </span>
+
+	</div>
+<?php } elseif($requestType == "PTRS") {?>
+	
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Select Telephone Equipment for inspection" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+							<input class="easyui-combobox" name="phoneDetail" id="phoneDetail" prompt="PHONE DETAIL:" style="width:25%" data-options="
+									url:'getDetailedTelephoneInventoryICTJRS',
+									method:'get',
+									valueField:'ID',
+									textField:'phoneDetail',
+									panelHeight:200,
+									required:true
+									">
+							<input type="text" class="easyui-textbox" id="itemDetails" data-options="prompt:'Item Details:',required:true" style="width:40%"> 
+			
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Select</a>						
+									
+		</form>
+		</div>
+
+	</div>
+
+	<div id="itemsList" class="col-100" style="border: 0; padding: 10px">
+		<span > </span>
+
+	</div>
+<?php } elseif($requestType == "SWTI") {?>
+	
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Select Software" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+							<input class="easyui-combobox" name="softwareName" id="softwareName" prompt="SOFTWARE:" style="width:25%" data-options="
+									url:'getSoftwareInventoryICTJRS',
+									method:'get',
+									valueField:'ID',
+									textField:'softwareName',
+									panelHeight:200,
+									required:true
+									">
+							<input type="text" class="easyui-textbox" id="itemDetails" data-options="prompt:'Item Details:',required:true" style="width:40%"> 
+			
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Select</a>						
+									
+		</form>
+		</div>
+
+	</div>
+
+	<div id="itemsList" class="col-100" style="border: 0; padding: 10px">
+		<span > </span>
+
+	</div>
+
+<?php } elseif ($requestType == "CLA") { ?>
+	<div class="col-100" style="border: 0">
+		<div class="easyui-panel" title="Lab Reservation" style="width:100%;max-width:100%;padding:5px 5px;"> 
+		<form id="itemForm" class="easyui-form" method="post" data-options="novalidate:true">
+			
+
+				<input class="easyui-combobox" name="comlabName" id="comlabName" prompt="Comlab Name:" style="width:15%" data-options="
+						url:'getLaboratoryList',
+						method:'get',
+						valueField:'comlabName',
+						textField:'comlabName',
+						panelHeight:100,
+						required:true
+						">
+
+				
+				<table id="datepicker" class="dp_calendar" style="display:none;font-size:14px;" cellpadding="0" cellspacing="0"></table>
+				<span style="padding: 10px">
+					Start Date:
+					<input type="text" name="start_date" id="start_date" readonly>
+					<a onclick="DP.open('start_date','doc_single_icon')" id="doc_single_icon"><img src="<?php echo base_url();?>assets/scripts/datepicker/datepicker_cal.gif" /></a>
+				</span>
+
+				<span style="padding: 10px">
+					Start Time:
+					<input id="startTime" type="text" class="time" />
+				</span>
+
+				
+				<span style="padding: 10px">
+
+					End Date:
+					<input type="text" name="end_date" id="end_date" readonly>
+					<a onclick="DP.open('end_date','doc_single_icon')" id="doc_single_icon"><img src="<?php echo base_url();?>assets/scripts/datepicker/datepicker_cal.gif" /></a>
+				</span>
+
+				<span style="padding: 10px">
+					End Time:
+					<input id="endTime" type="text" class="time" />
+				</span>
+				
+				</br></br>	
+	
+				<input type="text" class="easyui-textbox" id="reservationDetails" data-options="prompt:'Reservation Details:',required:true" style="width:40%"> 
+
+				<script>
+					$(function() {
+						$('#startTime').timepicker();
+						$('#endTime').timepicker();
+					});
+				</script>
+									
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width:80px">Set</a>						
+									
+		</form>
+		</div>
+
+	</div>
+
 	
 <?php } ?>	</div>	
 

@@ -5,8 +5,13 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/icon.css">
     <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/jquery.easyui.min.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/egis/egis.css" />
- <script src="http://handsontable.com/dist/handsontable.full.js"></script>
-    <link rel="stylesheet" media="screen" href="http://handsontable.com/dist/handsontable.full.css">
+	
+	<!--<script src="http://handsontable.com/dist/handsontable.full.js"></script>
+    <link rel="stylesheet" media="screen" href="http://handsontable.com/dist/handsontable.full.css">-->
+	
+	<script  src="<?php echo base_url();?>assets/thirdparty/handsontable-master/dist/handsontable.full.js"></script>
+	<link rel="stylesheet" media="screen" href="<?php echo base_url();?>assets/thirdparty/handsontable-master/dist/handsontable.full.css">
+	
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/dialog.css" />
 
 	<div id="dialogoverlay-long"></div>
@@ -21,7 +26,7 @@
 <div>	
 <table id="tt" class="easyui-datagrid" style="width:100%;max-width:100%;padding:5px 5px;font-size: 5px;"
         url="getMyElementarySectionsEGIS" toolbar="#tb"
-        title="My Elementary Sections List for the term <?php echo '<b><u>' . $_SESSION['sy'] . '</u></b>'; ?>" iconCls="icon-save"
+        title="My Elementary Sections List for the term <?php echo '<b><u>' . $_SESSION['sy'] . '</u></b>'; ?>, Grading Period: <?php echo '<b><u>' . $_SESSION['gP'] . '</u></b>'; ?>" iconCls="icon-save"
         rownumbers="true" pagination="true" data-options="singleSelect: true,
         rowStyler: function(){
                         return 'padding:5px;';
@@ -41,7 +46,7 @@
 </table>
 </br>
 
-        <div id="p" class="easyui-panel" title="SUBJECT INFORMATION AND TITLE SETUP " style="width:100%;height:200px;padding:10px;"
+        <div id="p" class="easyui-panel" title="SUBJECT INFORMATION AND TITLE SETUP, Grading Period: <?php echo '<b><u>' . $_SESSION['gP'] . '</u></b>'; ?> " style="width:100%;height:200px;padding:10px;"
                 data-options="iconCls:'icon-save',collapsible:true,minimizable:false,maximizable:false,closable:false">
 				
 				

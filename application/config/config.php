@@ -28,7 +28,7 @@ ini_set('date.timezone', 'Asia/Manila');
 ini_set('default_charset', 'UTF-8');
 header ('Content-type: text/html; charset=utf-8');
 
-$domainName = "localhost";
+$domainName = "192.168.2.153";
 $config['base_url'] = 'http://' . $domainName . '/trinity/';
 $config['server_root'] = $_SERVER['DOCUMENT_ROOT'];
 

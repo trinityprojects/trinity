@@ -39,7 +39,7 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 //$pdf->SetKeywords('Job Order, request');
 
 // set default header data
-$pdf->SetHeaderData(false, false, 'Ranking by Year Level: ' . $yearLevel, false);
+$pdf->SetHeaderData(false, false, 'Ranking by Year Level: ' . $yearLevelLabel, false);
 
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 12));

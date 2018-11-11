@@ -923,5 +923,219 @@ class trinityDataTHRIMS extends MY_Controller {
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 	}
+
+
+    public function getEvaluationDetailsTHRIMS() {
+
+			
+			$selectField = "triune_section_junior_high.sectionCode, triune_subject_junior_high.subjectCode, triune_subject_junior_high.subjectDescription, triune_section_junior_high.employeeNumber, ";
+			$selectField = $selectField . "concat(triune_employee_data.lastName, ', ', triune_employee_data.firstName, ' ', triune_employee_data.middleName) as facultyFullName, ";
+			$selectField = $selectField . "question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, ";
+			$selectField = $selectField . "question11, question12, question13, question14, question15, question16, question17, question18, question19, question20, ";
+			$selectField = $selectField . "question21, question22, question23, question24, question25, question26, question27, question28, question29, question30, ";
+			$selectField = $selectField . "question31, question32, question33, question34, question35, question36, question37, question38, question39, question40, ";
+			$selectField = $selectField . "question41, question42, question43, comments";
+			
+			$results = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_student_roster_junior_high', 'triune_subject_junior_high', 'triune_section_junior_high', 'triune_employee_data', 'triune_faculty_evaluation_answers'), 
+			$fieldName = array('triune_student_roster_junior_high.sy', 'triune_student_roster_junior_high.studentNumber'), 
+			$where = array($_SESSION['sy'], $_SESSION['userNumber']), 
+			$join = array('triune_student_roster_junior_high.subjectCode = triune_subject_junior_high.subjectCode', 
+			'triune_student_roster_junior_high.sy = triune_section_junior_high.sy AND triune_student_roster_junior_high.sectionCode = triune_section_junior_high.sectionCode AND triune_student_roster_junior_high.subjectCode = triune_section_junior_high.subjectCode', 
+			'triune_section_junior_high.employeeNumber = triune_employee_data.employeeNumber',
+			'triune_student_roster_junior_high.sy = triune_faculty_evaluation_answers.sy AND triune_student_roster_junior_high.sem = triune_faculty_evaluation_answers.sem AND triune_student_roster_junior_high.sectionCode = triune_faculty_evaluation_answers.sectionCode AND triune_student_roster_junior_high.subjectCode = triune_faculty_evaluation_answers.subjectCode  AND triune_student_roster_junior_high.studentNumber = triune_faculty_evaluation_answers.studentNumber'), 
+			$joinType = array('left', 'left', 'left', 'left'), 
+			$sortBy = null, $sortOrder = null, $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			
+			if(empty($results)) {
+
+					$selectField = "triune_section_senior_high.sectionCode, triune_subject_senior_high.subjectCode, triune_subject_senior_high.subjectDescription, triune_section_senior_high.employeeNumber, ";
+					$selectField = $selectField . "concat(triune_employee_data.lastName, ', ', triune_employee_data.firstName, ' ', triune_employee_data.middleName) as facultyFullName, ";
+					$selectField = $selectField . "question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, ";
+					$selectField = $selectField . "question11, question12, question13, question14, question15, question16, question17, question18, question19, question20, ";
+					$selectField = $selectField . "question21, question22, question23, question24, question25, question26, question27, question28, question29, question30, ";
+					$selectField = $selectField . "question31, question32, question33, question34, question35, question36, question37, question38, question39, question40, ";
+					$selectField = $selectField . "question41, question42, question43, comments";
+					
+					$results = $this->_getRecordsData($data = array($selectField), 
+					$tables = array('triune_student_roster_senior_high', 'triune_subject_senior_high', 'triune_section_senior_high', 'triune_employee_data', 'triune_faculty_evaluation_answers'), 
+					$fieldName = array('triune_student_roster_senior_high.sy', 'triune_student_roster_senior_high.sem', 'triune_student_roster_senior_high.studentNumber'), 
+					$where = array($_SESSION['sy'], $_SESSION['sem'], $_SESSION['userNumber']), 
+					$join = array('triune_student_roster_senior_high.subjectCode = triune_subject_senior_high.subjectCode', 
+					'triune_student_roster_senior_high.sy = triune_section_senior_high.sy AND triune_student_roster_senior_high.sem = triune_section_senior_high.sem AND triune_student_roster_senior_high.sectionCode = triune_section_senior_high.sectionCode AND triune_student_roster_senior_high.subjectCode = triune_section_senior_high.subjectCode', 
+					'triune_section_senior_high.employeeNumber = triune_employee_data.employeeNumber', 
+					'triune_student_roster_senior_high.sy = triune_faculty_evaluation_answers.sy AND triune_student_roster_senior_high.sem = triune_faculty_evaluation_answers.sem AND triune_student_roster_senior_high.sectionCode = triune_faculty_evaluation_answers.sectionCode AND triune_student_roster_senior_high.subjectCode = triune_faculty_evaluation_answers.subjectCode  AND triune_student_roster_senior_high.studentNumber = triune_faculty_evaluation_answers.studentNumber'), 
+					$joinType = array('left', 'left', 'left', 'left'), 
+					$sortBy = null, $sortOrder = null, $limit = null, 
+					$fieldNameLike = null, $like = null, 
+					$whereSpecial = null, $groupBy = null );
+					
+					if(empty($results)) {
+						$selectField = "triune_employee_data.employeeNumber, triune_faculty_load_college.sectionCode, triune_faculty_load_college.subjectCode, triune_subjects_college.subjectDescription, ";
+						$selectField = $selectField . "concat(triune_employee_data.lastName, ', ', triune_employee_data.firstName, ' ', triune_employee_data.middleName) as facultyFullName, ";
+						$selectField = $selectField . "question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, ";
+						$selectField = $selectField . "question11, question12, question13, question14, question15, question16, question17, question18, question19, question20, ";
+						$selectField = $selectField . "question21, question22, question23, question24, question25, question26, question27, question28, question29, question30, ";
+						$selectField = $selectField . "question31, question32, question33, question34, question35, question36, question37, question38, question39, question40, ";
+						$selectField = $selectField . "question41, question42, question43, comments";
+						
+						$results = $this->_getRecordsData($data = array($selectField), 
+						$tables = array('triune_class_list_college', 'triune_faculty_load_college', 'triune_employee_data', 'triune_subjects_college', 'triune_faculty_evaluation_answers'), 
+						$fieldName = array('triune_class_list_college.sy', 'triune_class_list_college.sem', 'triune_class_list_college.studentNumber'), 
+						$where = array($_SESSION['sy'], $_SESSION['sem'], $_SESSION['userNumber']), 
+						$join = array('triune_class_list_college.sy = triune_faculty_load_college.sy AND triune_class_list_college.sem = triune_faculty_load_college.sem AND triune_class_list_college.sectionCode = triune_faculty_load_college.sectionCode AND triune_class_list_college.eSubjectCode = triune_faculty_load_college.subjectCode', 
+						'triune_faculty_load_college.fCode = triune_employee_data.employeeNumber', 
+						'triune_faculty_load_college.subjectCode = triune_subjects_college.subjectCode', 
+						'triune_class_list_college.sy = triune_faculty_evaluation_answers.sy AND triune_class_list_college.sem = triune_faculty_evaluation_answers.sem AND triune_class_list_college.eSubjectCode = triune_faculty_evaluation_answers.subjectCode AND triune_class_list_college.sectionCode = triune_faculty_evaluation_answers.sectionCode  AND triune_class_list_college.studentNumber = triune_faculty_evaluation_answers.studentNumber'), 
+						$joinType = array('left', 'left', 'left', 'left'), 
+						$sortBy = null, $sortOrder = null, $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+						
+						
+						
+					}
+				
+			}
+			
+			
+			
+			echo json_encode($results);
+    }
+
+
+	public function populateEvaluationDetailsTHRIMS() {
+		$employeeNumber = $_POST['employeeNumber'];
+		$sectionCode = $_POST['sectionCode'];
+		$subjectCode = $_POST['subjectCode'];
+		$fieldNameData = $_POST['fieldName'];
+		$value = $_POST['value'];
+		$userName = $this->_getUserName(1);
+		
+		$exist = $this->_getRecordsData($data = array("*"), 
+			$tables = array('triune_faculty_evaluation_answers'), 
+			$fieldName = array('employeeNumber', 'sectionCode', 'subjectCode', 'studentNumber', 'sy', 'sem'), 
+			$where = array($employeeNumber, $sectionCode, $subjectCode, $_SESSION['userNumber'], $_SESSION['sy'], $_SESSION['sem']), 
+			$join = null, 
+			$joinType = null, 
+			$sortBy = null, 
+			$sortOrder = null, 
+			$limit = null, 
+			$fieldNameLike = null, 
+			$like = null, 
+			$whereSpecial = null, 
+			$groupBy = null );
+			
+		if(empty($exist)) {
+				$insertData1 = null;
+				$insertData1 = array(
+					'sy' => $_SESSION['sy'],
+					'sem' => $_SESSION['sem'],
+					'subjectCode' => $subjectCode,
+					'sectionCode' => $sectionCode,
+					'employeeNumber' => $employeeNumber,
+					'studentNumber' => $_SESSION['userNumber'],
+					$fieldNameData => $value,
+					'workstationID' => $this->_getIPAddress(),
+					'userNumber' => $userName,
+					'timeStamp' => $this->_getTimeStamp(),
+				);				 
+
+				$insertedRecord1 =$this->_insertRecords($tableName = 'triune_faculty_evaluation_answers', $insertData1);        			 
+			
+		
+		} else {
+			
+				$recordUpdate = array(
+					$fieldNameData => $value,
+				);
+			
+				$this->_updateRecords($tableName = 'triune_faculty_evaluation_answers', 
+				$fieldName = array('employeeNumber', 'sectionCode', 'subjectCode', 'studentNumber', 'sy', 'sem'), 
+				$where = array($employeeNumber, $sectionCode, $subjectCode, $_SESSION['userNumber'], $_SESSION['sy'], $_SESSION['sem']), $recordUpdate);
+			
+		}
+		
+	}
+
+
+
+	public function postEvaluationTHRIMS() {
+		$userName = $this->_getUserName(1);
+		
+		$exist = $this->_getRecordsData($data = array("*"), 
+			$tables = array('triune_faculty_evaluation_post'), 
+			$fieldName = array('studentNumber', 'sy', 'sem'), 
+			$where = array($_SESSION['userNumber'], $_SESSION['sy'], $_SESSION['sem']), 
+			$join = null, 
+			$joinType = null, 
+			$sortBy = null, 
+			$sortOrder = null, 
+			$limit = null, 
+			$fieldNameLike = null, 
+			$like = null, 
+			$whereSpecial = null, 
+			$groupBy = null );
+			
+		if(empty($exist)) {
+				$insertData1 = null;
+				$insertData1 = array(
+					'sy' => $_SESSION['sy'],
+					'sem' => $_SESSION['sem'],
+					'studentNumber' => $_SESSION['userNumber'],
+					'postedFlag' => 1,
+					'workstationID' => $this->_getIPAddress(),
+					'userNumber' => $userName,
+					'timeStamp' => $this->_getTimeStamp(),
+				);				 
+
+				$insertedRecord1 =$this->_insertRecords($tableName = 'triune_faculty_evaluation_post', $insertData1);        			 
+			
+		
+		} else {
+			
+				$recordUpdate = array(
+					'postedFlag' => 1,
+				);
+			
+				$this->_updateRecords($tableName = 'triune_faculty_evaluation_post', 
+				$fieldName = array('studentNumber', 'sy', 'sem'), 
+				$where = array($_SESSION['userNumber'], $_SESSION['sy'], $_SESSION['sem']), $recordUpdate);
+			
+		}
+		
+	}
+
+	
+	public function checkEvaluationPostingTHRIMS() {
+
+		$exist = $this->_getRecordsData($data = array("*"), 
+			$tables = array('triune_faculty_evaluation_post'), 
+			$fieldName = array('studentNumber', 'sy', 'sem'), 
+			$where = array($_SESSION['userNumber'], $_SESSION['sy'], $_SESSION['sem']), 
+			$join = null, 
+			$joinType = null, 
+			$sortBy = null, 
+			$sortOrder = null, 
+			$limit = null, 
+			$fieldNameLike = null, 
+			$like = null, 
+			$whereSpecial = null, 
+			$groupBy = null );
+	
+		$returnValue = array();
+		
+		if(empty($exist)) {
+			$returnValue['success'] = 0;
+		} else {
+			$returnValue['success'] = 1;
+		}
+		
+		echo json_encode($returnValue);
+	}
+	
+	
 	
 }

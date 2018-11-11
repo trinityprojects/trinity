@@ -188,6 +188,10 @@ class trinityInfoTech extends MY_Controller {
 
 		if($data['requestType'] == 'ICWA') {
 			$this->load->view('ICTJRS/request-items-list_2', $data);
+		} else if($data['requestType'] == 'LPI') {
+			$this->load->view('ICTJRS/request-items-list_3', $data);
+		} else if($data['requestType'] == 'PTRS') {
+			$this->load->view('ICTJRS/request-items-list_4', $data);
 		} else {
 			$this->load->view('ICTJRS/request-items-list', $data);
 		}

@@ -181,6 +181,9 @@
 							<div class="panel-detail message-instruction" id="message" > 
 								<span id="message-author" onclick="hideInstructionBox();"><?php echo "(" .$userNumber . ") "; ?></span>
 								<textarea  style="background-color: white;" id="specialInstructions" data-autoresize rows="1" class="autoExpand"></textarea>
+								<?php if( ($requestStatus == 'N') && ($userLevel == "SUPERVISOR") ) {?>
+									<a href="javascript:void(0)" class="link-btn" onclick="SetAnnotation.render('Request #<?php echo $ID?> New','update_request','N')" style="width:80px">Annotation</a>
+								<?php } ?>
 							</div> 
 						<?php } ?>
 				   <?php } ?>
@@ -211,7 +214,7 @@
 								</div>
 							<?php }?>
 						<?php }?>
-						<?php if( ($requestStatus == 'E') ) {?>
+						<?php if( ($requestStatus == 'E') && ($userLevel == "SUPERVISOR") && (empty($fundsAvailability))) {?>
 
 								<a href="javascript:void(0)" class="link-btn" onclick="SetFundsStatus.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">SET FUND STATUS</a>
 						
@@ -287,481 +290,544 @@
 
 							
                     <?php } elseif( ($requestStatus == 'O') || ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C') || ($requestStatus == 'R')) { ?>
-                        <label >Estimation/Materials Needed:</label>
+							<?php if( ($requestStatus == 'A') && ($returnedFrom == 'O') ) {?>
+							
+								<label >Estimation: 						
 
-                        <div class="panel-detail" style="padding: 5px"> 
-						
-							<div class="tab">
-							  <button class="tablinksEstimates active" onclick="openTab(event, 'Estimates')">Estimates</button>
-							  <?php if( ($requestStatus == 'S') ||($requestStatus == 'W') || ($requestStatus == 'C')) {?>
-							  <button class="tablinksEstimates" onclick="openTab(event, 'Actual')">Actual</button>
-							  <?php } ?>
-							  <?php if( ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
-							  <button class="tablinksEstimates" onclick="openTab(event, 'JobOrder')">Job Order</button>
-							  <?php } ?>
-							  <?php if($requestStatus == 'C') {?>
-							  <button class="tablinksEstimates" onclick="openTab(event, 'EvaluationJO')">Evaluation</button>
-							  <input type="hidden" id="jobOrderNumber" value="<?php echo $jobOrderNumber;?>" />
-							  <?php } ?>
+								<?php if($owner != 1) {?>
+									<span class="add_field_button_with_price" id="basic-btn"> Set Materials</span> 
+								<?php } ?>
+								</label>
+									<div class="input_fields_wrap_with_price"></div>  
+							
+							
+							<?php } else { ?>
+								<label >Estimation/Materials Needed:</label>
 
-							</div>
-							<div id="Estimates" class="tabcontentEstimates">
-						
-										<div class="panel-detail">   
-										<?php if(!empty($materials)) {?>
+								<div class="panel-detail" style="padding: 5px"> 
+								
+									<div class="tab">
+									  <button class="tablinksEstimates active" onclick="openTab(event, 'Estimates')">Estimates</button>
+									  <?php if( ($requestStatus == 'S') ||($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+									  <button class="tablinksEstimates" onclick="openTab(event, 'Actual')">Actual</button>
+									  <?php } ?>
+									  <?php if( ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+									  <button class="tablinksEstimates" onclick="openTab(event, 'JobOrder')">Job Order</button>
+									  <?php } ?>
+									  <?php if($requestStatus == 'C') {?>
+									  <button class="tablinksEstimates" onclick="openTab(event, 'EvaluationJO')">Evaluation</button>
+									  <input type="hidden" id="jobOrderNumber" value="<?php echo $jobOrderNumber;?>" />
+									  <?php } ?>
+
+									</div>
+									<div id="Estimates" class="tabcontentEstimates">
+								
+												<div class="panel-detail">   
+												<?php if(!empty($materials)) {?>
 
 
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b><u>QTY</u></b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b><u>UNITS</u></b></span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span>
-														<b><u>PARTICULARS</u></b>
-													</span>
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b><u>QTY</u></b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b><u>UNITS</u></b></span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span>
+																<b><u>PARTICULARS</u></b>
+															</span>
+															
+														</div> 
+
+														
+														<?php if( ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+															
+															<div style="float: left; width: 50%">
+																<span>
+																	<b><u>Estimated Unit Amount</u></b>
+																</span>
+																
+																
+																
+																<span style="float: right;">
+																	<b><u>Estimated Amount</u></b>
+																</span>
+																
+															</div>    
+														<?php } ?>
+
+													</div></br>
+												<?php } ?>
+			 
+			 
+										<?php 
+											$totalMaterialsAmount = 0;
+											$itemCtr = 0;
+											if(!empty($materials)) {
+												foreach($materials as $row) {
+										?>
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b><?php echo $row->quantity; ?></b></span>
+															<input type="hidden" name="quantity[]" value="<?php echo $row->quantity; ?> "/> 
+
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b><?php echo trim($row->units); ?></b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span>
+																<?php echo trim($row->particulars); ?> 
+															</span>
+														</div>    
+
 													
-												</div> 
+														<?php if($requestStatus == 'A') {?>
+															<div style="float: left; width: 50%">
+																<span>
+																	<input type="number" autofocus class="amount" id="numeric" name="amount[]" size="5" maxlength="5" placeholder="Amount"/> 
+																	<input type="hidden" name="materialsRecordID[]" value="<?php echo $row->ID; ?>"/> 
+																	<span id="itemTotalAmount<?php echo $itemCtr;?>" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+																	</span>                                          
+															   </span>
+															</div>    
+															
+														<?php } ?>
 
-												
-												<?php if( ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+														
+														
+														
+														<?php if( ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+
+
+															<div style="float: left; width: 50%">
+
+																<span >
+																	<?php 
+																		echo number_format($row->materialsAmount, 2); 
+																		//$totalMaterialsAmount += $row->materialsAmount;
+																	?> 
+															   </span>
+															   
+															   
+																<span style="color: red; font-size: 15px; font-weight: bold; float: right;">
+																	<?php 
+																		echo number_format((floatval($row->materialsAmount) * intval($row->quantity)), 2); 
+																		$totalMaterialsAmount += (floatval($row->materialsAmount) * intval($row->quantity));
+																	?> 
+															   </span>
+															   
+															</div>    
+														<?php } ?>
+
+													</div></br>
+										
+										<?php 
+												$itemCtr++;
+												} 
+											}
+										?>
+										
+										<?php if(!empty($materials)) { ?>
+										
+											<?php if( ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) { ?>
+												<div>
+													<div style="float: left; width: 3%">
+														<span><b>_</b></span>
+													</div> 
+													<div style="float: left; width: 7%">
+														<span><b>_</b> </span> 
+													</div>
+													<div style="float: left; width: 40%">
+														<span style="color: red; font-size: 15px; font-weight: bold">
+														   TOTAL AMOUNT:
+														</span>
+													</div>   
+
+													
 													
 													<div style="float: left; width: 50%">
 														<span>
-															<b><u>Estimated Unit Amount</u></b>
+														>>>
 														</span>
+														<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+														<?php if(($requestStatus == 'A') ) {?>
+															0.00
+														<?php } ?>
+
 														
-														
-														
-														<span style="float: right;">
-															<b><u>Estimated Amount</u></b>
-														</span>
-														
-													</div>    
-												<?php } ?>
-
-											</div></br>
-										<?php } ?>
-	 
-	 
-								<?php 
-									$totalMaterialsAmount = 0;
-									$itemCtr = 0;
-									if(!empty($materials)) {
-										foreach($materials as $row) {
-								?>
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b><?php echo $row->quantity; ?></b></span>
-													<input type="hidden" name="quantity[]" value="<?php echo $row->quantity; ?> "/> 
-
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b><?php echo trim($row->units); ?></b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span>
-														<?php echo trim($row->particulars); ?> 
-													</span>
-												</div>    
-
-											
-												<?php if($requestStatus == 'A') {?>
-													<div style="float: left; width: 50%">
-														<span>
-															<input type="number" autofocus class="amount" id="numeric" name="amount[]" size="5" maxlength="5" placeholder="Amount"/> 
-															<input type="hidden" name="materialsRecordID[]" value="<?php echo $row->ID; ?>"/> 
-															<span id="itemTotalAmount<?php echo $itemCtr;?>" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-															</span>                                          
-													   </span>
-													</div>    
-													
-												<?php } ?>
-
-												
-												
-												
-												<?php if( ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
-
-
-													<div style="float: left; width: 50%">
-
-														<span >
-															<?php 
-																echo number_format($row->materialsAmount, 2); 
-																//$totalMaterialsAmount += $row->materialsAmount;
-															?> 
-													   </span>
-													   
-													   
-														<span style="color: red; font-size: 15px; font-weight: bold; float: right;">
-															<?php 
-																echo number_format((floatval($row->materialsAmount) * intval($row->quantity)), 2); 
-																$totalMaterialsAmount += (floatval($row->materialsAmount) * intval($row->quantity));
-															?> 
-													   </span>
-													   
-													</div>    
-												<?php } ?>
-
-											</div></br>
-								
-								<?php 
-										$itemCtr++;
-										} 
-									}
-								?>
-								
-								<?php if(!empty($materials)) { ?>
-								
-									<?php if( ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) { ?>
-										<div>
-											<div style="float: left; width: 3%">
-												<span><b>_</b></span>
-											</div> 
-											<div style="float: left; width: 7%">
-												<span><b>_</b> </span> 
-											</div>
-											<div style="float: left; width: 40%">
-												<span style="color: red; font-size: 15px; font-weight: bold">
-												   TOTAL AMOUNT:
-												</span>
-											</div>   
-
-											
-											
-											<div style="float: left; width: 50%">
-												<span>
-												>>>
-												</span>
-												<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-												<?php if(($requestStatus == 'A') ) {?>
-													0.00
-												<?php } ?>
-
-												
-												<?php if(($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
-													echo number_format($totalMaterialsAmount, 2);
-												} ?>
-													<input type="hidden" id="totalAmountSumm" value="<?php echo $totalMaterialsAmount; ?>" />
-												</span>
-											</div>    
-										
-										</div>
-										
-										
-										<?php if(($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b>_</b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b>_</b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span style="color: red; font-size: 15px; font-weight: bold">
-													   ACTUAL BUDGET:
-													</span>
-												</div>    
-												
-												
-												<div style="float: left; width: 50%">
-													<span>
-													>>>
-													</span>
-													<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-
-													
-													<?php if(($requestStatus == 'E')) {?>
-														<input style="font-size: 12px; " type="number" class="actualBudgetAmount" id="actualBudgetAmount" name="actualBudgetAmount" size="5" maxlength="5" placeholder="Actual Budget"/> 
-													<?php } //if(($requestStatus == 'E')) {?>
-													
-													<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
-															echo number_format($actualBudgetAmount, 2);
-													} ?>
-													
-													
-													</span>
-												</div>    
-										
-											</div>
-
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b>_</b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b>_</b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span style="color: red; font-size: 15px; font-weight: bold">
-													   DIFFERENCE:
-													</span>
-												</div>    
-												
-												
-												<div style="float: left; width: 50%">
-													<span>
-													>>>
-													</span>
-													<span id="differenceAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-													<?php if(($requestStatus == 'E')) {?>
-														0.00
-													<?php } //if(($requestStatus == 'E'))?>
-													<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
-															echo number_format(($totalMaterialsAmount - $actualBudgetAmount), 2);
-													} ?>
-
-													
-													</span>
-												</div>    
-										
-											</div>
-
-
-											
-										
-										<?php } //if(($requestStatus == 'E') || ($requestStatus == 'S'))?>
-										
-										
-									<?php } //if( ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') ) {?>
-									<?php } else { //if(!empty($materials))?>
-											<div>
-												<span> NO MATERIALS NEEDED </span>
-											</div>
-									
-									<?php } //if(!empty($materials))?>
-								</div>
-							</div> <!--<div id="Estimates" class="tabcontentEstimates"> -->
-							
-							<div id="Actual" class="tabcontentEstimates" style="display: none">
-							<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) { ?>
-							
-										<div class="panel-detail">   
-										<?php if(!empty($materials)) {?>
-
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b><u>QTY</u></b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b><u>UNITS</u></b></span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span>
-														<b><u>PARTICULARS</u></b>
-													</span>
-													
-												</div> 
-
-													
-												<div style="float: left; width: 50%">
-													<span>
-														<b><u>Actual Unit Amount</u></b>
-													</span>
-													
-													<span style="float: right;">
-														<b><u>Actual Amount</u></b>
-													</span>
-													
-												</div>    
-
-											</div></br>
-										<?php } ?>
-	 
-	 
-								<?php 
-									$totalMaterialsAmountActual = 0;
-									$itemCtr = 0;
-									if(!empty($materials)) {
-										foreach($materials as $row) {
-								?>
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b><?php echo $row->quantity; ?></b></span>
-													<input type="hidden" name="quantityActual[]" value="<?php echo $row->quantity; ?> "/> 
-
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b><?php echo trim($row->units); ?></b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span>
-														<?php echo trim($row->particulars); ?> 
-													</span>
-												</div>    
-
-												<div style="float: left; width: 50%">
-													<span>
-														<?php if($requestStatus == 'S') { ?>
-															<input type="number" class="amountActual" id="numericActual" name="amountActual[]" size="5" maxlength="5" placeholder="Amount Actual"/> 
-															<input type="hidden" name="materialsRecordIDActual[]" value="<?php echo $row->ID; ?>"/> 
-															<span id="itemTotalAmountActual<?php echo $itemCtr;?>" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-															</span>                        
-														<?php } elseif( ($requestStatus == 'W') || ($requestStatus == 'C')) { 
-																echo $row->actualAmount;
-														
-														 } ?>
-
-													</span>
-													
-													<?php if ( ($requestStatus == 'W') || ($requestStatus == 'C')) { ?>
-														<span style="color: red; font-size: 15px; font-weight: bold; float: right;">
-																<?php 
-																	echo number_format((floatval($row->actualAmount) * intval($row->quantity)), 2); 
-																	$totalMaterialsAmountActual += (floatval($row->actualAmount) * intval($row->quantity));
-																?> 
-														 </span>
-													<?php } ?>
-													
-													
-												</div>    
-													
-											</div></br>
-								
-								<?php 
-										$itemCtr++;
-										} 
-									}
-								?>
-								
-								<?php if(!empty($materials)) { ?>
-								
-										<div>
-											<div style="float: left; width: 3%">
-												<span><b>_</b></span>
-											</div> 
-											<div style="float: left; width: 7%">
-												<span><b>_</b> </span> 
-											</div>
-											<div style="float: left; width: 40%">
-												<span style="color: red; font-size: 15px; font-weight: bold">
-												   TOTAL AMOUNT:
-												</span>
-											</div>   
-
-											
-											
-											<div style="float: left; width: 50%">
-												<span>
-												>>>
-												</span>
-												<span id="totalAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-													<?php 
-													if( ($requestStatus == 'W') || ($requestStatus == 'C')) {
-														echo number_format($totalMaterialsAmountActual, 2);
-													} else {		
-														echo "0.00";
-													} ?>
-												</span>
-											</div>    
-										
-										</div>
-										
-										
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b>_</b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b>_</b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span style="color: red; font-size: 15px; font-weight: bold">
-													   ACTUAL BUDGET:
-													</span>
-												</div>    
-												
-												
-												<div style="float: left; width: 50%">
-													<span>
-													>>>
-													</span>
-													<span id="totalAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-													<?php if($requestStatus == 'S') {?>
-															<?php echo number_format($actualBudgetAmount, 2); ?>
-															<input type="hidden" id="actualBudgetAmountActual" value="<?php echo $actualBudgetAmount;?>"/>
-													<?php } elseif( ($requestStatus == 'W') || ($requestStatus == 'C')) { 
-															echo number_format($actualBudgetAmount, 2);
-													} ?>
-													</span>
-												</div>    
-										
-											</div>
-
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b>_</b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b>_</b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span style="color: red; font-size: 15px; font-weight: bold">
-													   DIFFERENCE:
-													</span>
-												</div>    
-												
-												
-												<div style="float: left; width: 50%">
-													<span>
-													>>>
-													</span>
-													<span id="differenceAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-														<?php 
-														if(  ($requestStatus == 'W') || ($requestStatus == 'C')) {
-															echo number_format(($totalMaterialsAmountActual - $actualBudgetAmount), 2);
-														} else {
-															echo "0.00";
+														<?php if(($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
+															echo number_format($totalMaterialsAmount, 2);
 														} ?>
-													</span>
-												</div>    
-										
-											</div>
+															<input type="hidden" id="totalAmountSumm" value="<?php echo $totalMaterialsAmount; ?>" />
+														</span>
+													</div>    
+												
+												</div>
+												
+												
+												<?php if(($requestStatus == 'E') || ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b>_</b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b>_</b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span style="color: red; font-size: 15px; font-weight: bold">
+															   AVAILABLE FUNDS:
+															</span>
+														</div>    
+														
+														
+														<div style="float: left; width: 50%">
+															<span>
+															>>>
+															</span>
+															<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+
+															
+															<?php if(($requestStatus == 'E') && ($userLevel == "SUPERVISOR") ) {?>
+																<?php if(empty($fundsAvailableAmount)) {?>
+																	<input style="font-size: 12px; " type="number" class="fundsAvailableAmount" id="fundsAvailableAmount" name="fundsAvailableAmount" size="5" maxlength="5" placeholder="Available Funds"/> 
+																	
+																<?php } else { ?>
+																	<?php echo number_format($fundsAvailableAmount, 2); ?>
+																<?php } ?>
+															<?php } //if(($requestStatus == 'E')) {?>
+
+															<?php if(($requestStatus == 'E') && ($userLevel == "DIRECTOR") ) {
+																	echo number_format($fundsAvailableAmount, 2);
+															} //if(($requestStatus == 'E')) {?>
+
+															
+															<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
+																	echo number_format($fundsAvailableAmount, 2);
+															} ?>
+															
+															
+															</span>
+														</div>    
+												
+													</div>
+												
+												
+												
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b>_</b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b>_</b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span style="color: red; font-size: 15px; font-weight: bold">
+															   ACTUAL BUDGET:
+															</span>
+														</div>    
+														
+														
+														<div style="float: left; width: 50%">
+															<span>
+															>>>
+															</span>
+															<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+
+															
+															<?php if(($requestStatus == 'E') && ($userLevel == "DIRECTOR") ) {?>
+																<input style="font-size: 12px; " type="number" class="actualBudgetAmount" id="actualBudgetAmount" name="actualBudgetAmount" size="5" maxlength="5" placeholder="Actual Budget"/> 
+															<?php } //if(($requestStatus == 'E')) {?>
+															<?php if(($requestStatus == 'E') && ($userLevel == "SUPERVISOR") ) {
+																	echo number_format($actualBudgetAmount, 2);
+															} //if(($requestStatus == 'E')) {?>
+															
+															<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
+																	echo number_format($actualBudgetAmount, 2);
+															} ?>
+															
+															
+															</span>
+														</div>    
+												
+													</div>
 
 
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b>_</b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b>_</b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span style="color: red; font-size: 15px; font-weight: bold">
+															   DIFFERENCE:
+															</span>
+														</div>    
+														
+														
+														<div style="float: left; width: 50%">
+															<span>
+															>>>
+															</span>
+															<span id="differenceAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+															<?php if(($requestStatus == 'E')) {?>
+																0.00
+															<?php } //if(($requestStatus == 'E'))?>
+															<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) {
+																	echo number_format(($totalMaterialsAmount - $actualBudgetAmount), 2);
+															} ?>
+
+															
+															</span>
+														</div>    
+												
+													</div>
+
+
+													
+												
+												<?php } //if(($requestStatus == 'E') || ($requestStatus == 'S'))?>
+												
+												
+											<?php } //if( ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S') ) {?>
+											<?php } else { //if(!empty($materials))?>
+													<div>
+														<span> NO MATERIALS NEEDED </span>
+													</div>
 											
-										
-									<?php } else { //if(!empty($materials))?>
-											<div>
-												<span> NO MATERIALS NEEDED </span>
-											</div>
+											<?php } //if(!empty($materials))?>
+										</div>
+									</div> <!--<div id="Estimates" class="tabcontentEstimates"> -->
 									
-									<?php } //if(!empty($materials))?>
-								</div>							
-							
-							
+									<div id="Actual" class="tabcontentEstimates" style="display: none">
+									<?php if( ($requestStatus == 'S') || ($requestStatus == 'W') || ($requestStatus == 'C')) { ?>
+									
+												<div class="panel-detail">   
+												<?php if(!empty($materials)) {?>
+
+
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b><u>QTY</u></b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b><u>UNITS</u></b></span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span>
+																<b><u>PARTICULARS</u></b>
+															</span>
+															
+														</div> 
+
+															
+														<div style="float: left; width: 50%">
+															<span>
+																<b><u>Actual Unit Amount</u></b>
+															</span>
+															
+															<span style="float: right;">
+																<b><u>Actual Amount</u></b>
+															</span>
+															
+														</div>    
+
+													</div></br>
+												<?php } ?>
+			 
+			 
+										<?php 
+											$totalMaterialsAmountActual = 0;
+											$itemCtr = 0;
+											if(!empty($materials)) {
+												foreach($materials as $row) {
+										?>
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b><?php echo $row->quantity; ?></b></span>
+															<input type="hidden" name="quantityActual[]" value="<?php echo $row->quantity; ?> "/> 
+
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b><?php echo trim($row->units); ?></b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span>
+																<?php echo trim($row->particulars); ?> 
+															</span>
+														</div>    
+
+														<div style="float: left; width: 50%">
+															<span>
+																<?php if($requestStatus == 'S') { ?>
+																	<input type="number" class="amountActual" id="numericActual" name="amountActual[]" size="5" maxlength="5" placeholder="Amount Actual"/> 
+																	<input type="hidden" name="materialsRecordIDActual[]" value="<?php echo $row->ID; ?>"/> 
+																	<span id="itemTotalAmountActual<?php echo $itemCtr;?>" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+																	</span>                        
+																<?php } elseif( ($requestStatus == 'W') || ($requestStatus == 'C')) { 
+																		echo $row->actualAmount;
+																
+																 } ?>
+
+															</span>
+															
+															<?php if ( ($requestStatus == 'W') || ($requestStatus == 'C')) { ?>
+																<span style="color: red; font-size: 15px; font-weight: bold; float: right;">
+																		<?php 
+																			echo number_format((floatval($row->actualAmount) * intval($row->quantity)), 2); 
+																			$totalMaterialsAmountActual += (floatval($row->actualAmount) * intval($row->quantity));
+																		?> 
+																 </span>
+															<?php } ?>
+															
+															
+														</div>    
+															
+													</div></br>
+										
+										<?php 
+												$itemCtr++;
+												} 
+											}
+										?>
+										
+										<?php if(!empty($materials)) { ?>
+										
+												<div>
+													<div style="float: left; width: 3%">
+														<span><b>_</b></span>
+													</div> 
+													<div style="float: left; width: 7%">
+														<span><b>_</b> </span> 
+													</div>
+													<div style="float: left; width: 40%">
+														<span style="color: red; font-size: 15px; font-weight: bold">
+														   TOTAL AMOUNT:
+														</span>
+													</div>   
+
+													
+													
+													<div style="float: left; width: 50%">
+														<span>
+														>>>
+														</span>
+														<span id="totalAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+															<?php 
+															if( ($requestStatus == 'W') || ($requestStatus == 'C')) {
+																echo number_format($totalMaterialsAmountActual, 2);
+															} else {		
+																echo "0.00";
+															} ?>
+														</span>
+													</div>    
+												
+												</div>
+												
+												
+
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b>_</b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b>_</b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span style="color: red; font-size: 15px; font-weight: bold">
+															   ACTUAL BUDGET:
+															</span>
+														</div>    
+														
+														
+														<div style="float: left; width: 50%">
+															<span>
+															>>>
+															</span>
+															<span id="totalAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+															<?php if($requestStatus == 'S') {?>
+																	<?php echo number_format($actualBudgetAmount, 2); ?>
+																	<input type="hidden" id="actualBudgetAmountActual" value="<?php echo $actualBudgetAmount;?>"/>
+															<?php } elseif( ($requestStatus == 'W') || ($requestStatus == 'C')) { 
+																	echo number_format($actualBudgetAmount, 2);
+															} ?>
+															</span>
+														</div>    
+												
+													</div>
+
+
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b>_</b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b>_</b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span style="color: red; font-size: 15px; font-weight: bold">
+															   DIFFERENCE:
+															</span>
+														</div>    
+														
+														
+														<div style="float: left; width: 50%">
+															<span>
+															>>>
+															</span>
+															<span id="differenceAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+																<?php 
+																if(  ($requestStatus == 'W') || ($requestStatus == 'C')) {
+																	echo number_format(($totalMaterialsAmountActual - $actualBudgetAmount), 2);
+																} else {
+																	echo "0.00";
+																} ?>
+															</span>
+														</div>    
+												
+													</div>
+
+
+													
+												
+											<?php } else { //if(!empty($materials))?>
+													<div>
+														<span> NO MATERIALS NEEDED </span>
+													</div>
+											
+											<?php } //if(!empty($materials))?>
+										</div>							
+									
+									
+									<?php } ?>
+									</div><!--<div id="Actual" class="tabcontentEstimates"> -->
+
+									<div id="JobOrder" class="tabcontentEstimates" style="display: none">
+										<?php if( ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
+										<div class="panel-detail">   
+												<span class="input_fields_wrap_worker"></span>
+												<span id="job_order_exist"> </span>
+										
+										</div>
+										<?php } ?>
+									</div>
+
+									<div id="EvaluationJO" class="tabcontentEstimates" style="display: none">
+										<?php if( ($requestStatus == 'C')) {?>
+										<div class="panel-detail">   
+												<span class="input_fields_wrap_jo_evaluation"></span>
+												<span id="evaluation_exist"> </span>
+												<input type="hidden" id="owner" value="<?php echo $owner;?>" />
+										</div>
+										<?php } ?>
+									</div>
+									
+								</div>
 							<?php } ?>
-							</div><!--<div id="Actual" class="tabcontentEstimates"> -->
-
-							<div id="JobOrder" class="tabcontentEstimates" style="display: none">
-								<?php if( ($requestStatus == 'W') || ($requestStatus == 'C')) {?>
-								<div class="panel-detail">   
-										<span class="input_fields_wrap_worker"></span>
-										<span id="job_order_exist"> </span>
-								
-								</div>
-								<?php } ?>
-							</div>
-
-							<div id="EvaluationJO" class="tabcontentEstimates" style="display: none">
-								<?php if( ($requestStatus == 'C')) {?>
-								<div class="panel-detail">   
-										<span class="input_fields_wrap_jo_evaluation"></span>
-										<span id="evaluation_exist"> </span>
-										<input type="hidden" id="owner" value="<?php echo $owner;?>" />
-								</div>
-								<?php } ?>
-							</div>
-							
-                        </div>
                     <?php } //} elseif( ($requestStatus == 'O') || ($requestStatus == 'A') || ($requestStatus == 'E') || ($requestStatus == 'S')) {?>
                 </div>
 
@@ -774,7 +840,9 @@
 							<br>
 							<?php //if($owner == 1) { ?>
 									<div class="panel-detail" id="message">
-											<p>You may attach NEW files for this request</p>
+											<p><b>You may attach NEW files for this request</b></p>
+											<p><b>(Please make sure the filenames have no spaces and has gif|jpg|png|pdf|jpeg extensions. Should be below <u> 3000 KB. </u>).</b></p>
+
 											<input multiple id="files" name="files" type="file"  > 
 											<a id="ff" class="easyui-linkbutton"><span id="basic-btn">Upload</span></a>		
 											<div id="uploading"></div>
@@ -841,7 +909,8 @@
 							<br>
 							<?php //if($owner == 1) { ?>
 									<div class="panel-detail" id="message">
-											<p>You may attach NEW files for this request</p>
+											<p><b>You may attach NEW files for this request</b></p>
+											<p><b>(Please make sure the filenames have no spaces and has gif|jpg|png|pdf|jpeg extensions. Should be below <u> 3000 KB. </u>).</b></p>
 											<input multiple id="files" name="files" type="file"  > 
 											<a id="ff" class="easyui-linkbutton"><span id="basic-btn">Upload</span></a>		
 											<div id="uploading"></div>
@@ -903,6 +972,7 @@
 							<?php if($owner != 1) {?>
 								<?php if(empty($materials)) {?>
 									<a href="javascript:void(0)" class="link-btn" onclick="ConfirmOpenToSet.render('Request #<?php echo $ID?> Set','update_request','S')" style="width:80px">Approved and Set</a>
+									<a href="javascript:void(0)" class="link-btn" onclick="ConfirmOpen.render('Request #<?php echo $ID?> Approved','update_request_approved','A')" style="width:80px">Approved For Estimation</a>
 								<?php } else {?>
 									<a href="javascript:void(0)" class="link-btn" onclick="ConfirmOpen.render('Request #<?php echo $ID?> Approved','update_request','A')" style="width:80px">Approved</a>
 								<?php } ?>
@@ -910,13 +980,17 @@
 							<?php } ?>
 						<?php } elseif($requestStatus == 'A') { ?>
 							<?php if($owner != 1) {?>
-								<a href="javascript:void(0)" class="link-btn" onclick="ConfirmApprove.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">Estimated</a>
+								<?php if( ($requestStatus == 'A') && ($returnedFrom == 'O') ) {?>
+									<a href="javascript:void(0)" class="link-btn" onclick="ConfirmPrice.render('Request #<?php echo $ID?> Estimated','update_request','E', 'A')" style="width:80px">Estimated (materials)</a>
+								<?php } else { ?>	
+									<a href="javascript:void(0)" class="link-btn" onclick="ConfirmApprove.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">Estimated</a>
+								<?php } ?>
 								<a href="javascript:void(0)" class="link-btn" onclick="ConfirmApprove.render('Request #<?php echo $ID?> Return','update_request','R')" style="width:80px">Return</a>
 							<?php } ?>
-						<?php } elseif($requestStatus == 'E') { ?>
+						<?php } elseif( ($requestStatus == 'E') && ($userLevel == 'DIRECTOR') && (!empty($fundsAvailability)) ) { ?>
 							<?php if($owner != 1) {?>
-								<a href="javascript:void(0)" class="link-btn" onclick="ConfirmEstimated.render('Request #<?php echo $ID?> Set','update_request','S')" style="width:80px">Set</a>
-								<a href="javascript:void(0)" class="link-btn" onclick="ConfirmEstimated.render('Request #<?php echo $ID?> Return','update_request','R')" style="width:80px">Return</a>
+								<a href="javascript:void(0)" class="link-btn" onclick="ConfirmEstimated.render('Request #<?php echo $ID?> Set','update_request','S', '')" style="width:80px">Set</a>
+								<a href="javascript:void(0)" class="link-btn" onclick="ConfirmEstimated.render('Request #<?php echo $ID?> Return','update_request','R', 'E')" style="width:80px">Return</a>
 							<?php } ?>
 						<?php } elseif($requestStatus == 'S') { ?>
 							<?php if($owner != 1) {?>
@@ -1332,8 +1406,11 @@ $('#ff').click(function(){
         }
         this.yes = function(op,status, requestID, specialInstructions, scopeDetails, requestStatusRemarksID ){
             if(op == "update_request"){
-                updateRequestOpen(requestID, status, specialInstructions, scopeDetails, requestStatusRemarksID);
-            }
+                updateRequestOpen(requestID, status, specialInstructions, scopeDetails, requestStatusRemarksID, '');
+            } else if(op == "update_request_approved") {
+                updateRequestOpen(requestID, status, specialInstructions, scopeDetails, requestStatusRemarksID, 'O');
+				
+			}
             document.getElementById('dialogbox').style.display = "none";
             document.getElementById('dialogoverlay').style.display = "none";
         }
@@ -1400,7 +1477,7 @@ $('#ff').click(function(){
 	
 	
     function CustomConfirmEstimated(){
-        this.render = function(dialog,op,status){
+        this.render = function(dialog,op,status, returnedFrom){
             var winW = window.innerWidth;
             var winH = window.innerHeight;
             var dialogoverlay = document.getElementById('dialogoverlay');
@@ -1428,18 +1505,25 @@ $('#ff').click(function(){
             dialog = dialog + "<div><u>" + actualBudgetAmount + "</u></div>";
             dialog = dialog + "</div>";
 
+			var button = '';
+			//alert(op + ' ' + status);
+			if(specialInstructions == '' || requestStatusRemarksID == '' || actualBudgetAmount == '') {
+				button = 'Please put your instructions and actual budget... </button> <button onclick="ConfirmEstimated.no()">Close</button>';				
+			} else {
+				button = '<button onclick="ConfirmEstimated.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\',\''+scopeDetails+'\',\''+requestStatusRemarksID+'\',\''+actualBudgetAmount+'\',\''+returnedFrom+'\')">Proceed</button> <button onclick="ConfirmEstimated.no()">Close</button>';				
+			}
 
             document.getElementById('dialogboxhead').innerHTML = "Please Confirm...";
             document.getElementById('dialogboxbody').innerHTML = dialog;
-            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="ConfirmEstimated.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\',\''+scopeDetails+'\',\''+requestStatusRemarksID+'\',\''+actualBudgetAmount+'\')">Proceed</button> <button onclick="ConfirmEstimated.no()">Close</button>';
+            document.getElementById('dialogboxfoot').innerHTML = button; 
         }
         this.no = function(){
             document.getElementById('dialogbox').style.display = "none";
             document.getElementById('dialogoverlay').style.display = "none";
         }
-        this.yes = function(op,status, requestID, specialInstructions, scopeDetails, requestStatusRemarksID, actualBudgetAmount){
+        this.yes = function(op,status, requestID, specialInstructions, scopeDetails, requestStatusRemarksID, actualBudgetAmount, returnedFrom){
             if(op == "update_request"){
-                updateRequestEstimated(requestID, status, specialInstructions, scopeDetails, requestStatusRemarksID, actualBudgetAmount);
+                updateRequestEstimated(requestID, status, specialInstructions, scopeDetails, requestStatusRemarksID, actualBudgetAmount, returnedFrom);
             }
             document.getElementById('dialogbox').style.display = "none";
             document.getElementById('dialogoverlay').style.display = "none";
@@ -1664,7 +1748,7 @@ $('#ff').click(function(){
     }
 
 
-    function updateRequestOpen(requestID, requestStatus, specialInstructions, scopeDetails, requestStatusRemarksID) {
+    function updateRequestOpen(requestID, requestStatus, specialInstructions, scopeDetails, requestStatusRemarksID, from) {
 
             jQuery.ajax({
                 url: "updateRequestTBAMIMS",
@@ -1674,6 +1758,7 @@ $('#ff').click(function(){
                     'specialInstructions': specialInstructions,  
                     'scopeDetails': scopeDetails,  
                     'requestStatusRemarksID': requestStatusRemarksID,  
+                    'from': from,  
 
 				},
                 type: "POST",
@@ -1743,7 +1828,7 @@ $('#ff').click(function(){
     }
 	
 
-    function updateRequestEstimated(requestID, requestStatus, specialInstructions, scopeDetails, requestStatusRemarksID, actualBudgetAmount) {
+    function updateRequestEstimated(requestID, requestStatus, specialInstructions, scopeDetails, requestStatusRemarksID, actualBudgetAmount, returnedFrom) {
 
             jQuery.ajax({
                 url: "updateRequestTBAMIMS",
@@ -1754,6 +1839,7 @@ $('#ff').click(function(){
                     'scopeDetails': scopeDetails,  
                     'requestStatusRemarksID': requestStatusRemarksID,  
                     'actualBudgetAmount': actualBudgetAmount,  
+                    'returnedFrom': returnedFrom,  
 					
 				},
                 type: "POST",
@@ -2018,6 +2104,315 @@ $('#ff').click(function(){
     }
 
 	
+	
+    function CustomSetFundsStatus(){
+        this.render = function(dialog,op,status){
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH+"px";
+            dialogbox.style.left = (winW/2) - (1000 * .5)+"px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+
+            var requestID = $('#requestID').val();           
+            var specialInstructions = $('#specialInstructions').val();
+            var requestStatusRemarksID = $('#requestStatusRemarksID').val();
+            var fundsAvailableAmount = $('#fundsAvailableAmount').val();
+			
+            dialog = dialog + "<div>";
+            dialog = dialog + "<div><b>Request ID: </b></div>";
+            dialog = dialog + "<div><u>" + requestID + "</u></div>";
+            dialog = dialog + "<div><b>Special Instructions: </b></div>";
+            dialog = dialog + "<div><u>" + specialInstructions + "</u></div>";
+            dialog = dialog + "<div><b>Status Remarks: </b></div>";
+            dialog = dialog + "<div><u>" + requestStatusRemarksID + "</u></div>";
+			if(requestStatusRemarksID == 45) {
+				dialog = dialog + "<div><b>Available Funds: </b></div>";
+				dialog = dialog + "<div><u>" + fundsAvailableAmount + "</u></div>";
+			}
+            dialog = dialog + "</div>";
+
+			if(requestStatusRemarksID != 45) {
+				fundsAvailableAmount = 0;
+			}
+
+			var button = '';
+			//alert(op + ' ' + status);
+			alert(requestStatusRemarksID);
+			alert(fundsAvailableAmount);
+			alert(specialInstructions);
+			if(specialInstructions == '' || requestStatusRemarksID == '' || (requestStatusRemarksID == 45 && fundsAvailableAmount == '')  ) {
+				button = 'Please put your instruction... </button> <button onclick="SetFundsStatus.no()">Close</button>';				
+			} else {
+				button = '<button onclick="SetFundsStatus.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\',\''+requestStatusRemarksID+'\',\''+fundsAvailableAmount+'\')">Proceed</button> <button onclick="SetFundsStatus.no()">Close</button>';				
+			}
+
+            document.getElementById('dialogboxhead').innerHTML = "Please Confirm...";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = button;
+        }
+        this.no = function(){
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+        this.yes = function(op,status, requestID, specialInstructions,  requestStatusRemarksID, fundsAvailableAmount){
+            if(op == "update_request"){
+                setupFundStatusRequest(requestID, status, specialInstructions,  requestStatusRemarksID, fundsAvailableAmount);
+            }
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var SetFundsStatus = new CustomSetFundsStatus();
+
+    function setupFundStatusRequest(requestID, status, specialInstructions,  requestStatusRemarksID, fundsAvailableAmount) {
+            alert(requestID);
+            alert(status);
+			
+			jQuery.ajax({
+                url: "setupFundStatusRequestTBAMIMS",
+                data: {
+                    'ID':requestID,
+                    'requestStatus': status,
+                    'specialInstructions':specialInstructions,
+                    'requestStatusRemarksID':requestStatusRemarksID,
+                    'fundsAvailableAmount':fundsAvailableAmount,
+
+				},
+                type: "POST",
+                success:function(data){
+                   console.log(data);
+                    var resultValue = $.parseJSON(data);
+                    console.log(resultValue);
+                    //console.log(resultValue['quantt']);
+                    if(resultValue['success'] == 1) {
+                        $('div.level2').remove();
+                        $('#N').datagrid('reload');
+                        $('#O').datagrid('reload');
+                        $('#A').datagrid('reload');
+                        $('#E').datagrid('reload');
+                        $('#S').datagrid('reload');
+                        $('#W').datagrid('reload');
+                        $('#R').datagrid('reload');
+                        $('#X').datagrid('reload');
+                        $('#C').datagrid('reload');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                error:function (){}
+            }); //jQuery.ajax({
+    }
+	
+    function CustomConfirmPrice(){
+        this.render = function(dialog,op,status, from){
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH+"px";
+            dialogbox.style.left = (winW/2) - (1000 * .5)+"px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+
+            var requestID = $('#requestID').val();           
+            var specialInstructions = $('#specialInstructions').val();
+            var scopeDetails = $('#scopeDetails').val();
+            var requestStatusRemarksID = $('#requestStatusRemarksID').val();
+			
+            var qty = $('input[name="quantity[]"]').map(function(){ 
+                    return this.value; 
+            }).get();           
+
+            var materialsID = $('input[name="materialsID[]"]').map(function(){ 
+                    return this.value; 
+            }).get();           
+
+			
+            var price = $('input[name="price[]"]').map(function(){ 
+                    return this.value; 
+            }).get();           
+			
+			
+            dialog = dialog + "<div>";
+            dialog = dialog + "<div><b>Special Instructions: </b></div>";
+            dialog = dialog + "<div><u>" + specialInstructions + "</u></div>";
+            dialog = dialog + "<div><b>Scope Details: </b></div>";
+            dialog = dialog + "<div><u>" + scopeDetails + "</u></div>";
+            dialog = dialog + "<div><b>Status Remarks: </b></div>";
+            dialog = dialog + "<div><u>" + requestStatusRemarksID + "</u></div>";
+
+            dialog = dialog + "<div><b>Quantity: </b></div>";
+            dialog = dialog + "<div><u>" + qty + "</u></div>";
+            dialog = dialog + "<div><b>Materials ID: </b></div>";
+            dialog = dialog + "<div><u>" + materialsID + "</u></div>";
+            dialog = dialog + "<div><b>Prices: </b></div>";
+            dialog = dialog + "<div><u>" + price + "</u></div>";
+
+            dialog = dialog + "</div>";
+
+
+            document.getElementById('dialogboxhead').innerHTML = "Please Confirm...";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="ConfirmPrice.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\',\''+scopeDetails+'\',\''+requestStatusRemarksID+'\',\''+qty+'\',\''+materialsID+'\',\''+price+'\',\''+from+'\')">Proceed</button> <button onclick="ConfirmPrice.no()">Close</button>';
+        }
+        this.no = function(){
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+        this.yes = function(op,status, requestID, specialInstructions, scopeDetails, requestStatusRemarksID, qty, materialsID, price, from){
+            if(op == "update_request"){
+                updateRequestPrice(requestID, status, specialInstructions, scopeDetails, requestStatusRemarksID, qty, materialsID, price, from);
+            }
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var ConfirmPrice = new CustomConfirmPrice();
+	
+
+
+    function updateRequestPrice(requestID, requestStatus, specialInstructions, scopeDetails, requestStatusRemarksID, qty, materialsID, price, from) {
+            console.log(qty);
+            console.log(materialsID);
+
+            jQuery.ajax({
+                url: "updateRequestTBAMIMS",
+                data: {
+                    'ID':requestID,
+                    'requestStatus': requestStatus,
+                    'specialInstructions': specialInstructions,  
+                    'scopeDetails': scopeDetails, 
+                    'requestStatusRemarksID': requestStatusRemarksID, 
+                    'qty': qty,
+                    'materialsID': materialsID,
+                    'price': price,
+                    'from': from,
+					
+                },
+                type: "POST",
+                success:function(data){
+                    var resultValue = $.parseJSON(data);
+                    console.log(data);
+                    console.log("hoy");
+                    if(resultValue['success'] == 1) {
+                        $('div.level2').remove();
+                        $('#N').datagrid('reload');
+                        $('#O').datagrid('reload');
+                        $('#A').datagrid('reload');
+                        $('#E').datagrid('reload');
+                        $('#S').datagrid('reload');
+                        $('#W').datagrid('reload');
+                        $('#R').datagrid('reload');
+                        $('#X').datagrid('reload');
+                        $('#C').datagrid('reload');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                error:function (){}
+            }); //jQuery.ajax({
+    }
+
+
+	
+	
+
+    function CustomSetAnnotation(){
+        this.render = function(dialog,op,status){
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH+"px";
+            dialogbox.style.left = (winW/2) - (1000 * .5)+"px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+
+            var requestID = $('#requestID').val();           
+            var specialInstructions = $('#specialInstructions').val();
+			
+            dialog = dialog + "<div>";
+            dialog = dialog + "<div><b>Request ID: </b></div>";
+            dialog = dialog + "<div><u>" + requestID + "</u></div>";
+            dialog = dialog + "<div><b>Special Instructions: </b></div>";
+            dialog = dialog + "<div><u>" + specialInstructions + "</u></div>";
+            dialog = dialog + "</div>";
+
+			var button = '';
+			//alert(op + ' ' + status);
+			if(specialInstructions == '') {
+				button = 'Please put your instruction... </button> <button onclick="SetAnnotation.no()">Close</button>';				
+			} else {
+				button = '<button onclick="SetAnnotation.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\')">Proceed</button> <button onclick="SetAnnotation.no()">Close</button>';				
+			}
+
+            document.getElementById('dialogboxhead').innerHTML = "Please Confirm...";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = button;
+        }
+        this.no = function(){
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+        this.yes = function(op,status, requestID, specialInstructions){
+            if(op == "update_request"){
+                setupAnnotation(requestID, status, specialInstructions);
+            }
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var SetAnnotation = new CustomSetAnnotation();
+
+    function setupAnnotation(requestID, status, specialInstructions) {
+			
+			jQuery.ajax({
+                url: "setupAnnotationTBAMIMS",
+                data: {
+                    'ID':requestID,
+                    'requestStatus': status,
+                    'specialInstructions':specialInstructions,
+				},
+                type: "POST",
+                success:function(data){
+                   console.log(data);
+                    var resultValue = $.parseJSON(data);
+                    console.log(resultValue);
+                    //console.log(resultValue['quantt']);
+                    if(resultValue['success'] == 1) {
+                        $('div.level2').remove();
+                        $('#N').datagrid('reload');
+                        $('#O').datagrid('reload');
+                        $('#A').datagrid('reload');
+                        $('#E').datagrid('reload');
+                        $('#S').datagrid('reload');
+                        $('#W').datagrid('reload');
+                        $('#R').datagrid('reload');
+                        $('#X').datagrid('reload');
+                        $('#C').datagrid('reload');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                error:function (){}
+            }); //jQuery.ajax({
+    }
+	
+	
+	
+	
+	
+	
+	
 	function createJobOrder(requestNumber, requestStatus, workerID, workerName, startDatePlanned, completionDateTarget, jobDescriptionCode, jobDescription) {
             jQuery.ajax({
                 url: "insertJobOrderTBAMIMS",
@@ -2141,6 +2536,80 @@ $('#ff').click(function(){
             }
         });
 
+		
+		
+		
+
+
+
+
+
+
+        var max_fields = 10; //maximum input boxes allowed
+        var wrapper_with_price = $(".input_fields_wrap_with_price"); //Fields wrapper
+        var add_button_with_price = $(".add_field_button_with_price"); //Add button ID
+
+        var x = 1; //initlal text box count
+        var i = 0;
+        $(add_button_with_price).click(function(e) { //on add input button click
+            e.preventDefault();
+            console.log($('input#numeric'+(x-1)).val());
+            console.log($('input#ID'+(x-1)).val());
+            console.log(x);
+            var qty = $('input#numeric'+(x-1)).val();
+            var identification = $('input#ID'+(x-1)).val();
+            var price = $('input#numericPrice'+(x-1)).val();
+           
+            var qtylength = 0;
+            var idlength = 0;
+            var pricelength = 0;
+			
+            if((qty != undefined) && (identification != undefined)) {
+                qtylength = qty.length;
+                idlength = identification.length;
+                pricelength = price.length;
+				
+            }
+            
+            if( ( (qty == undefined) && (identification == undefined) && (price == undefined) && (x == 1) )   || ( (qtylength > 0) && (idlength > 0) && (pricelength > 0)  ) ) {
+                //console.log('bakit');
+                jQuery.ajax({
+                    url: "TBAMIMS/showMaterialsListWithPrice",
+                    data: 'ctr='+x,
+                    type: "GET",
+                    success:function(data){
+                        
+                            $(wrapper_with_price).append(data); //add input box
+                        
+                    },
+                    error:function (){}
+                }); //jQuery.ajax({
+                x++; //text box increment
+                i = x;
+            } else {
+                return false;
+            }
+
+
+        });
+
+        $(wrapper_with_price).on("click", ".remove_field_with_price", function(e) { //user click on remove text
+            e.preventDefault();
+            var curr = $(this).html().slice(-1);
+
+            if(curr == (x - 1)) {
+                $(this).parent('div').remove();
+                x--;
+                $('div.autocomplete-suggestion.lista'+x).remove();
+                $('script#dynamic'+x).remove();
+            } else {
+                alert("Only last record can be removed!!!");
+            }
+        });
+
+
+
+		
 		document.getElementById('Images').style.display = "block";
 		document.getElementById('Estimates').style.display = "block";
 

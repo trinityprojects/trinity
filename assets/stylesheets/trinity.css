@@ -48,8 +48,8 @@ div.footer  p  em {
 div.form-panel {
     box-shadow: 10px 10px 5px grey; 
     padding: 15px; 
-    height: 100%; 
-    background-color: #FFF5EE; 
+    height: 120%; 
+    /*background-color: #FFF5EE;*/ 
     border-radius: 10px;
     font-family: Tahoma, Geneva, sans-serif;
 }

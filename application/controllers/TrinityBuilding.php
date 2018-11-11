@@ -119,7 +119,42 @@ class trinityBuilding extends MY_Controller {
 			$data['owner'] = 1;
 		}
 		
+		$data['userLevel'] = null;
+		$data['fundsAvailability'] = null;
+		if($data['requestStatus'] == 'E') {
+			$userLevel = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_user_privilege'), 
+			$fieldName = array('userNumber', 'sourceSystemID', 'elementValueID'), $where = array($data['userNumber'], 'TBAMIMS', 'estimatedRequest'), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null,
+			$whereSpecial = null, $groupBy = null );
+			if(!empty($userLevel)) {
+				$data['userLevel'] = $userLevel[0]->userLevel;
+			}
 
+			$special = "requestStatusRemarksID IN ('45', '46')";
+			$funds = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_status_remarks'), 
+			$fieldName = array('requestNumber'), $where = array($data['ID']), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null,
+			$whereSpecial = array($special), $groupBy = null );
+			if(!empty($funds)) {
+				$data['fundsAvailability'] = $funds[0]->requestStatusRemarksID;
+			}
+			
+			
+		}
+		
+		if($data['requestStatus'] == 'N') {
+			$userLevel = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_user_privilege'), 
+			$fieldName = array('userNumber', 'sourceSystemID', 'elementValueID'), $where = array($data['userNumber'], 'TBAMIMS', 'newRequest'), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null,
+			$whereSpecial = null, $groupBy = null );
+			if(!empty($userLevel)) {
+				$data['userLevel'] = $userLevel[0]->userLevel;
+			}
+		}
+		
 		$details1 = $this->_getRecordsData($rec = array('*'), 
 		$tables = array('triune_job_request_transaction_tbamims_status_history'), 
 		$fieldName = array('requestNumber'), $where = array($data['ID']), 
@@ -151,7 +186,7 @@ class trinityBuilding extends MY_Controller {
 		
 		$data['statusHistory'] = null;
 		$data['completedFlag'] = null;		
-		if(($data['requestStatus'] == 'O') || ($data['requestStatus'] == 'A') || ($data['requestStatus'] == 'E') || ($data['requestStatus'] == 'S') || ($data['requestStatus'] == 'W') || ($data['requestStatus'] == 'C') || ($data['requestStatus'] == 'R')) {
+		if(($data['requestStatus'] == 'N') || ($data['requestStatus'] == 'O') || ($data['requestStatus'] == 'A') || ($data['requestStatus'] == 'E') || ($data['requestStatus'] == 'S') || ($data['requestStatus'] == 'W') || ($data['requestStatus'] == 'C') || ($data['requestStatus'] == 'R')) {
 
 
 
@@ -197,6 +232,7 @@ class trinityBuilding extends MY_Controller {
 
 			
 			$data['actualBudgetAmount'] = null;
+			$data['fundsAvailableAmount'] = null;
 			$results17 = $this->_getRecordsData($rec = array('*'), 
 			$tables = array('triune_job_request_transaction_tbamims_actual_budget'), 
 			$fieldName = array('requestNumber', 'requestStatus'), 
@@ -207,8 +243,21 @@ class trinityBuilding extends MY_Controller {
 
 			if(!empty($results17)) {
 				$data['actualBudgetAmount'] = $results17[0]->actualBudgetAmount;
+				$data['fundsAvailableAmount'] = $results17[0]->fundsAvailableAmount;
+				
 			}
 
+			$results37 = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_actual_budget'), 
+			$fieldName = array('requestNumber', 'requestStatus'), 
+			$where = array($data['ID'], 'E'), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+			$groupBy = null );
+
+			if(!empty($results37)) {
+				$data['fundsAvailableAmount'] = $results37[0]->fundsAvailableAmount;
+			}
 
 
 			$data['jobDescription'] = null;
@@ -368,6 +417,33 @@ class trinityBuilding extends MY_Controller {
     }
 
 
+	
+    public function tBAMIMSMaterialsListWithPrice() {
+		$data['ctr'] = $_GET["ctr"];
+		//echo $data['ctr'];
+		$results = $this->_getRecordsData($records = array('particulars', 'units', 'ID'), 
+			$tables = array('triune_job_request_materials_tbamims'), $fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('particulars'), $sortOrder = array('asc'), $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+
+			$rec = "[";
+
+			foreach($results as $row) {
+
+				$rec = $rec . "['" . trim($row->particulars) . "','" . trim($row->units, '     ') . "','" . $row->ID ."'], ";
+
+			}
+			$rec = $rec . "]";
+
+
+		$data['items'] = $rec;
+		
+		//echo $rec;
+		$this->load->view('TBAMIMS/materials-autocomplete-with-price', $data);
+    }
+	
+	
 	
     public function tBAMIMSRequestStatuList() {
 		$data['unitCode'] = $_GET["unitCode"];
@@ -789,6 +865,93 @@ class trinityBuilding extends MY_Controller {
 	public function tBAMIMSRoomsList() {
         $this->load->view('TBAMIMS/rooms-list');
 	}
+
+	public function tBAMIMSNotification() {
+        $this->load->view('TBAMIMS/notification-list');
+	}
+
+    public function tBAMIMSShowNotifications() {
+		$data['requestNumber'] = $_POST["requestNumber"];
+		$data['ID'] = $_POST["ID"];
+		$data['requestStatus'] = $_POST["requestStatus"];
+
+		$notificationRec = null;
+
+		$data['locationCode'] = null;
+		$data['floor'] = null;
+		$data['roomNumber'] = null;
+		$data['projectTitle'] = null;
+		$data['scopeOfWorks'] = null;
+		$data['projectJustification'] = null;
+		$data['dateNeeded'] = null;
+		$data['dateCreated'] = null;
+		$data['dateClosed'] = null;
+		$data['userName'] = null;
+
+
+		
+
+		$notificationRec = $this->_getRecordsData($records = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_notification'), $fieldName = array('ID'), $where = array($data['ID']), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+		
+		if(!empty($jobOrderRec)) {
+			
+			
+		}
+		
+		$requestTransRec = $this->_getRecordsData($records = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims'), $fieldName = array('ID'), $where = array($data['requestNumber']), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+
+		if(!empty($requestTransRec)) {
+			$data['locationCode'] = $requestTransRec[0]->locationCode;
+			$data['floor'] = $requestTransRec[0]->floor;
+			$data['roomNumber'] = $requestTransRec[0]->roomNumber;
+			$data['projectTitle'] = $requestTransRec[0]->projectTitle;
+			$data['scopeOfWorks'] = $requestTransRec[0]->scopeOfWorks;
+			$data['projectJustification'] = $requestTransRec[0]->projectJustification;
+			$data['dateNeeded'] = $requestTransRec[0]->dateNeeded;
+			$data['dateCreated'] = $requestTransRec[0]->dateCreated;
+			$data['dateClosed'] = $requestTransRec[0]->dateClosed;
+			
+		}
+			
+		
+		$data['requestStatusDescription'] = $this->_getRequestStatusDescription($data['requestStatus'], 'TBAMIMS');
+
+
+		$details = $this->_getTransactionDetails($data['requestNumber'], $from = 'triune_job_request_transaction_tbamims');
+
+		$results2 = $this->_getRecordsData($rec = array('triune_employee_data.*'), 
+		$tables = array('triune_user', 'triune_employee_data'), 
+		$fieldName = array('triune_user.userName'), $where = array($details[0]->userName), 
+		$join = array('triune_user.userNumber = triune_employee_data.employeeNumber'), $joinType = array('left'), $sortBy = null, $sortOrder = null, 
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+		$groupBy = null );
+
+		$data['userName'] = $this->_getUserName(1);
+		$data['fullName'] = $results2[0]->lastName . ", " . $results2[0]->firstName . " " . $results2[0]->middleName;
+
+
+			$data['specialInstructions'] = null;
+			$results25 = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_special_instructions'), 
+			$fieldName = array('requestNumber'), 
+			$where = array($data['requestNumber']), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+			$groupBy = null );
+			if(!empty($results25)) {
+				$data['specialInstructions'] = $results25;
+			}
+
+		$this->load->view('TBAMIMS/notification-details', $data);
+    }
 	
 	
 }

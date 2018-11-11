@@ -41,6 +41,18 @@
 						</td>
 					</tr>
 					
+					<tr>
+						<td style="padding: 10px"><span>Grading Period:</span></td>
+						<td style="padding: 10px">
+							<span>
+								<select id="selectedGp">
+									<?php foreach($gradingPeriods as $row) {?>
+										<option value='<?php echo $row->gradingPeriods ?>'><?php echo $row->gradingPeriods ?></option>
+									<?php } ?>
+								</select>
+							</span> 
+						</td>
+					</tr>
 				
 				</table>
 				

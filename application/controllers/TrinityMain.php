@@ -81,6 +81,13 @@ class trinityMain extends MY_Controller {
 			$whereSpecial = null, $groupBy = null );
 
 			
+		$data['gradingPeriods'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_grading_periods'), 
+			$fieldName = null, $where = null, 
+			$join = null, $joinType = null, $sortBy = array('gradingPeriods'), $sortOrder = array('asc'), $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			
+			
         $this->load->view('main/modal-form', $data);
 	}
 	
@@ -91,8 +98,11 @@ class trinityMain extends MY_Controller {
 		
 		$sY = isset($clean['sY']) ? $clean['sY'] : '';
 		$sem = isset($clean['sem']) ? $clean['sem'] : '';
+		$gP = isset($clean['gP']) ? $clean['gP'] : '';
+		
 		$this->session->set_userdata('sy', $sY);
 		$this->session->set_userdata('sem', $sem);
+		$this->session->set_userdata('gP', $gP);
 
 		$returnValue = array();
 		$returnValue['success'] = 1;

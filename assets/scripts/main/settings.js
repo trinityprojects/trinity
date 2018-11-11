@@ -25,12 +25,15 @@ $('#submitForm').click(function () {
 			
 	var selectedSY = $('#selectedSY').val();
 	var selectedSem = $('#selectedSem').val();
-			
+	var selectedGp = $('#selectedGp').val();
+	
+selectedGp			
 	jQuery.ajax({
 		url: "updateSessionTerm",
         data: {
 			'sY':selectedSY,
             'sem':  selectedSem,
+            'gP':  selectedGp,
         },
         type: "POST",
         success:function(data){

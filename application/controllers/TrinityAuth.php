@@ -29,6 +29,7 @@ class trinityAuth extends MY_Controller {
 
 
 
+	
 	public function signInView()	{
 		
 		//$this->session->sess_destroy();
@@ -169,13 +170,14 @@ class trinityAuth extends MY_Controller {
         $employeeNumber = null;
         //$cityStreet = null;
         //$mobileNumberE = null;
-        $TIN = null;       
+        $SSS = null;       
         
         $presentAddressG = null;
 		$mobileNumberG = null;
 		
 		$userNumber = null;
 
+		$companyNameUser = null;
         if($userCategory == "S") {
             $this->form_validation->set_rules('studentNumber', 'Student Number', 'required');    
             //$this->form_validation->set_rules('cityAddress', 'Present Address', 'required');    
@@ -190,6 +192,12 @@ class trinityAuth extends MY_Controller {
             $birthPlaceS = $this->input->post('birthPlaceS');
 			$userNumber =  $studentNumber;
 
+			if (strpos($userNumber, '-') !== false) {
+				$companyNameUser = "TUA-K12";
+			} else {
+				$companyNameUser = "TUA-Student";
+			}			
+			
             $this->session->set_flashdata('studentNumber', $studentNumber);
             //$this->session->set_flashdata('cityAddress', $cityAddress);
             //$this->session->set_flashdata('mobileNumberS', $mobileNumberS);
@@ -200,17 +208,17 @@ class trinityAuth extends MY_Controller {
             $this->form_validation->set_rules('employeeNumber', 'Employee Number', 'required');    
             //$this->form_validation->set_rules('cityStreet', 'City Street', 'required');    
             //$this->form_validation->set_rules('mobileNumberE', 'Mobile Number', 'required');    
-            $this->form_validation->set_rules('TIN', 'TIN', 'required');    
+            $this->form_validation->set_rules('SSS', 'SSS', 'required');    
             $employeeNumber = $this->input->post('employeeNumber');
             //$cityStreet = $this->input->post('cityStreet');
             //$mobileNumberE = $this->input->post('mobileNumberE');
-            $TIN = $this->input->post('TIN');
+            $SSS = $this->input->post('SSS');
 			$userNumber =  $employeeNumber;
-
+			$companyNameUser = "TUA-Employee";
             $this->session->set_flashdata('employeeNumber', $employeeNumber);
             //$this->session->set_flashdata('cityStreet', $cityStreet);
             //$this->session->set_flashdata('mobileNumberE', $mobileNumberE);
-            $this->session->set_flashdata('TIN', $TIN);
+            $this->session->set_flashdata('SSS', $SSS);
 
 
         } elseif($userCategory == "G") {
@@ -220,6 +228,7 @@ class trinityAuth extends MY_Controller {
             $mobileNumberG = $this->input->post('mobileNumberG');
             $this->session->set_flashdata('presentAddressG', $presentAddressG);
             $this->session->set_flashdata('mobileNumberG', $mobileNumberG);
+			$companyNameUser = "TUA-Guest";
         }
 
 
@@ -256,6 +265,10 @@ class trinityAuth extends MY_Controller {
 				$fieldNameLike = null, $like = null, 
 				$whereSpecial = null, $groupBy = null );
 					
+			$userNumberExist = $userRecord = $this->_getRecordsData($data = array('userName'), $tables = array('triune_user'), $fieldName = array('userNumber'), $where = array($userNumber), 
+				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
+				$fieldNameLike = null, $like = null, 
+				$whereSpecial = null, $groupBy = null );
 				
 			if(!empty($userNameExist)){
 				$this->session->set_flashdata('msg', 'Username Already Exist!');
@@ -264,6 +277,11 @@ class trinityAuth extends MY_Controller {
 			} elseif(!empty($emailAddressExist)) {
 				
 				$this->session->set_flashdata('msg', 'Email Address Already Exist!');
+				redirect(base_url().'user-acct/sign-up');
+
+			} elseif(!empty($userNumberExist)) {
+				
+				$this->session->set_flashdata('msg', 'User Number Already Exist!');
 				redirect(base_url().'user-acct/sign-up');
 				
 			} else {
@@ -302,15 +320,14 @@ class trinityAuth extends MY_Controller {
 
                     $recordExist = $this->_getRecordsData($data = array('employeeNumber'), 
                         $tables = array('triune_employee_data'), 
-                        $fieldName = array('lastName', 'firstName', 'middleName', 'birthDate', 'employeeNumber', 'tin'), 
-                        $where = array($lastName, $firstName, $middleName, $birthDate, $employeeNumber, $TIN), 	
+                        $fieldName = array('lastName', 'firstName', 'middleName', 'birthDate', 'employeeNumber', 'sss'), 
+                        $where = array($lastName, $firstName, $middleName, $birthDate, $employeeNumber, $SSS), 	
                         $join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
                         $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
                 } elseif($userCategory == "G") {
                     $recordExist = 1;
                 }
-
 
 
                 if(!empty($recordExist)) {
@@ -322,6 +339,7 @@ class trinityAuth extends MY_Controller {
 						  'emailAddress' => $clean['emailAddress'],
 						  'firstNameUser' => $clean['firstName'],
 						  'lastNameUser' => $clean['lastName'],
+						  'companyNameUser' => $companyNameUser,
 						  'userNumber' => $userNumber,
 						  'role' => $this->roles[0],
 						  'status' => $this->status[0],

@@ -259,14 +259,14 @@ echo form_open_multipart('user-acct/create-account', $attributes);
                                         </span>-->
                                         <!--END ------------------------------ mobileNumberE TextBox  -------------------------------------------END -->
                                         
-                                        <!--START ------------------------------ TIN TextBox  -------------------------------------------START -->
+                                        <!--START ------------------------------ SSS TextBox  -------------------------------------------START -->
                                         <div class="input-group col-md-10 input-group-md">
-                                            <input name="TIN" value="<?php echo $this->session->flashdata('TIN'); ?>" type="text" class="form-control" id="TIN" placeholder="TIN" data-validation="alphanumeric" data-validation-allowing="-" data-validation-error-msg="Please enter valid TIN" data-validation-error-msg-container="#messageValidationLocationTIN" >
+                                            <input name="SSS" value="<?php echo $this->session->flashdata('SSS'); ?>" type="text" class="form-control" id="SSS" placeholder="SSS (99-9999999-9)" data-validation="alphanumeric" data-validation-allowing="-" data-validation-error-msg="Please enter valid SSS" data-validation-error-msg-container="#messageValidationLocationSSS" >
                                         </div>
                                         <span>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationTIN"></b>
+                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationSSS"></b>
                                         </span>
-                                        <!--END ------------------------------ TIN TextBox  -------------------------------------------END -->
+                                        <!--END ------------------------------ SSS TextBox  -------------------------------------------END -->
 										<a href="javascript:window.open('consentformemployee','employee consent form','width=1200,height=800')">Clik this link to open Employee Consent Form</a>
 										
                                     </div>

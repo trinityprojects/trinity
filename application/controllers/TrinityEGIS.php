@@ -103,6 +103,8 @@ class trinityEGIS extends MY_Controller {
 		//$sectionCode = '1001 5-HUMILITY'; 
 		//$subjectCode = 'ARTED5E';
 
+		$gradingPeriod = $_SESSION['gP'];
+		
 		$rC = $this->_getRecordsData($dataSelect = array('*'), 
 			$tables = array('triune_subject_elementary'), 
 			$fieldName = array('subjectCode'), $where = array($subjectCode), 
@@ -131,18 +133,31 @@ class trinityEGIS extends MY_Controller {
 		$reportCategory = $rC[0]->reportCategory;
 		//$reportCategory = 1;
 		if($reportCategory == 1) {
-		
-				$selectFields = "triune_grades_score_sheet_1.*, ";
-				$selectFields = $selectFields . "triune_students_k12.studentNumber, concat(triune_students_k12.lastName, ', ', triune_students_k12.firstName, ' ', SUBSTR(triune_students_k12.middleName, 1, 1), '.') as fullName";
+				$results = null;
 				
-				$results = $this->_getRecordsData($dataSelect = array($selectFields), 
-					$tables = array('triune_grades_score_sheet_1', 'triune_students_k12'), 
-					$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
-					$join = array('triune_grades_score_sheet_1.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
-					$sortBy = array('gender', 'lastName', 'firstName'), $sortOrder = array('desc', 'asc', 'asc'), $limit = null, 
-					$fieldNameLike = null, $like = null, 
-					$whereSpecial = null, $groupBy = null );
-
+				if($gradingPeriod == '1') {
+					$selectFields = "triune_grades_score_sheet_1.*, ";
+					$selectFields = $selectFields . "triune_students_k12.studentNumber, concat(triune_students_k12.lastName, ', ', triune_students_k12.firstName, ' ', SUBSTR(triune_students_k12.middleName, 1, 1), '.') as fullName";
+					$results = $this->_getRecordsData($dataSelect = array($selectFields), 
+						$tables = array('triune_grades_score_sheet_1', 'triune_students_k12'), 
+						$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+						$join = array('triune_grades_score_sheet_1.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+						$sortBy = array('gender', 'lastName', 'firstName'), $sortOrder = array('desc', 'asc', 'asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+				} elseif($gradingPeriod == '2') {
+					$selectFields = "triune_grades_score_sheet_2.*, ";
+					$selectFields = $selectFields . "triune_students_k12.studentNumber, concat(triune_students_k12.lastName, ', ', triune_students_k12.firstName, ' ', SUBSTR(triune_students_k12.middleName, 1, 1), '.') as fullName";
+					$results = $this->_getRecordsData($dataSelect = array($selectFields), 
+						$tables = array('triune_grades_score_sheet_2', 'triune_students_k12'), 
+						$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+						$join = array('triune_grades_score_sheet_2.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+						$sortBy = array('gender', 'lastName', 'firstName'), $sortOrder = array('desc', 'asc', 'asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					
+				}
+					
 					$data['scoreList'] = (array) $results;
 					$wwColumnCtr = 0;
 					$ptColumnCtr = 0;			
@@ -173,17 +188,29 @@ class trinityEGIS extends MY_Controller {
 					$data['wwColumnCount'] = $wwColumnCtr + 3;
 					$data['ptColumnCount'] = $ptColumnCtr + 3;
 					$data['qaColumnCount'] = $qaColumnCtr + 2;
-			
-				$titlesFields = "triune_grades_score_sheet_1_title.*";
 
-				$titlesData = $this->_getRecordsData($dataSelect = array($titlesFields), 
-					$tables = array('triune_grades_score_sheet_1_title'), 
-					$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
-					$join = null, $joinType = null, 
-					$sortBy = null, $sortOrder = null, $limit = null, 
-					$fieldNameLike = null, $like = null, 
-					$whereSpecial = null, $groupBy = null );
-			
+					$titlesData = null;
+
+					if($gradingPeriod == '1') {
+						$titlesFields = "triune_grades_score_sheet_1_title.*";
+						$titlesData = $this->_getRecordsData($dataSelect = array($titlesFields), 
+							$tables = array('triune_grades_score_sheet_1_title'), 
+							$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+							$join = null, $joinType = null, 
+							$sortBy = null, $sortOrder = null, $limit = null, 
+							$fieldNameLike = null, $like = null, 
+							$whereSpecial = null, $groupBy = null );
+					} elseif($gradingPeriod == '2') {
+						$titlesFields = "triune_grades_score_sheet_2_title.*";
+						$titlesData = $this->_getRecordsData($dataSelect = array($titlesFields), 
+							$tables = array('triune_grades_score_sheet_2_title'), 
+							$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+							$join = null, $joinType = null, 
+							$sortBy = null, $sortOrder = null, $limit = null, 
+							$fieldNameLike = null, $like = null, 
+							$whereSpecial = null, $groupBy = null );
+						
+					}
 				$data['titles'] = (array) $titlesData[0];
 				
 				//echo $data['scoreList'][0]->studentNumber;
@@ -212,6 +239,18 @@ class trinityEGIS extends MY_Controller {
 						$sortBy = null, $sortOrder = null, $limit = null, 
 						$fieldNameLike = null, $like = null, 
 						$whereSpecial = null, $groupBy = null );
+				} elseif($courseCode == '1005') {
+
+					$selectSP = "triune_grading_components_sh.sy, triune_grading_components_sh.levelCode, triune_grading_components_sh.subjectComponentCode, ";
+					$selectSP = $selectSP . "triune_grading_components_sh.gradingComponentCode, triune_grading_components_sh.componentPercentage";
+
+					$scorePercentage = $this->_getRecordsData($dataSelect = array($selectSP), 
+							$tables = array('triune_subject_senior_high', 'triune_grading_components_sh'), 
+							$fieldName = array('sy', 'subjectCode' ), $where = array($_SESSION['sy'], $subjectCode), 
+							$join = array('triune_subject_senior_high.subjectComponentCode = triune_grading_components_sh.subjectComponentCode'), $joinType = array('inner'), 
+							$sortBy = null, $sortOrder = null, $limit = null, 
+							$fieldNameLike = null, $like = null, 
+							$whereSpecial = null, $groupBy = null );
 				}
 
 						
@@ -247,33 +286,55 @@ class trinityEGIS extends MY_Controller {
 				$this->load->library('Pdf');
 				$this->load->view('EGIS/subject-grades-summary', $data);
 		} else {
-
-				$selectFields = "triune_grades_score_sheet_1.*, ";
-				$selectFields = $selectFields . "triune_students_k12.studentNumber, concat(triune_students_k12.lastName, ', ', triune_students_k12.firstName, ' ', SUBSTR(triune_students_k12.middleName, 1, 1), '.') as fullName";
-				
-				$results = $this->_getRecordsData($dataSelect = array($selectFields), 
-					$tables = array('triune_grades_score_sheet_1', 'triune_students_k12'), 
-					$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
-					$join = array('triune_grades_score_sheet_1.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
-					$sortBy = array('gender', 'lastName', 'firstName'), $sortOrder = array('desc', 'asc', 'asc'), $limit = null, 
-					$fieldNameLike = null, $like = null, 
-					$whereSpecial = null, $groupBy = null );
-
+				$results = null;
+				if($gradingPeriod == '1') {
+					$selectFields = "triune_grades_score_sheet_1.*, ";
+					$selectFields = $selectFields . "triune_students_k12.studentNumber, concat(triune_students_k12.lastName, ', ', triune_students_k12.firstName, ' ', SUBSTR(triune_students_k12.middleName, 1, 1), '.') as fullName";
+					
+					$results = $this->_getRecordsData($dataSelect = array($selectFields), 
+						$tables = array('triune_grades_score_sheet_1', 'triune_students_k12'), 
+						$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+						$join = array('triune_grades_score_sheet_1.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+						$sortBy = array('gender', 'lastName', 'firstName'), $sortOrder = array('desc', 'asc', 'asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+				} elseif($gradingPeriod == '2') {
+					$selectFields = "triune_grades_score_sheet_2.*, ";
+					$selectFields = $selectFields . "triune_students_k12.studentNumber, concat(triune_students_k12.lastName, ', ', triune_students_k12.firstName, ' ', SUBSTR(triune_students_k12.middleName, 1, 1), '.') as fullName";
+					
+					$results = $this->_getRecordsData($dataSelect = array($selectFields), 
+						$tables = array('triune_grades_score_sheet_2', 'triune_students_k12'), 
+						$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+						$join = array('triune_grades_score_sheet_2.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+						$sortBy = array('gender', 'lastName', 'firstName'), $sortOrder = array('desc', 'asc', 'asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+				}
 					$data['scoreList'] = (array) $results;
 
 					$maxScoreCounter = (array) $results[0];
 					$data['maxScoreRow'] = $maxScoreCounter;
-
-				$titlesFields = "triune_grades_score_sheet_1_title.*";
-
-				$titlesData = $this->_getRecordsData($dataSelect = array($titlesFields), 
-					$tables = array('triune_grades_score_sheet_1_title'), 
-					$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
-					$join = null, $joinType = null, 
-					$sortBy = null, $sortOrder = null, $limit = null, 
-					$fieldNameLike = null, $like = null, 
-					$whereSpecial = null, $groupBy = null );
-			
+				
+					$titlesData = null;
+					if($gradingPeriod == '1') {
+						$titlesFields = "triune_grades_score_sheet_1_title.*";
+						$titlesData = $this->_getRecordsData($dataSelect = array($titlesFields), 
+							$tables = array('triune_grades_score_sheet_1_title'), 
+							$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+							$join = null, $joinType = null, 
+							$sortBy = null, $sortOrder = null, $limit = null, 
+							$fieldNameLike = null, $like = null, 
+							$whereSpecial = null, $groupBy = null );
+					} elseif($gradingPeriod == '2') {
+						$titlesFields = "triune_grades_score_sheet_2_title.*";
+						$titlesData = $this->_getRecordsData($dataSelect = array($titlesFields), 
+							$tables = array('triune_grades_score_sheet_2_title'), 
+							$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
+							$join = null, $joinType = null, 
+							$sortBy = null, $sortOrder = null, $limit = null, 
+							$fieldNameLike = null, $like = null, 
+							$whereSpecial = null, $groupBy = null );
+					}
 				$data['titles'] = (array) $titlesData[0];
 					
 				$this->load->library('Pdf');
@@ -301,6 +362,8 @@ class trinityEGIS extends MY_Controller {
 		
         $this->load->view('EGIS/student-subject-list');
     }	
+
+
 	
     public function classCardEGIS() {
         //echo "HELLO WORLD";
@@ -317,6 +380,7 @@ class trinityEGIS extends MY_Controller {
 		//$sectionCode = '1001 6-DILIGENCE';
 		//$studentNumber = '13-100001';
 		//$sectionCodeNS = '10016-DILIGENCE';
+		$gradingPeriod = $_SESSION['gP'];
 		
 		$data['sectionCode'] = $sectionCode;
 		$data['studentNumber'] = $studentNumber;
@@ -393,6 +457,29 @@ class trinityEGIS extends MY_Controller {
 				$joinType = array('inner'),  $sortBy = array('triune_subject_elementary.displaySequence'), $sortOrder = array('asc'), $limit = null, 
 				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
+		} else if($courseCode == '1005') {
+
+			$selectField1 = "triune_subject_senior_high.subjectDescription, triune_subject_senior_high.weight, triune_subject_senior_high.subjectCode, ";
+			$selectField1 = $selectField1 . "triune_grades_score_sheet_1_summary.initialGrade, triune_grades_score_sheet_1_summary.transmutedGrade, ";
+			$selectField1 = $selectField1 . "triune_subject_senior_high.displaySequence";
+			$resultsGrades1 = $this->_getRecordsData($dataSelect2 = array($selectField1), 
+				$tables = array('triune_grades_score_sheet_1_summary', 'triune_subject_senior_high'), 
+				$fieldName = array('sy', 'studentNumber'), $where = array($_SESSION['sy'], $studentNumber), 
+				$join = array('triune_subject_senior_high ON triune_grades_score_sheet_1_summary.subjectCode = triune_subject_senior_high.subjectCode'), 
+				$joinType = array('inner'),  $sortBy = array('triune_subject_senior_high.displaySequence'), $sortOrder = array('asc'), $limit = null, 
+				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+
+			$selectField2 = "triune_subject_senior_high.subjectDescription, triune_subject_senior_high.weight, triune_subject_senior_high.subjectCode, ";
+			$selectField2 = $selectField2 . "triune_grades_score_sheet_2_summary.initialGrade, triune_grades_score_sheet_2_summary.transmutedGrade, ";
+			$selectField2 = $selectField2 . "triune_subject_senior_high.displaySequence";
+			$resultsGrades2 = $this->_getRecordsData($dataSelect2 = array($selectField2), 
+				$tables = array('triune_grades_score_sheet_2_summary', 'triune_subject_senior_high'), 
+				$fieldName = array('sy','studentNumber'), $where = array($_SESSION['sy'], $studentNumber), 
+				$join = array('triune_subject_senior_high ON triune_grades_score_sheet_2_summary.subjectCode = triune_subject_senior_high.subjectCode'), 
+				$joinType = array('inner'),  $sortBy = array('triune_subject_senior_high.displaySequence'), $sortOrder = array('asc'), $limit = null, 
+				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
 		}
 
 
@@ -440,7 +527,13 @@ class trinityEGIS extends MY_Controller {
 			$where = array($_SESSION['sy'], $studentNumber, $sectionCode), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
 			$limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
+		$traits2 = $this->_getRecordsData($dataSelect3 = array('*'), 
+			$tables = array('triune_grades_score_sheet_2_traits'), $fieldName = array('sy', 'studentNumber', 'sectionCode'), 
+			$where = array($_SESSION['sy'], $studentNumber, $sectionCode), $join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+		
 		 $traits1g = (array) $traits1[0];
+		 $traits2g = (array) $traits2[0];
 		 
 		 //echo $traits1g['traits1'];
 		 //echo $traits1g['traits2'];
@@ -600,11 +693,13 @@ weight*/
 		$data['sectionCode'] = $sectionCode;
 		$data['sectionCodeNS'] = $sectionCodeNS;
 		$userName = $this->_getUserName(1);
-
+		$gradingPeriod = $_SESSION['gP'];
 		$results = null;
 
-		//$sectionCode = '1001 5-HUMILITY';
-
+		//$sectionCode = '1005ABM 1-ABM1';
+		//$sectionCodeNS = '1005ABM1-ABM1';
+		//$data['sectionCode'] = $sectionCode;
+		//$data['sectionCodeNS'] = $sectionCodeNS;
 
 		//CONDITION AND ACTION FOR DELETION
 		$where = array($sectionCode, $userName);
@@ -628,6 +723,19 @@ weight*/
 				$sortBy = array('displaySequence'), $sortOrder = array('asc'), $limit = null, 
 				$fieldNameLike = null, $like = null, 
 				$whereSpecial = null, $groupBy = null );
+				
+				if(empty($results)) {
+					$selectFields = "triune_subject_senior_high.subjectCode, triune_subject_senior_high.subjectDescription, triune_subject_senior_high.weight";
+					$results = $this->_getRecordsData($dataSelect1 = array($selectFields), 
+						$tables = array('triune_section_senior_high', 'triune_subject_senior_high'), 
+						$fieldName = array('triune_subject_senior_high.sem', 'triune_section_senior_high.sectionCode'), $where = array($_SESSION['sem'], $sectionCode, ), 
+						$join = array('triune_section_senior_high.subjectCode = triune_subject_senior_high.subjectCode'), $joinType = array('inner'), 
+						$sortBy = array('displaySequence'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+				}
+				
+				
 		}
 
 		$weight = array();
@@ -677,32 +785,53 @@ weight*/
 		$totalScore = [];
 		$totalWeightedAverage = [];
 		$studentNo = [];
-
+		$recordCount = null;
 		
-		$recordCount = $this->_getRecordsData($dataSelect1 = array('studentNumber'), 
-				$tables = array('triune_grades_score_sheet_1_summary'), 
-				$fieldName = array('triune_grades_score_sheet_1_summary.sectionCode'), 
-				$where = array($sectionCode),$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
-				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 		
+		if($gradingPeriod == '1') {
+			$recordCount = $this->_getRecordsData($dataSelect1 = array('studentNumber'), 
+					$tables = array('triune_grades_score_sheet_1_summary'), 
+					$fieldName = array('triune_grades_score_sheet_1_summary.sy', 'triune_grades_score_sheet_1_summary.sectionCode'), 
+					$where = array($_SESSION['sy'], $sectionCode),$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
+					$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+		} elseif($gradingPeriod == '2') {
+			$recordCount = $this->_getRecordsData($dataSelect1 = array('studentNumber'), 
+					$tables = array('triune_grades_score_sheet_2_summary'), 
+					$fieldName = array('triune_grades_score_sheet_2_summary.sy', 'triune_grades_score_sheet_2_summary.sectionCode'), 
+					$where = array($_SESSION['sy'], $sectionCode),$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
+					$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			
+		}
 		$z = 0;
 		foreach($recordCount as $r) {
 			$totalScore[$z] = 0;
 			$z++;
 		}	
 		foreach($results as $row) {
-			
-			$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, ";
-			$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_1_summary.transmutedGrade, triune_grades_score_sheet_1_summary.subjectCode";
-			
-			$details = $this->_getRecordsData($dataSelect1 = array($selectDetail), 
-				$tables = array('triune_grades_score_sheet_1_summary', 'triune_students_k12'), 
-				$fieldName = array('triune_grades_score_sheet_1_summary.sectionCode', 'triune_grades_score_sheet_1_summary.subjectCode'), 
-				$where = array($sectionCode, $row->subjectCode), 
-				$join = array('triune_grades_score_sheet_1_summary.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
-				$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
-				$fieldNameLike = null, $like = null, 
-				$whereSpecial = null, $groupBy = null );
+			$details = null;
+			if($gradingPeriod == '1') {
+				$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, ";
+				$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_1_summary.transmutedGrade, triune_grades_score_sheet_1_summary.subjectCode";
+				$details = $this->_getRecordsData($dataSelect1 = array($selectDetail), 
+					$tables = array('triune_grades_score_sheet_1_summary', 'triune_students_k12'), 
+					$fieldName = array('triune_grades_score_sheet_1_summary.sectionCode', 'triune_grades_score_sheet_1_summary.subjectCode'), 
+					$where = array($sectionCode, $row->subjectCode), 
+					$join = array('triune_grades_score_sheet_1_summary.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+					$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
+					$fieldNameLike = null, $like = null, 
+					$whereSpecial = null, $groupBy = null );
+			} elseif($gradingPeriod == '2') {
+				$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, ";
+				$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_2_summary.transmutedGrade, triune_grades_score_sheet_2_summary.subjectCode";
+				$details = $this->_getRecordsData($dataSelect1 = array($selectDetail), 
+					$tables = array('triune_grades_score_sheet_2_summary', 'triune_students_k12'), 
+					$fieldName = array('triune_grades_score_sheet_2_summary.sectionCode', 'triune_grades_score_sheet_2_summary.subjectCode'), 
+					$where = array($sectionCode, $row->subjectCode), 
+					$join = array('triune_grades_score_sheet_2_summary.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+					$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
+					$fieldNameLike = null, $like = null, 
+					$whereSpecial = null, $groupBy = null );
+			}
 			
 			$scoreField = 'subj' . $scoreCtr;
 			$recCtr = 0;
@@ -754,7 +883,7 @@ weight*/
 		}
 		
 		$totalItems = count($totalScore);
-		$data['t'] = $totalItems;
+		//$data['t'] = $totalItems;
 		for($i = 0; $i < $totalItems; $i++) {
 			$totalWeightedAverage[$i] = ($totalScore[$i] / $totalWeight); 
 			
@@ -777,8 +906,13 @@ weight*/
 				$fieldName = array('sectionCode', 'userNumber'), $where = array($sectionCode, $userName), 
 				$join = null, $joinType = null,  $sortBy = array('weightedAverage'), $sortOrder = array('desc'), $limit = null, 
 				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-	
+
+
+				
 		$data['grades'] = (array) $grades;
+		
+		$data['t'] = count($data['grades']) - 1;
+		
 		$this->load->library('Pdf');		
         $this->load->view('EGIS/ranking-by-section-report', $data);
 
@@ -789,15 +923,16 @@ weight*/
 
     public function showRankingByYearLevelEGIS() {
 		$yearLevel = $_POST["yearLevel"];
-		//$yearLevel = 2;
+		//$yearLevel = 1;
 
 		$data['yearLevel'] = $yearLevel;
 		$userName = $this->_getUserName(1);
 
 		$results = null;
 
-
-
+		$gradingPeriod = $_SESSION['gP'];
+		$yearLevelSH = 11;
+		$courseCodeSH = '';
 		//CONDITION AND ACTION FOR DELETION
 		$where = array($yearLevel, $userName);
 		$fieldName = array('yearLevel', 'userNumber');
@@ -818,6 +953,37 @@ weight*/
 				$where = array($yearLevel), $join = array('triune_section_junior_high.subjectCode = triune_subject_junior_high.subjectCode'), 
 				$joinType = array('inner'), $sortBy = array('displaySequence'), $sortOrder = array('asc'), $limit = null, 
 				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+				if(empty($resultsHead)) {
+					
+					if($yearLevel == 11) {
+						$yearLevelSH = 1;
+						$courseCodeSH = '1005ABM';
+					} elseif($yearLevel == 12) {
+						$yearLevelSH = 2;
+						$courseCodeSH = '1005ABM2';
+					} elseif($yearLevel == 21) {
+						$yearLevelSH = 1;
+						$courseCodeSH = '1005HUM';
+					} elseif($yearLevel == 22) {
+						$yearLevelSH = 2;
+						$courseCodeSH = '1005HUM2';
+					} elseif($yearLevel == 31) {
+						$yearLevelSH = 1;
+						$courseCodeSH = '1005STE';
+					} elseif($yearLevel == 32) {
+						$yearLevelSH = 2;
+						$courseCodeSH = '1005STE2';
+					}
+					
+					$selectHead = "triune_subject_senior_high.subjectCode, triune_subject_senior_high.subjectDescription, triune_subject_senior_high.weight";
+					$resultsHead = $this->_getRecordsData($dataSelect1 = array($selectHead), 
+						$tables = array('triune_section_senior_high', 'triune_subject_senior_high'), 
+						$fieldName = array('triune_subject_senior_high.sem', 'triune_subject_senior_high.courseCode', 'triune_section_senior_high.yearLevel'), 
+						$where = array($_SESSION['sem'], $courseCodeSH, $yearLevelSH), $join = array('triune_section_senior_high.subjectCode = triune_subject_senior_high.subjectCode'), 
+						$joinType = array('inner'), $sortBy = array('displaySequence'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+				}
 		}
 		
 		
@@ -838,6 +1004,46 @@ weight*/
 				$where = array($yearLevel), $join = array('triune_section_junior_high.subjectCode = triune_subject_junior_high.subjectCode'), 
 				$joinType = array('inner'), $sortBy = array('triune_section_junior_high.sectionCode', 'displaySequence'), $sortOrder = array('asc', 'asc'), $limit = null, 
 				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+				if(empty($results)) {
+					
+					if($yearLevel == 11) {
+						$yearLevelSH = 1;
+						$courseCodeSH = '1005ABM';
+						//$data['yearLevel'] = '1005ABM';
+					} elseif($yearLevel == 12) {
+						$yearLevelSH = 2;
+						$courseCodeSH = '1005ABM2';
+						//$data['yearLevel'] = '1005ABM2';
+					} elseif($yearLevel == 21) {
+						$yearLevelSH = 1;
+						$courseCodeSH = '1005HUM';
+						//$data['yearLevel'] = '1005HUM';
+					} elseif($yearLevel == 22) {
+						$yearLevelSH = 2;
+						$courseCodeSH = '1005HUM2';
+						//$data['yearLevel'] = '1005HUM2';
+					} elseif($yearLevel == 31) {
+						$yearLevelSH = 1;
+						$courseCodeSH = '1005STE';
+						//$data['yearLevel'] = '1005STE';
+					} elseif($yearLevel == 32) {
+						$yearLevelSH = 2;
+						$courseCodeSH = '1005STE2';
+						//$data['yearLevel'] = '1005STE2';
+					}
+					
+					$selectFields = "triune_subject_senior_high.subjectCode, triune_subject_senior_high.subjectDescription, triune_subject_senior_high.weight, ";
+					$selectFields = $selectFields . "triune_section_senior_high.sectionCode";
+					$results = $this->_getRecordsData($dataSelect1 = array($selectFields), 
+						$tables = array('triune_section_senior_high', 'triune_subject_senior_high'), 
+						$fieldName = array('triune_subject_senior_high.sem', 'triune_subject_senior_high.courseCode', 'triune_section_senior_high.yearLevel'), 
+						$where = array($_SESSION['sem'], $courseCodeSH, $yearLevelSH), $join = array('triune_section_senior_high.subjectCode = triune_subject_senior_high.subjectCode'), 
+						$joinType = array('inner'), $sortBy = array('triune_section_senior_high.sectionCode', 'displaySequence'), $sortOrder = array('asc', 'asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+				}
+				
+				
 		}
 
 		$weight = array();
@@ -890,27 +1096,57 @@ weight*/
 		$totalWeightedAverage = [];
 		$studentNo = [];
 
-		$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_1.studentNumber'), 
-				$tables = array('triune_section_elementary', 'triune_grades_score_sheet_1'), $fieldName = array('triune_section_elementary.yearLevel'), 
-				$where = array($yearLevel), $join = array('triune_section_elementary.sectionCode = triune_grades_score_sheet_1.sectionCode'), 
-				$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
-				$groupBy = null );
-
-
-		if(empty($recordCount)) {
-
+		$recordCount = null;
+		
+		if($gradingPeriod == '1') {
 			$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_1.studentNumber'), 
-					$tables = array('triune_section_junior_high', 'triune_grades_score_sheet_1'), $fieldName = array('triune_section_junior_high.yearLevel'), 
-					$where = array($yearLevel), $join = array('triune_section_junior_high.sectionCode = triune_grades_score_sheet_1.sectionCode'), 
+					$tables = array('triune_section_elementary', 'triune_grades_score_sheet_1'), $fieldName = array('triune_section_elementary.yearLevel'), 
+					$where = array($yearLevel), $join = array('triune_section_elementary.sectionCode = triune_grades_score_sheet_1.sectionCode'), 
+					$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
+					$groupBy = null );
+		} elseif($gradingPeriod == '2') {
+			$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_2.studentNumber'), 
+					$tables = array('triune_section_elementary', 'triune_grades_score_sheet_2'), $fieldName = array('triune_section_elementary.yearLevel'), 
+					$where = array($yearLevel), $join = array('triune_section_elementary.sectionCode = triune_grades_score_sheet_2.sectionCode'), 
 					$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
 					$groupBy = null );
 			
-			if(empty($recordCount)) {
+		}
+
+		if(empty($recordCount)) {
+
+			if($gradingPeriod == '1') {
 				$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_1.studentNumber'), 
-						$tables = array('triune_section_senior_high', 'triune_grades_score_sheet_1'), $fieldName = array('triune_section_senior_high.yearLevel'), 
-						$where = array($yearLevel), $join = array('triune_section_senior_high.sectionCode = triune_grades_score_sheet_1.sectionCode'), 
+						$tables = array('triune_section_junior_high', 'triune_grades_score_sheet_1'), $fieldName = array('triune_section_junior_high.yearLevel'), 
+						$where = array($yearLevel), $join = array('triune_section_junior_high.sectionCode = triune_grades_score_sheet_1.sectionCode'), 
 						$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
 						$groupBy = null );
+			} elseif($gradingPeriod == '2') {
+				$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_2.studentNumber'), 
+						$tables = array('triune_section_junior_high', 'triune_grades_score_sheet_2'), $fieldName = array('triune_section_junior_high.yearLevel'), 
+						$where = array($yearLevel), $join = array('triune_section_junior_high.sectionCode = triune_grades_score_sheet_2.sectionCode'), 
+						$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
+						$groupBy = null );
+			}
+
+					
+			if(empty($recordCount)) {
+
+				if($gradingPeriod == '1') {
+					$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_1.studentNumber'), 
+						$tables = array('triune_section_senior_high', 'triune_grades_score_sheet_1'), 
+						$fieldName = array('triune_grades_score_sheet_1.sy', 'triune_section_senior_high.yearLevel'), 
+						$where = array($_SESSION['sy'], $yearLevelSH), $join = array('triune_section_senior_high.sectionCode = triune_grades_score_sheet_1.sectionCode'), 
+						$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
+						$groupBy = null );
+				} elseif($gradingPeriod == '2') {
+					$recordCount = $this->_getRecordsData($dataSelect1 = array('triune_grades_score_sheet_2.studentNumber'), 
+						$tables = array('triune_section_senior_high', 'triune_grades_score_sheet_2'), 
+						$fieldName = array('triune_grades_score_sheet_1.sy', 'triune_section_senior_high.yearLevel'), 
+						$where = array($_SESSION['sy'], $yearLevelSH), $join = array('triune_section_senior_high.sectionCode = triune_grades_score_sheet_2.sectionCode'), 
+						$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, 
+						$groupBy = null );
+				}
 			}
 		}		
 				
@@ -924,18 +1160,32 @@ weight*/
 		foreach($results as $row) {
 			//echo "---------<br>";
 			//echo $row->subjectCode . "<br>";
-			$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, triune_grades_score_sheet_1_summary.sectionCode, ";
-			$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_1_summary.transmutedGrade, triune_grades_score_sheet_1_summary.subjectCode";
 			
-			$details = $this->_getRecordsData($dataSelect1 = array($selectDetail), 
-				$tables = array('triune_grades_score_sheet_1_summary', 'triune_students_k12'), 
-				$fieldName = array('triune_grades_score_sheet_1_summary.sectionCode', 'triune_grades_score_sheet_1_summary.subjectCode'), 
-				$where = array($row->sectionCode, $row->subjectCode), 
-				$join = array('triune_grades_score_sheet_1_summary.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
-				$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
-				$fieldNameLike = null, $like = null, 
-				$whereSpecial = null, $groupBy = null );
+			$details = null;
 			
+			if($gradingPeriod == '1') {
+				$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, triune_grades_score_sheet_1_summary.sectionCode, ";
+				$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_1_summary.transmutedGrade, triune_grades_score_sheet_1_summary.subjectCode";
+				$details = $this->_getRecordsData($dataSelect1 = array($selectDetail), 
+					$tables = array('triune_grades_score_sheet_1_summary', 'triune_students_k12'), 
+					$fieldName = array('triune_grades_score_sheet_1_summary.sectionCode', 'triune_grades_score_sheet_1_summary.subjectCode'), 
+					$where = array($row->sectionCode, $row->subjectCode), 
+					$join = array('triune_grades_score_sheet_1_summary.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+					$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
+					$fieldNameLike = null, $like = null, 
+					$whereSpecial = null, $groupBy = null );
+			} elseif($gradingPeriod == '2') {
+				$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, triune_grades_score_sheet_2_summary.sectionCode, ";
+				$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_2_summary.transmutedGrade, triune_grades_score_sheet_2_summary.subjectCode";
+				$details = $this->_getRecordsData($dataSelect1 = array($selectDetail), 
+					$tables = array('triune_grades_score_sheet_2_summary', 'triune_students_k12'), 
+					$fieldName = array('triune_grades_score_sheet_2_summary.sectionCode', 'triune_grades_score_sheet_2_summary.subjectCode'), 
+					$where = array($row->sectionCode, $row->subjectCode), 
+					$join = array('triune_grades_score_sheet_2_summary.studentNumber = triune_students_k12.studentNumber'), $joinType = array('inner'), 
+					$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
+					$fieldNameLike = null, $like = null, 
+					$whereSpecial = null, $groupBy = null );
+			}
 			$scoreField = 'subj' . $scoreCtr;
 			$recCtr = 0;
 			echo $row->sectionCode . " " . $row->subjectCode . " " . $recCtr ."<br>";
@@ -1021,8 +1271,8 @@ weight*/
 					
 
 		}
-		echo $z . "----";
-		$data['t'] = ($z - 1);
+		//echo "v " . $z . "--vvvvvvvvv--";
+		//$data['t'] = ($z - 1);
 		for($i = 0; $i < (count($studentNo)); $i++) {
 			$totalWeightedAverage[$i] = ($totalScore[$i] / $totalWeight); 
 			
@@ -1047,6 +1297,27 @@ weight*/
 				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 	//var_dump($grades);
 		$data['grades'] = (array) $grades;
+		$data['t'] = count($data['grades']) - 1;
+		
+		$data['yearLevelLabel'] = null;
+		if($yearLevel == 11) {
+			$data['yearLevelLabel'] = '1005ABM';
+		} elseif($yearLevel == 12) {
+			$data['yearLevelLabel'] = '1005ABM2';
+		} elseif($yearLevel == 21) {
+			$data['yearLevelLabel'] = '1005HUM';
+		} elseif($yearLevel == 22) {
+			$data['yearLevelLabel'] = '1005HUM2';
+		} elseif($yearLevel == 31) {
+			$data['yearLevelLabel'] = '1005STE';
+		} elseif($yearLevel == 32) {
+			$data['yearLevelLabel'] = '1005STE2';
+		} else {
+			$data['yearLevelLabel'] = $yearLevel;
+		}
+		
+		
+		
 		$this->load->library('Pdf');		
         $this->load->view('EGIS/ranking-by-yearlevel-report', $data);
 

@@ -171,7 +171,7 @@ class trinityDataInfoTech extends MY_Controller {
 				'sy' => $_SESSION['sy'],
 				'requestNumber' =>$insertedRecord1,
 				'requestStatus' => $requestStatus,
-				'assignedTo' => $assignedTo,
+				'assignedTo' => ltrim($assignedTo),
 				'userName' => $userName,
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
@@ -288,7 +288,7 @@ class trinityDataInfoTech extends MY_Controller {
 
     public function getWorkstationInventoryICTJRS() {
 		
-		$selectField = "triune_inventory_workstation.*, concat(triune_employee_data.lastName, ', ', triune_employee_data.firstName, ' ', triune_employee_data.middleName, '; ', triune_employee_data.employeeNumber) as fullName";
+		$selectField = "triune_inventory_workstation.*, concat(triune_employee_data.lastName, ', ', triune_employee_data.firstName, ' ', triune_employee_data.middleName, ';', triune_employee_data.employeeNumber) as fullName";
 		$results1 = $this->_getRecordsData($data = array($selectField), 
 			$tables = array('triune_inventory_workstation', 'triune_employee_data'), 
 			$fieldName = null, $where = null, 
@@ -1491,8 +1491,11 @@ class trinityDataInfoTech extends MY_Controller {
 
 	public function validateRequestItemsICTJRS() {
 		$requestType = $_POST["requestType"];
-
-		if($requestType == "CCTA" || $requestType == "GSAS" || $requestType == "HWRS") {
+		$item = '';
+		$startDate = '';
+		$endDate = '';
+		
+		if($requestType == "CCTA" || $requestType == "GSAS" || $requestType == "HWRS" || $requestType == "LPI"  || $requestType == "PTRS" || $requestType == "SWTI") {
 			$this->form_validation->set_rules('itemID', 'itemID', 'required');
 			$this->form_validation->set_rules('requestNumber', 'requestNumber', 'required');
 			$this->form_validation->set_rules('requestType', 'requestType', 'required');
@@ -1501,12 +1504,20 @@ class trinityDataInfoTech extends MY_Controller {
 			$this->form_validation->set_rules('deliveryDate', 'deliveryDate', 'required');
 			$this->form_validation->set_rules('otherDetails', 'otherDetails', 'required');
 			$this->form_validation->set_rules('location', 'location', 'required');
-		} elseif($requestType == "ICWA") {
+		} elseif($requestType == "ICSA") {
 			$this->form_validation->set_rules('item', 'item', 'required');
 			$this->form_validation->set_rules('itemDetails', 'itemDetails', 'required');
 			$this->form_validation->set_rules('otherDetails', 'otherDetails', 'required');
 			$this->form_validation->set_rules('startDate', 'startDate', 'required');
 			$this->form_validation->set_rules('endDate', 'endDate', 'required');
+		
+			$item = $_POST["item"];
+			$startDate = $_POST["startDate"];
+			$endDate = $_POST["endDate"];
+			
+			$this->session->set_flashdata('item', $item);
+			$this->session->set_flashdata('startDate', $startDate);
+			$this->session->set_flashdata('endDate', $endDate);
 			
 		}
 
@@ -1538,6 +1549,9 @@ class trinityDataInfoTech extends MY_Controller {
 			$returnValue['deliveryDate'] = $deliveryDate;
 			$returnValue['otherDetails'] = $otherDetails;
 			$returnValue['location'] = $location;
+			$returnValue['item'] = $item;
+			$returnValue['startDate'] = $startDate;
+			$returnValue['endDate'] = $endDate;
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
@@ -1558,6 +1572,7 @@ class trinityDataInfoTech extends MY_Controller {
 
 		$item = null;
 		$inventory = null;
+		$startDate = null;
 		
 		$userName = $this->_getUserName(1);
 
@@ -1570,6 +1585,8 @@ class trinityDataInfoTech extends MY_Controller {
 			if(!empty($inventory)) {
 				$item = $inventory[0]->location;
 			}
+			$startDate = $this->_getCurrentDate();
+			
 		} else if($requestType == "GSAS") {
 			$inventory = $this->_getRecordsData($data = array('*'), 
 			$tables = array('triune_request_reference_gsuite'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
@@ -1579,6 +1596,7 @@ class trinityDataInfoTech extends MY_Controller {
 			if(!empty($inventory)) {
 				$item = $inventory[0]->requestCategory;
 			}
+			$startDate = $this->_getCurrentDate();
 			
 		} else if($requestType == "HWRS") {
 			$inventory = $this->_getRecordsData($data = array('*'), 
@@ -1589,8 +1607,50 @@ class trinityDataInfoTech extends MY_Controller {
 			if(!empty($inventory)) {
 				$item = $inventory[0]->requestCategory;
 			}
+			$startDate = $this->_getCurrentDate();
+		} else if($requestType == "ICSA") {
+				$item = $_POST["item"];
+				$startDate = $_POST["startDate"];
+				$deliveryDate = $_POST["endDate"];
+		} else if($requestType == "LPI") {
+			$inventory = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_inventory_lcd_projector'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 			
+			
+			if(!empty($inventory)) {
+				$item = $inventory[0]->projectorBrand . "-" . $inventory[0]->projectorModel;
+				$location = $inventory[0]->roomNumber;
+				$otherDetails = $inventory[0]->underWarranty;
+				
+			}
+			$startDate = $this->_getCurrentDate();
+		} else if($requestType == "PTRS") {
+			$inventory = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_inventory_telephone'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			
+			
+			if(!empty($inventory)) {
+				$item = $inventory[0]->phoneUser;
+				$location = $inventory[0]->roomNumber . "-" . $inventory[0]->floor;
+				$otherDetails = $inventory[0]->phoneNumber;
+				
+			}
+			$startDate = $this->_getCurrentDate();
+		} else if($requestType == "SWTI") {
+			$inventory = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_inventory_software'), $fieldName = array('ID'), $where = array($itemID), $join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+			
+			
+			if(!empty($inventory)) {
+				$item = $inventory[0]->softwareName;
+			}
+			$startDate = $this->_getCurrentDate();
+				
 		}
+
 		
 		$transactionExist = null;
 		
@@ -1603,6 +1663,12 @@ class trinityDataInfoTech extends MY_Controller {
 			$transactionExist = $this->_getRecordsData($data = array('*'), 
 			$tables = array('triune_job_request_transaction_ict_request_items'), $fieldName = array('requestNumber', 'otherDetails', 'location'), 
 			$where = array($requestNumber, $otherDetails, $location), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+		} elseif($requestType == "ICSA") {
+			$transactionExist = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_job_request_transaction_ict_request_items'), $fieldName = array('requestNumber', 'item', 'otherDetails'), 
+			$where = array($requestNumber, $item, $otherDetails), 
 			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 	$fieldNameLike = null, $like = null, 
 			$whereSpecial = null, $groupBy = null );
 		}
@@ -1626,8 +1692,8 @@ class trinityDataInfoTech extends MY_Controller {
 				'itemDetails' => $itemDetails,
 				'otherDetails' => $otherDetails,
 				'location' => $location,
-				'startDate' => $deliveryDate,
-				'endDate' => $this->_getCurrentDate(),
+				'startDate' => $startDate,
+				'endDate' => $deliveryDate,
 				'userName' => $userName,
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
@@ -1784,5 +1850,52 @@ class trinityDataInfoTech extends MY_Controller {
 			$sortBy = array('requestCategory'), $sortOrder = array('asc'), $limit = null, $fieldNameLike = null, $like = null, 
 			$whereSpecial = null, $groupBy = null );
 			echo json_encode($results1);
-    }		
+    }
+	
+    public function getDetailedLCDInventoryICTJRS() {
+		$selectField = "triune_inventory_lcd_projector.*, ";
+		$selectField = $selectField . "concat(roomNumber, ' - ', projectorBrand, ' - ', projectorModel) as projectorDetail";
+		
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_lcd_projector'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('locationCode', 'floor'), $sortOrder = array('asc', 'asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+	
+    public function getDetailedTelephoneInventoryICTJRS() {
+		$selectField = "triune_inventory_telephone.*, ";
+		$selectField = $selectField . " concat(phoneUser, '(', phoneNumber, ')') as phoneDetail";
+		
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_telephone'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('locationCode', 'floor'), $sortOrder = array('asc', 'asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+
+	
+    public function getSoftwareInventoryICTJRS() {
+		$selectField = "triune_inventory_software.*";
+		
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_software'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('softwareName'), $sortOrder = array('asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+
+
+    public function getLaboratoryList() {
+		$selectField = "triune_inventory_comlab.*";
+		
+		$results1 = $this->_getRecordsData($data = array($selectField), 
+			$tables = array('triune_inventory_comlab'), 	$fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('comlabName'), $sortOrder = array('asc'), $limit = null, $fieldNameLike = null, $like = null, 
+			$whereSpecial = null, $groupBy = null );
+			echo json_encode($results1);
+    }	
+	
+
+	
 }

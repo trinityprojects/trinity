@@ -43,6 +43,14 @@
         <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reset</a>-->
         <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>-->
     </div>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/datagrid-filter.js"></script>
+	
+	<script type="text/javascript">
+	$(function(){
+		var dg = $('#dg').datagrid();
+		dg.datagrid('enableFilter');
+	});
+	</script>
     
     <script type="text/javascript">
         var editIndex = undefined;

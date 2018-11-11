@@ -22,7 +22,7 @@
 
     <nav class="navbar navbar-expand-sm navbar-custom">
         <a href="/" class="navbar-brand">
-			<span style="padding: 0 2px 0 2px; font-size: 10px"> ACTIVE TERM: <?php echo $_SESSION['sy'] . "-" . $_SESSION['sem']; ?> </span>		
+			<span style="padding: 0 2px 0 2px; font-size: 10px"> ACTIVE TERM: <?php echo $_SESSION['sy'] . "-" . $_SESSION['sem'] . "-" . $_SESSION['gP']; ?> </span>		
 			<br>
 			<?php echo strtoupper($_SESSION['organizationAppBrand']); ?>
 		</a>
@@ -102,7 +102,8 @@
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a href="<?php echo base_url() ?>trinityAuth/logout" class="dropdown-item" selectControl1="logout">Logout</a> 
-                            <a class="dropdown-item" selectControl="hris/personalData">Personal Data</a>   
+                            
+							<a class="dropdown-item" selectApp="PERSONALDATA/personalData">Personal Data</a>   
 							
 						</div>
 					</li>

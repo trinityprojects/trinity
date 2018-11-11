@@ -433,13 +433,16 @@ class trinityDataBuilding extends MY_Controller {
 		$actualBudgetAmount =  null;
 		$actualAmount = null;
 		$jo = null;
+		$price =  null;
+		$materialsIDPrice =  null;
 
 		$selectionCode = null;
 		$remarks = null;
 		$questionCategoryID = null;
 		$selectionDesciption = null;
 
-		
+		$returnedFrom = null;
+		$from = null;
 		if($requestStatus == 'O') {
 			$specialInstructions =  $clean['specialInstructions'];
 			$scopeDetails =  $clean['scopeDetails'];
@@ -450,12 +453,20 @@ class trinityDataBuilding extends MY_Controller {
 			$specialInstructions =  $clean['specialInstructions'];
 			$scopeDetails =  $clean['scopeDetails'];
 			$requestStatusRemarksID =  $clean['requestStatusRemarksID'];
+			$from = isset($clean['from']) ? $clean['from'] : '';
 		} elseif($requestStatus == 'E') {
 			$specialInstructions =  $clean['specialInstructions'];
 			$scopeDetails =  $clean['scopeDetails'];
 			$requestStatusRemarksID =  $clean['requestStatusRemarksID'];
-			$amount =  $clean['amount'];
-			$materialsRecordID =  $clean['materialsRecordID'];
+			$from = isset($clean['from']) ? $clean['from'] : '';
+			if($from == 'A') {
+				$quantity =  $clean['qty'];
+				$materialsIDPrice =  $clean['materialsID'];
+				$price =  $clean['price'];
+			} else {
+				$amount =  $clean['amount'];
+				$materialsRecordID =  $clean['materialsRecordID'];
+			}
 		} elseif($requestStatus == 'S') {
 			$specialInstructions =  $clean['specialInstructions'];
 			$scopeDetails =  $clean['scopeDetails'];
@@ -483,6 +494,9 @@ class trinityDataBuilding extends MY_Controller {
 			$scopeDetails =  $clean['scopeDetails'];
 			$requestStatusRemarksID =  $clean['requestStatusRemarksID'];
 			
+			$returnedFrom = isset($clean['returnedFrom']) ? $clean['returnedFrom'] : '';
+			
+			
 		}
 
 
@@ -506,6 +520,16 @@ class trinityDataBuilding extends MY_Controller {
 				$requestStatusUpdate = array(
 					'requestStatus' => $requestStatus,
 					'dateCompleted' => $this->_getCurrentDate()
+				);
+			} else if($requestStatus == 'R' && $returnedFrom == 'E') {
+				$requestStatusUpdate = array(
+					'requestStatus' => $requestStatus,
+					'returnedFrom' => 'N'
+				);
+			} else if($requestStatus == 'A' && $from == 'O') {
+				$requestStatusUpdate = array(
+					'requestStatus' => $requestStatus,
+					'returnedFrom' => 'O'
 				);
 			} else {
 				$requestStatusUpdate = array(
@@ -818,47 +842,84 @@ class trinityDataBuilding extends MY_Controller {
 				//--------------UPDATE REQUEST MATERIALS AMOUNT-------------------
 			}
 			
+			$existBudget = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_actual_budget'), $fieldName = array('requestNumber'), $where = array($ID), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+			$groupBy = null );
 			
-			//--------------INSERT REQUEST SCOPE DETAILS-------------------
+			//--------------INSERT ACTUAL AMOUNT-------------------
 			$systemForAuditName7 = "TBAMIMS";
 			$moduleName7 = "REQUESTACTUALBUDGET";
 
 			if( (strlen($actualBudgetAmount)) > 0) {
-				$insertData7 = null;
-				$insertData7 = array(
-					'sy' => $_SESSION['sy'],
-					'requestNumber' =>$ID,
-					'requestStatus' => $requestStatus,
-					'actualBudgetAmount' => $actualBudgetAmount,
-					'userName' => $details[0]->userName,
-					'workstationID' => $this->_getIPAddress(),
-					'timeStamp' => $this->_getTimeStamp(),
-					'updatedBy' => $userName,
+				if(empty($existBudget)) {
+					$insertData7 = null;
+					$insertData7 = array(
+						'sy' => $_SESSION['sy'],
+						'requestNumber' =>$ID,
+						'requestStatus' => $requestStatus,
+						'fundsAvailableAmount' => 0,
+						'actualBudgetAmount' => $actualBudgetAmount,
+						'userName' => $details[0]->userName,
+						'workstationID' => $this->_getIPAddress(),
+						'timeStamp' => $this->_getTimeStamp(),
+						'updatedBy' => $userName,
+						
+					);				 
+					$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_actual_budget', $insertData7);        			 
 					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_actual_budget', $insertData7);        			 
-				
-				$actionName7 = "Insert Request Actual Budget Amount";
-				$for7 = $ID . ";" . $userName;
-				$oldValue7 = null;
-				$newValue7 =  $insertData7;
-				$userType = 1;
-				$this->_insertAuditTrail($actionName7, $systemForAuditName7, $moduleName7, $for7, $oldValue7, $newValue7, $userType);		
+					$actionName7 = "Insert Request Actual Budget Amount";
+					$for7 = $ID . ";" . $userName;
+					$oldValue7 = null;
+					$newValue7 =  $insertData7;
+					$userType = 1;
+					$this->_insertAuditTrail($actionName7, $systemForAuditName7, $moduleName7, $for7, $oldValue7, $newValue7, $userType);		
 
-				$fileName7 = "triune_job_request_transaction_tbamims_actual_budget-" . $this->_getCurrentDate();
-				$text7 = "INSERT INTO triune_job_request_transaction_tbamims_actual_budget ";
-				$text7 = $text7 .  "VALUES ('".$ID . "', ";
-				$text7 = $text7 .  "'".$_SESSION['sy'] . "', ";
-				$text7 = $text7 .  "'".$requestStatus . "', ";
-				$text7 = $text7 .  "'".$actualBudgetAmount . "', ";
-				$text7 = $text7 .  "'".$details[0]->userName . "', ";
-				$text7 = $text7 .  "'".$this->_getIPAddress() . "', ";
-				$text7 = $text7 .  "'".$this->_getTimeStamp() . "', ";
-				$text7 = $text7 .  "'".$userName . "', ";
-				$text7 = $text7 . "');";
-				$this->_insertTextLog($fileName7, $text7, $this->LOGFOLDER);
+					$fileName7 = "triune_job_request_transaction_tbamims_actual_budget-" . $this->_getCurrentDate();
+					$text7 = "INSERT INTO triune_job_request_transaction_tbamims_actual_budget ";
+					$text7 = $text7 .  "VALUES ('".$ID . "', ";
+					$text7 = $text7 .  "'".$_SESSION['sy'] . "', ";
+					$text7 = $text7 .  "'".$requestStatus . "', ";
+					$text7 = $text7 .  "'0', ";
+					$text7 = $text7 .  "'".$actualBudgetAmount . "', ";
+					$text7 = $text7 .  "'".$details[0]->userName . "', ";
+					$text7 = $text7 .  "'".$this->_getIPAddress() . "', ";
+					$text7 = $text7 .  "'".$this->_getTimeStamp() . "', ";
+					$text7 = $text7 .  "'".$userName . "', ";
+					$text7 = $text7 . "');";
+					$this->_insertTextLog($fileName7, $text7, $this->LOGFOLDER);
+				} else {
+					$systemForAuditName7 = "TBAMIMS";
+					$moduleName7 = "ACTUALAMOUNTUPDATE";
+					
+					$requestStatusUpdate = array(
+							'requestStatus' => $requestStatus,
+							'actualBudgetAmount' => $actualBudgetAmount,
+							'workstationID' => $this->_getIPAddress(),
+							'timeStamp' => $this->_getTimeStamp(),
+							'updatedBy' => $userName,
+					);
+						
+					$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims_actual_budget', 
+					$fieldName = array('requestNumber'), 
+					$where = array($ID), $requestStatusUpdate);
+					
+					$actionName7 = "Update Transaction Request to: " . $requestStatus;
+					$for7 = $ID . ";" . $userName;
+					$oldValue7 = null;
+					$newValue7 =  $requestStatusUpdate;
+					$userType = 1;
+					$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+
+					/*$fileName0 = "triune_job_request_transaction_tbamims_actual_budget-" . $this->_getCurrentDate();
+					$text0 = "UPDATE triune_job_request_transaction_tbamims_actual_budget ";
+					$text0 = $text0 .  "SET status = '0', ";
+					$text0 = $text0 .  "timeStamp = '" .  $this->_getTimeStamp() . "' ";
+					$text0 = $text0 .  "WHERE ID = ".$ID . " AND requestNumber = " . $requestNumber;
+					$this->_insertTextLog($fileName0, $text0, $this->LOGFOLDER);*/					
+					}
 			}
-			//--------------INSERT REQUEST SCOPE DETAILS-------------------
+			//--------------INSERT ACTUAL AMOUNT-------------------
 
 
 
@@ -948,6 +1009,69 @@ class trinityDataBuilding extends MY_Controller {
 				//--------------INSERT EVALUATION ANSWERS-------------------
 			}
 			
+
+
+			if($price != null){
+				//--------------INSERT REQUEST MATERIALS-------------------
+				$systemForAuditName10 = "TBAMIMS";
+				$moduleName10 = "REQUESTMATERIALS";
+				
+				$quantt = explode(",",$quantity);
+				$materyalsID = explode(",",$materialsIDPrice);
+				$prays = explode(",",$price);
+				$validPrice = 0;
+				for($i = 0; $i < count($quantt); $i++ ) {
+					
+					
+					if(is_numeric($prays[$i]) && $prays[$i] > 0){
+						$validPrice = $prays[$i];
+					} else {
+						$validPrice = 0;
+					}
+					
+					$insertData10 = null;
+					$insertData10 = array(
+						'sy' => $_SESSION['sy'],
+						'requestNumber' =>$ID,
+						'requestStatus' => $requestStatus,
+						'quantity' => $quantt[$i],
+						'materialsID' => $materyalsID[$i],
+						'materialsAmount' => $validPrice,
+						'userName' => $details[0]->userName,
+						'workstationID' => $this->_getIPAddress(),
+						'timeStamp' => $this->_getTimeStamp(),
+						'updatedBy' => $userName,
+						
+					);				 
+					$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_materials', $insertData10);        			 
+					$fileName10 = "triune_job_request_transaction_tbamims_materials-" . $this->_getCurrentDate();
+					$text10 = "INSERT INTO triune_job_request_transaction_tbamims_materials ";
+					$text10 = $text10 .  "VALUES ('".$ID . "', ";
+					$text10 = $text10 .  "'".$_SESSION['sy'] . "', ";
+					$text10 = $text10 .  "'".$requestStatus . "', ";
+					$text10 = $text10 .  "'".$quantt[$i] . "', ";
+					$text10 = $text10 .  "'".$materyalsID[$i] . "', ";
+					$text10 = $text10 .  $validPrice . ", ";
+					$text10 = $text10 .  "'".$details[0]->userName . "', ";
+					$text10 = $text10 .  "'".$this->_getIPAddress() . "', ";
+					$text10 = $text10 .  "'".$this->_getTimeStamp() . "', ";
+					$text10 = $text10 .  "'".$userName . "', ";
+					$text10 = $text10 . "');";
+					$this->_insertTextLog($fileName10, $text10, $this->LOGFOLDER);
+
+
+				}
+				$actionName10 = "Insert Request Materials";
+				$for10 = $ID . ";" . $userName;
+				$oldValue10 = null;
+				$newValue10 =  $quantity . " " .$materialsID;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName10, $systemForAuditName10, $moduleName10, $for10, $oldValue10, $newValue10, $userType);		
+				//--------------INSERT REQUEST MATERIALS-------------------
+			}
+
+			
+
 			
 		$this->db->trans_complete();
 
@@ -1399,6 +1523,315 @@ class trinityDataBuilding extends MY_Controller {
 	}
 
 
+	
+	
+	public function setupFundStatusRequestTBAMIMS() {
+		$post = $this->input->post();  
+		$clean = $this->security->xss_clean($post);
+		
+		$ID =  $clean['ID'];
+		$requestStatus =  $clean['requestStatus'];
+		$specialInstructions =  $clean['specialInstructions'];
+		$requestStatusRemarksID =  $clean['requestStatusRemarksID'];
+		$fundsAvailableAmount =  $clean['fundsAvailableAmount'];
+
+		//$ID =  '33';
+		//$requestStatus =  'E';
+		//$specialInstructions =  'hello';
+		//$requestStatusRemarksID =  '48';
+
+		
+		$userName = $this->_getUserName(1);
+
+
+		$this->db->trans_start();
+
+			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+			if( (strlen($specialInstructions)) > 0) {
+				$systemForAuditName2 = "TBAMIMS";
+				$moduleName2 = "REQUESTSPECIALINSTRUCTIONS";
+
+				$insertData2 = null;
+				$insertData2 = array(
+					'sy' =>$_SESSION['sy'],
+					'requestNumber' =>$ID,
+					'requestStatus' => $requestStatus,
+					'specialInstructions' => $specialInstructions,
+					'userName' => $userName,
+					'workstationID' => $this->_getIPAddress(),
+					'timeStamp' => $this->_getTimeStamp(),
+					'updatedBy' => $userName,
+					
+				);				 
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);        			 
+
+				$actionName2 = "Insert Request Special Instructions";
+				$for2 = $ID . ";" . $userName;
+				$oldValue2 = null;
+				$newValue2 =  $insertData2;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);		
+
+				$fileName2 = "triune_job_request_transaction_tbamims_special_instructions-" . $this->_getCurrentDate();
+				$text2 = "INSERT INTO triune_job_request_transaction_tbamims_special_instructions ";
+				$text2 = $text2 .  "VALUES ('".$ID . "', ";
+				$text2 = $text2 .  "'".$_SESSION['sy'] . "', ";
+				$text2 = $text2 .  "'".$requestStatus . "', ";
+				$text2 = $text2 .  "'".$specialInstructions . "', ";
+				$text2 = $text2 .  "'".$userName . "', ";
+				$text2 = $text2 .  "'".$this->_getIPAddress() . "', ";
+				$text2 = $text2 .  "'".$this->_getTimeStamp() . "', ";
+				$text2 = $text2 .  "'".$userName . "', ";
+				$text2 = $text2 . "');";
+				$this->_insertTextLog($fileName2, $text2, $this->LOGFOLDER);
+					
+
+			}
+			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+
+			//--------------INSERT REQUEST STATUS REMARKS-------------------
+			$systemForAuditName5 = "TBAMIMS";
+			$moduleName5 = "REQUESTSTATUSREMARKS";
+
+			if( (strlen($requestStatusRemarksID)) > 0) {
+				$insertData5 = null;
+				$insertData5 = array(
+					'sy' =>$_SESSION['sy'],
+					'requestNumber' =>$ID,
+					'requestStatus' => $requestStatus,
+					'requestStatusRemarksID' => $requestStatusRemarksID,
+					'userName' => $userName,
+					'workstationID' => $this->_getIPAddress(),
+					'timeStamp' => $this->_getTimeStamp(),
+					'updatedBy' => $userName,
+					
+				);				 
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);        			 
+				
+				$actionName5 = "Insert Request Status Remarks";
+				$for5 = $ID . ";" . $userName;
+				$oldValue5 = null;
+				$newValue5 =  $insertData5;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);		
+
+				$fileName5 = "triune_job_request_transaction_tbamims_status_remarks-" . $this->_getCurrentDate();
+				$text5 = "INSERT INTO triune_job_request_transaction_tbamims_status_remarks ";
+				$text5 = $text5 .  "VALUES ('".$ID . "', ";
+				$text5 = $text5 .  "'".$_SESSION['sy'] . "', ";
+				$text5 = $text5 .  "'".$requestStatus . "', ";
+				$text5 = $text5 .  "'".$requestStatusRemarksID . "', ";
+				$text5 = $text5 .  "'".$userName . "', ";
+				$text5 = $text5 .  "'".$this->_getIPAddress() . "', ";
+				$text5 = $text5 .  "'".$this->_getTimeStamp() . "', ";
+				$text5 = $text5 .  "'".$userName . "', ";
+				$text5 = $text5 . "');";
+				$this->_insertTextLog($fileName5, $text5, $this->LOGFOLDER);
+			}
+			//--------------INSERT REQUEST STATUS REMARKS-------------------
+
+			$details = $this->_getTransactionDetails($ID, $from = 'triune_job_request_transaction_tbamims');
+			$existBudget = $this->_getTransactionDetails($ID, $from = 'triune_job_request_transaction_tbamims_actual_budget');
+			
+			
+			//--------------INSERT ACTUAL AMOUNT DETAILS-------------------			
+			$systemForAuditName7 = "TBAMIMS";
+			$moduleName7 = "REQUESTACTUALAMOUNT";
+			if(empty($existBudget)) {
+				if($fundsAvailableAmount > 0) {
+					$insertData7 = null;
+					$insertData7 = array(
+						'sy' => $_SESSION['sy'],
+						'requestNumber' =>$ID,
+						'requestStatus' => $requestStatus,
+						'fundsAvailableAmount' => $fundsAvailableAmount,
+						'actualBudgetAmount' => 0,
+						'userName' => $details[0]->userName,
+						'workstationID' => $this->_getIPAddress(),
+						'timeStamp' => $this->_getTimeStamp(),
+						'updatedBy' => $userName,
+						
+					);				 
+					$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_actual_budget', $insertData7);        			 
+					
+					$actionName7 = "Insert Request Funds Available Amount";
+					$for7 = $ID . ";" . $userName;
+					$oldValue7 = null;
+					$newValue7 =  $insertData7;
+					$userType = 1;
+					$this->_insertAuditTrail($actionName7, $systemForAuditName7, $moduleName7, $for7, $oldValue7, $newValue7, $userType);		
+
+					$fileName7 = "triune_job_request_transaction_tbamims_actual_budget-" . $this->_getCurrentDate();
+					$text7 = "INSERT INTO triune_job_request_transaction_tbamims_actual_budget ";
+					$text7 = $text7 .  "VALUES ('".$ID . "', ";
+					$text7 = $text7 .  "'".$_SESSION['sy'] . "', ";
+					$text7 = $text7 .  "'".$requestStatus . "', ";
+					$text7 = $text7 .  "'".$fundsAvailableAmount . "', ";
+					$text7 = $text7 .  "'0', ";
+					$text7 = $text7 .  "'".$details[0]->userName . "', ";
+					$text7 = $text7 .  "'".$this->_getIPAddress() . "', ";
+					$text7 = $text7 .  "'".$this->_getTimeStamp() . "', ";
+					$text7 = $text7 .  "'".$userName . "', ";
+					$text7 = $text7 . "');";
+					$this->_insertTextLog($fileName7, $text7, $this->LOGFOLDER);
+				}
+			} else {
+
+				$systemForAuditName7 = "TBAMIMS";
+				$moduleName7 = "ACTUALAMOUNTUPDATE";
+				
+				$requestStatusUpdate = array(
+						'fundsAvailableAmount' => $fundsAvailableAmount,
+						'userName' => $details[0]->userName,
+						'workstationID' => $this->_getIPAddress(),
+						'timeStamp' => $this->_getTimeStamp(),
+						'updatedBy' => $userName,
+				);
+					
+				$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims_actual_budget', 
+				$fieldName = array('requestNumber'), 
+				$where = array($requestNumber), $requestStatusUpdate);
+				
+				$actionName7 = "Update Transaction Request to: " . $requestStatus;
+				$for7 = $requestNumber . ";" . $userName;
+				$oldValue7 = null;
+				$newValue7 =  $requestStatusUpdate;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+
+				/*$fileName0 = "triune_job_request_transaction_tbamims_actual_budget-" . $this->_getCurrentDate();
+				$text0 = "UPDATE triune_job_request_transaction_tbamims_actual_budget ";
+				$text0 = $text0 .  "SET status = '0', ";
+				$text0 = $text0 .  "timeStamp = '" .  $this->_getTimeStamp() . "' ";
+				$text0 = $text0 .  "WHERE ID = ".$ID . " AND requestNumber = " . $requestNumber;
+				$this->_insertTextLog($fileName0, $text0, $this->LOGFOLDER);*/
+
+			
+			}
+			//--------------INSERT ACTUAL AMOUNT DETAILS-------------------			
+
+
+			//--------------INSERT NOTIFICATION-------------------
+			if($requestStatusRemarksID == 47 || $requestStatusRemarksID == 48) {
+				$systemForAuditName5 = "TBAMIMS";
+				$moduleName5 = "REQUESTNOTIFICATION";
+
+					$insertData5 = null;
+					$insertData5 = array(
+						'sy' =>$_SESSION['sy'],
+						'requestNumber' =>$ID,
+						'requestStatus' => $requestStatus,
+						'status' => 1,
+						'notification' => $specialInstructions,
+						'userName' => $userName,
+						'workstationID' => $this->_getIPAddress(),
+						'timeStamp' => $this->_getTimeStamp(),
+					);				 
+					$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_notification', $insertData5);        			 
+					
+					$actionName5 = "Insert Request Notification";
+					$for5 = $ID . ";" . $userName;
+					$oldValue5 = null;
+					$newValue5 =  $insertData5;
+					$userType = 1;
+					$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);		
+
+					$fileName5 = "triune_job_request_transaction_tbamims_notification-" . $this->_getCurrentDate();
+					$text5 = "INSERT INTO triune_job_request_transaction_tbamims_notification ";
+					$text5 = $text5 .  "VALUES ('".$ID . "', ";
+					$text5 = $text5 .  "'".$_SESSION['sy'] . "', ";
+					$text5 = $text5 .  "'".$requestStatus . "', ";
+					$text5 = $text5 .  "'1', ";
+					$text5 = $text5 .  "'".$specialInstructions . "', ";
+					$text5 = $text5 .  "'".$userName . "', ";
+					$text5 = $text5 .  "'".$this->_getIPAddress() . "', ";
+					$text5 = $text5 .  "'".$this->_getTimeStamp() . "', ";
+					$text5 = $text5 . "');";
+					$this->_insertTextLog($fileName5, $text5, $this->LOGFOLDER);
+			}
+			//--------------INSERT NOTIFICATION-------------------
+
+			
+		$this->db->trans_complete();
+
+		$returnValue = array();
+		$returnValue['success'] = 1;
+		echo json_encode($returnValue);
+
+	}
+	
+
+
+	public function setupAnnotationTBAMIMS() {
+		$post = $this->input->post();  
+		$clean = $this->security->xss_clean($post);
+		
+		$ID =  $clean['ID'];
+		$requestStatus =  $clean['requestStatus'];
+		$specialInstructions =  $clean['specialInstructions'];
+
+		//$ID =  '33';
+		//$requestStatus =  'E';
+		//$specialInstructions =  'hello';
+
+		
+		$userName = $this->_getUserName(1);
+
+
+		$this->db->trans_start();
+
+			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+			if( (strlen($specialInstructions)) > 0) {
+				$systemForAuditName2 = "TBAMIMS";
+				$moduleName2 = "REQUESTSPECIALINSTRUCTIONS";
+
+				$insertData2 = null;
+				$insertData2 = array(
+					'sy' =>$_SESSION['sy'],
+					'requestNumber' =>$ID,
+					'requestStatus' => $requestStatus,
+					'specialInstructions' => $specialInstructions,
+					'userName' => $userName,
+					'workstationID' => $this->_getIPAddress(),
+					'timeStamp' => $this->_getTimeStamp(),
+					'updatedBy' => $userName,
+					
+				);				 
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);        			 
+
+				$actionName2 = "Insert Request Special Instructions";
+				$for2 = $ID . ";" . $userName;
+				$oldValue2 = null;
+				$newValue2 =  $insertData2;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);		
+
+				$fileName2 = "triune_job_request_transaction_tbamims_special_instructions-" . $this->_getCurrentDate();
+				$text2 = "INSERT INTO triune_job_request_transaction_tbamims_special_instructions ";
+				$text2 = $text2 .  "VALUES ('".$ID . "', ";
+				$text2 = $text2 .  "'".$_SESSION['sy'] . "', ";
+				$text2 = $text2 .  "'".$requestStatus . "', ";
+				$text2 = $text2 .  "'".$specialInstructions . "', ";
+				$text2 = $text2 .  "'".$userName . "', ";
+				$text2 = $text2 .  "'".$this->_getIPAddress() . "', ";
+				$text2 = $text2 .  "'".$this->_getTimeStamp() . "', ";
+				$text2 = $text2 .  "'".$userName . "', ";
+				$text2 = $text2 . "');";
+				$this->_insertTextLog($fileName2, $text2, $this->LOGFOLDER);
+					
+
+			}
+			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+
+		$this->db->trans_complete();
+
+		$returnValue = array();
+		$returnValue['success'] = 1;
+		echo json_encode($returnValue);
+
+	}
+
+	
 	public function returnRequestTBAMIMS() {
 		$post = $this->input->post();  
 		$clean = $this->security->xss_clean($post);
@@ -2434,8 +2867,152 @@ class trinityDataBuilding extends MY_Controller {
 	
 	
 	
+    public function getAllNotificationsTBAMIMS() {
+		$post = $this->input->post();  
+		$clean = $this->security->xss_clean($post);
+		
+		$page = isset($clean['page']) ? intval($clean['page']) : 1;
+		$rows = isset($clean['rows']) ? intval($clean['rows']) : 10;
+		$ID = isset($clean['ID']) ? $clean['ID'] : '';
+		$requestNumber = isset($clean['requestNumber']) ? $clean['requestNumber'] : '';
+		$userNamae = isset($clean['userNamae']) ? $clean['userNamae'] : '';
+
+		$userName = $this->_getUserName(1);
+		 
+		$offset = ($page-1)*$rows;
+		$result = array();
+
+		$whereSpcl =   "triune_job_request_transaction_tbamims_notification.ID like '$ID%'"; 
+		$whereSpcl =  $whereSpcl . " and triune_job_request_transaction_tbamims_notification.requestNumber like '$requestNumber%'";
+		$whereSpcl =  $whereSpcl . " and triune_job_request_transaction_tbamims_notification.userName like '$userNamae%'";
+	 
+		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'), 
+			$tables = array('triune_job_request_transaction_tbamims_notification'), $fieldName = array('sy', 'status'), $where = array($_SESSION['sy'], '1'), 
+			$join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = array($whereSpcl), $groupBy = null );
+
+			//$row = mysql_fetch_row($results);
+			$result["total"] = intval($results[0]->totalRecs);
+
+			$results = $this->_getRecordsData($data = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_notification'), 
+			$fieldName = array('sy', 'status'), $where = array($_SESSION['sy'], '1'), 
+			$join = null, 
+			$joinType = null, 
+			$sortBy = array('ID'), $sortOrder = array('desc'), 
+			$limit = array($rows, $offset), 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = array($whereSpcl), $groupBy = null );
+			
+			$result["rows"] = $results;
+
+			$result["ID"] = $ID;
+			$result["requestNumber"] = $requestNumber;
+
+			echo json_encode($result);
+	}
 	
 	
+	public function setupNotificationTBAMIMS() {
+		$post = $this->input->post();  
+		$clean = $this->security->xss_clean($post);
+		
+		$ID =  $clean['ID'];
+		$requestStatus =  $clean['requestStatus'];
+		$specialInstructions =  $clean['specialInstructions'];
+		$requestNumber =  $clean['requestNumber'];
+
+		//$ID =  '33';
+		//$requestStatus =  'E';
+		//$specialInstructions =  'hello';
+
+		$userName = $this->_getUserName(1);
+
+		$this->db->trans_start();
+
+			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+			if( (strlen($specialInstructions)) > 0) {
+				$systemForAuditName2 = "TBAMIMS";
+				$moduleName2 = "REQUESTSPECIALINSTRUCTIONS";
+
+				$insertData2 = null;
+				$insertData2 = array(
+					'sy' =>$_SESSION['sy'],
+					'requestNumber' =>$requestNumber,
+					'requestStatus' => $requestStatus,
+					'specialInstructions' => $specialInstructions,
+					'userName' => $userName,
+					'workstationID' => $this->_getIPAddress(),
+					'timeStamp' => $this->_getTimeStamp(),
+					'updatedBy' => $userName,
+					
+				);				 
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);        			 
+
+				$actionName2 = "Insert Request Special Instructions";
+				$for2 = $requestNumber . ";" . $userName;
+				$oldValue2 = null;
+				$newValue2 =  $insertData2;
+				$userType = 1;
+				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);		
+
+				$fileName2 = "triune_job_request_transaction_tbamims_special_instructions-" . $this->_getCurrentDate();
+				$text2 = "INSERT INTO triune_job_request_transaction_tbamims_special_instructions ";
+				$text2 = $text2 .  "VALUES ('".$ID . "', ";
+				$text2 = $text2 .  "'".$_SESSION['sy'] . "', ";
+				$text2 = $text2 .  "'".$requestNumber . "', ";
+				$text2 = $text2 .  "'".$requestStatus . "', ";
+				$text2 = $text2 .  "'".$specialInstructions . "', ";
+				$text2 = $text2 .  "'".$userName . "', ";
+				$text2 = $text2 .  "'".$this->_getIPAddress() . "', ";
+				$text2 = $text2 .  "'".$this->_getTimeStamp() . "', ";
+				$text2 = $text2 .  "'".$userName . "', ";
+				$text2 = $text2 . "');";
+				$this->_insertTextLog($fileName2, $text2, $this->LOGFOLDER);
+					
+
+			}
+			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+
+			
+			//--------------UPDATE NOTIFICATION STATUS-------------------
+			$systemForAuditName0 = "TBAMIMS";
+			$moduleName0 = "NOTIFICATIONUPDATE";
+			
+			$requestStatusUpdate = array(
+				'status' => 0,
+				'timeStamp' => $this->_getTimeStamp()
+			);
+				
+			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims_notification', 
+			$fieldName = array('ID', 'requestNumber'), 
+			$where = array($ID, $requestNumber), $requestStatusUpdate);
+			
+			$actionName0 = "Update Transaction Request to: " . $requestStatus;
+			$for0 = $ID . ";" . $userName;
+			$oldValue0 = null;
+			$newValue0 =  $requestStatusUpdate;
+			$userType = 1;
+			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+
+			$fileName0 = "triune_job_request_transaction_tbamims_notification-" . $this->_getCurrentDate();
+			$text0 = "UPDATE triune_job_request_transaction_tbamims_notification ";
+			$text0 = $text0 .  "SET status = '0', ";
+			$text0 = $text0 .  "timeStamp = '" .  $this->_getTimeStamp() . "' ";
+			$text0 = $text0 .  "WHERE ID = ".$ID . " AND requestNumber = " . $requestNumber;
+			$this->_insertTextLog($fileName0, $text0, $this->LOGFOLDER);
+			//--------------UPDATE NOTIFICATION STATUS-------------------
+			
+			
+		$this->db->trans_complete();
+
+		$returnValue = array();
+		$returnValue['success'] = 1;
+		echo json_encode($returnValue);
+
+	}
 	
 	
 }

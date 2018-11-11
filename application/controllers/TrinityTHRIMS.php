@@ -138,6 +138,10 @@ class trinityTHRIMS extends MY_Controller {
         $this->load->view('THRIMS/references-gender');
     }
 
+    public function showFacultyEvaluationTHRIMS() {
+        //echo "HELLO WORLD";
+        $this->load->view('THRIMS/faculty-evaluation-list');
+    }
 	
 
 }
