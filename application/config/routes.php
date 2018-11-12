@@ -516,6 +516,17 @@ $route['StudentPortal/studentPortal'] = 'trinityMain/sideMenu';
 
 $route['Privileges/privileges'] = 'trinityMain/sideMenu';
 
+$route['UserManagement/usermanagement'] = 'trinityMain/sideMenu';
+
+$route['ACCOUNT/usersList'] = 'trinityAccount/showUsersList';
+$route['ACCOUNT/showAccountUserDetails'] = 'trinityAccount/showAccountUserDetails'; 
+
+
+$route['getAllUsersList'] = 'trinityDataAccount/getAllUsersList'; 
+$route['resetPassword'] = 'trinityDataAccount/resetPassword'; 
+
+$route['PERSONALDATA/personalData'] = 'trinityMain/sideMenu';
+$route['MYACCOUNT/myAccountInfo'] = 'trinityMyAccount/myAccountInfo';
 
 
 
