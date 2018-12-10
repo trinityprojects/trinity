@@ -988,7 +988,7 @@ class trinityDataTHRIMS extends MY_Controller {
 						$join = array('triune_class_list_college.sy = triune_faculty_load_college.sy AND triune_class_list_college.sem = triune_faculty_load_college.sem AND triune_class_list_college.sectionCode = triune_faculty_load_college.sectionCode AND triune_class_list_college.eSubjectCode = triune_faculty_load_college.subjectCode', 
 						'triune_faculty_load_college.fCode = triune_employee_data.employeeNumber', 
 						'triune_faculty_load_college.subjectCode = triune_subjects_college.subjectCode', 
-						'triune_class_list_college.sy = triune_faculty_evaluation_answers.sy AND triune_class_list_college.sem = triune_faculty_evaluation_answers.sem AND triune_class_list_college.eSubjectCode = triune_faculty_evaluation_answers.subjectCode AND triune_class_list_college.sectionCode = triune_faculty_evaluation_answers.sectionCode  AND triune_class_list_college.studentNumber = triune_faculty_evaluation_answers.studentNumber'), 
+						'triune_class_list_college.sy = triune_faculty_evaluation_answers.sy AND triune_class_list_college.sem = triune_faculty_evaluation_answers.sem AND triune_class_list_college.eSubjectCode = triune_faculty_evaluation_answers.subjectCode AND triune_class_list_college.sectionCode = triune_faculty_evaluation_answers.sectionCode  AND triune_class_list_college.studentNumber = triune_faculty_evaluation_answers.studentNumber AND triune_faculty_load_college.fCode = triune_faculty_evaluation_answers.employeeNumber'), 
 						$joinType = array('left', 'left', 'left', 'left'), 
 						$sortBy = null, $sortOrder = null, $limit = null, 
 						$fieldNameLike = null, $like = null, 

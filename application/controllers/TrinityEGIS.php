@@ -377,9 +377,9 @@ class trinityEGIS extends MY_Controller {
 		$sectionCodeNS = $_POST["sectionCodeNS"];
 		$userName = $this->_getUserName(1);
 
-		//$sectionCode = '1001 6-DILIGENCE';
-		//$studentNumber = '13-100001';
-		//$sectionCodeNS = '10016-DILIGENCE';
+		//$sectionCode = '1002 3-9-INTEGRITY';
+		//$studentNumber = '18-200073';
+		//$sectionCodeNS = '10023-9-INTEGRITY';
 		$gradingPeriod = $_SESSION['gP'];
 		
 		$data['sectionCode'] = $sectionCode;
@@ -408,6 +408,7 @@ class trinityEGIS extends MY_Controller {
 		$selectField2 = null;
 		
 		$resultsGrades = null;
+		echo $courseCode;
 		if($courseCode == '1002') {
 
 			$selectField1 = "triune_subject_junior_high.subjectDescription, triune_subject_junior_high.weight, triune_subject_junior_high.subjectCode, ";
@@ -431,7 +432,10 @@ class trinityEGIS extends MY_Controller {
 				$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 				
-				
+			//print_r($resultsGrades1);
+			//echo "---------------------------------------------------<br>";
+			//print_r($resultsGrades2);
+			
 				
 				
 		} else if($courseCode == '1001') {
@@ -574,7 +578,6 @@ class trinityEGIS extends MY_Controller {
 				$insertedRecord1 =$this->_insertRecords($tableName = 'triune_wip_grades_class_card', $insertData);        			 
 		}		
 
-
 		foreach($resultsGrades2 as $row2) {
 				$letterEquivalent2 = null;
 				foreach($lE as $eRow) {
@@ -591,9 +594,13 @@ class trinityEGIS extends MY_Controller {
 					'timeStamp' => $this->_getTimeStamp(),
 
 				);
+				
+				//echo $studentNumber . ", " . $sectionCode . ", " . $row2->subjectCode . "<br>";
+				//print_r($grades2);
+				
 				$this->_updateRecords($tableName = 'triune_wip_grades_class_card', 
 				$fieldName = array('studentNumber', 'sectionCode', 'subjectCode'), 
-				$where = array($studentNumber, $sectionCode, $row->subjectCode), $grades2);
+				$where = array($studentNumber, $sectionCode, $row2->subjectCode), $grades2);
 		}		
 
 		$traitsCount = 10;
@@ -626,6 +633,7 @@ class trinityEGIS extends MY_Controller {
 		//echo $traitsCol . " " . $traits1g[$traitsCol] . "<br>";
 				$traits1 = array(
 					'traitsScore1' => $traits1g[$traitsCol],
+					'traitsScore2' => $traits2g[$traitsCol],
 					'userNumber' => $userName,
 					'timeStamp' => $this->_getTimeStamp(),
 
