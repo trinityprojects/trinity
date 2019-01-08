@@ -163,6 +163,8 @@ EOD;
 $totalGrades1 = 0;
 $weightedAve1 = 0;
 $weightedAve2 = 0;
+$weightedAve3 = 0;
+
 $totalWeight = 0;
 foreach($resultsGrades as $index=>$key ) {
 	 $subjectDescription = $resultsGrades[$index]->subjectDescription;
@@ -170,6 +172,8 @@ foreach($resultsGrades as $index=>$key ) {
 	 $letterEquivalent1 = $resultsGrades[$index]->letterEquivalent1;
 	 $grades2 = number_format($resultsGrades[$index]->grades2, 0);
 	 $letterEquivalent2 = $resultsGrades[$index]->letterEquivalent2;
+	 $grades3 = number_format($resultsGrades[$index]->grades3, 0);
+	 $letterEquivalent3 = $resultsGrades[$index]->letterEquivalent3;
 
 	 $totalGrades1 = $totalGrades1 + ($grades1 * $resultsGrades[$index]->weight);
 	 $totalWeight = $totalWeight + $resultsGrades[$index]->weight;
@@ -184,8 +188,8 @@ $tbl.=<<<EOD
 		<td align="right">$grades2 </td>
 		<td align="center">$letterEquivalent2</td>
 
-		<td ></td>
-		<td ></td>
+		<td align="right">$grades3 </td>
+		<td align="center">$letterEquivalent3</td>
 		<td ></td>
 		<td ></td>
 		<td> </td>
@@ -200,6 +204,7 @@ EOD;
 
 $weightedAve1 = number_format(($totalGrades1 / $totalWeight), 2);
 $weightedAve2 = number_format(($totalGrades2 / $totalWeight), 2);
+$weightedAve3 = number_format(($totalGrades3 / $totalWeight), 2);
 
 $tbl.=<<<EOD
 
@@ -207,7 +212,7 @@ $tbl.=<<<EOD
 		<td>GRADING SYSTEM AVERAGING </td>
 		<td colspan="2" align="right">$weightedAve1</td>
 		<td colspan="2" align="right">$weightedAve2</td>
-		<td colspan="2" align="right"></td>
+		<td colspan="2" align="right">$weightedAve3</td>
 		<td colspan="2" align="right"></td>
 		<td colspan="3" align="right"></td>
 
@@ -434,6 +439,7 @@ foreach($resultsTraits as $index=>$key ) {
 	 $traitsDescription = $resultsTraits[$index]->traitsDescription;
 	 $traitsScore1 = $resultsTraits[$index]->traitsScore1;
 	 $traitsScore2 = $resultsTraits[$index]->traitsScore2;
+	 $traitsScore3 = $resultsTraits[$index]->traitsScore3;
 
 $tbl.=<<<EOD
 	<tr>

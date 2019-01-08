@@ -94,7 +94,9 @@ $(document).ready(function(){
  
 
 	function displayScores(row) {
-		
+	//alert(row.sectionCode);
+	//alert(row.subjectCode);
+	
 		jQuery.ajax({
 		  type: "GET",
 		  headers: {
@@ -128,6 +130,7 @@ $(document).ready(function(){
 							
 						},
 						success: function(response) {
+							//console.log(response);
 							var titlesDataEdit = JSON.parse(response)['titles'][0];
 							var sectionCode = row.sectionCode;
 							var subjectCode = row.subjectCode;
@@ -198,6 +201,7 @@ $(document).ready(function(){
 										},
 										type: "POST",
 										success: function(response) {
+											
 											console.log("the request is successful for content1!");
 										},
 													
