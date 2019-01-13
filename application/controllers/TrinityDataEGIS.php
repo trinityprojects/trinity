@@ -3302,11 +3302,11 @@ class trinityDataEGIS extends MY_Controller {
     } //public function postSubjectGradesSummaryEGIS()	
 
     public function getMySectionScoreSheet1StatusEGISExcel() {
-		$sectionCode = $_GET["sectionCode"];
-		$subjectCode = $_GET["subjectCode"];
+		//$sectionCode = $_GET["sectionCode"];
+		//$subjectCode = $_GET["subjectCode"];
 
-		//$sectionCode = "1002 2-8-INNOVATION";
-		//$subjectCode = "FORELAN2";
+		$sectionCode = "1005ABM2 2-ABM21";
+		$subjectCode = "HR2_ABM2";
 		
 		$results = null;
 		

@@ -129,7 +129,6 @@ $(document).ready(function(){
 			row.styler = function(){
 				return 'background-color:yellow';
             };
-
 			jQuery.ajax({
 			  type: "GET",
 			  url:'getMySectionScoreSheet1StatusEGISExcel',
