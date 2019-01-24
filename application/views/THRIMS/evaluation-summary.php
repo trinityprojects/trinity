@@ -329,7 +329,585 @@ $tbl .= <<<EOD
 				</td>
 				</tr>
 			</table>
+			
 EOD;
+
+///----------------------------------------STUDENT EVALUATION-----------------------------------------------------------------------
+$tbl .= <<<EOD
+<br pagebreak="true"/>
+EOD;
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px"><b>TRINITY UNIVERSITY OF ASIA</b></font></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px">Cathedral Heights, 275 E. Rodriguez, Sr. Avenue, Quezon City</font> </td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><b>STUDENT EVALUATION</b></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">FACULTY PERFORMANCE EVALUATION ON TEACHING EFFECTIVENESS</td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">($sem, School Year $sy)</td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><br></td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0.5" cellpadding="2" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="15%">Faculty name:</td>
+					<td width="55%"><b> </b></td>
+					<td width="15%">Date printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				<tr > 
+					<td width="15%">College/Unit:</td>
+					<td width="55%" ><b> </b></td>
+					<td width="15%">Time printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				
+			</table>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="4" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td><br>
+					</td>
+				</tr>
+			</table>
+EOD;
+
+
+$studEvalLetterSect = 'A';
+foreach($studentEvalSections as $index=>$key ) {
+	$studEvalSectDesc = $studentEvalSections[$index]->SectDesc;
+	$studEvalSectID = $studentEvalSections[$index]->SectID;
+	$studEvalSectPct = $studentEvalSections[$index]->SectPct;
+	$studEvalNoOfQuestions = $studentEvalSections[$index]->NoOfQuestions;
+	
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%" colspan="2"><font size="10px"><b>$studEvalLetterSect . </b></font>	</td>
+					<td width="97%" colspan="4"><font size="10px"><b>$studEvalSectDesc </b></font></td>
+				</tr>
+EOD;
+
+	foreach($studentEvalItems as $index=>$key ) {
+		$studEvalItemIteIndex = $studentEvalItems[$index]->iteIndex;
+		$studEvalItemItePrefix = $studentEvalItems[$index]->itePrefix;
+		$studEvalItemIteText = $studentEvalItems[$index]->iteText;
+		$studEvalItemCriIndex = $studentEvalItems[$index]->criIndex;
+		
+			if($studEvalSectID == $studEvalItemCriIndex) {
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td colspan="2" width="75%">$studEvalItemItePrefix $studEvalItemIteText</td>
+					<td width="10%">4.46</td>
+					<td width="10%"></td>
+				</tr>
+EOD;
+			}
+	} //for($i = 0; $i < 4; $i++)
+		
+
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+EOD;
+	
+	$studEvalLetterSect++;	
+} //for($o = 0; $o < 4; $o++)
+
+$tbl .= <<<EOD
+				
+			</table>
+EOD;
+///-----------------------------------------------------STUDENT EVALUATION-----------------------------------------------------------------------
+
+
+///-----------------------------------------------------SELF EVALUATION--------------------------------------------------------------------------
+EOD;
+$tbl .= <<<EOD
+<br pagebreak="true"/>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px"><b>TRINITY UNIVERSITY OF ASIA</b></font></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px">Cathedral Heights, 275 E. Rodriguez, Sr. Avenue, Quezon City</font> </td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><b>SELF EVALUATION</b></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">FACULTY PERFORMANCE EVALUATION ON TEACHING EFFECTIVENESS</td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">($sem, School Year $sy)</td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><br></td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0.5" cellpadding="2" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="15%">Faculty name:</td>
+					<td width="55%"><b> </b></td>
+					<td width="15%">Date printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				<tr > 
+					<td width="15%">College/Unit:</td>
+					<td width="55%" ><b> </b></td>
+					<td width="15%">Time printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				
+			</table>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="4" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td><br>
+					</td>
+				</tr>
+			</table>
+EOD;
+
+
+$selfEvalLetterSect = 'A';
+foreach($selfEvalSections as $index=>$key ) {
+	$selfEvalSectDesc = $selfEvalSections[$index]->SectDesc;
+	$selfEvalSectID = $selfEvalSections[$index]->SectID;
+	$selfEvalSectPct = $selfEvalSections[$index]->SectPct;
+	$selfEvalNoOfQuestions = $selfEvalSections[$index]->NoOfQuestions;
+	
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%" colspan="2"><font size="10px"><b>$selfEvalLetterSect . </b></font>	</td>
+					<td width="97%" colspan="4"><font size="10px"><b>$selfEvalSectDesc </b></font></td>
+				</tr>
+EOD;
+
+	foreach($selfEvalItems as $index=>$key ) {
+		$selfEvalItemIteIndex = $selfEvalItems[$index]->iteIndex;
+		$selfEvalItemItePrefix = $selfEvalItems[$index]->itePrefix;
+		$selfEvalItemIteText = $selfEvalItems[$index]->iteText;
+		$selfEvalItemCriIndex = $selfEvalItems[$index]->criIndex;
+		
+			if($selfEvalSectID == $selfEvalItemCriIndex) {
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td colspan="2" width="75%">$selfEvalItemItePrefix $selfEvalItemIteText</td>
+					<td width="10%">4.46</td>
+					<td width="10%"></td>
+				</tr>
+EOD;
+			}
+	} //for($i = 0; $i < 4; $i++)
+		
+
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+EOD;
+	
+	$selfEvalLetterSect++;	
+} //for($o = 0; $o < 4; $o++)
+
+$tbl .= <<<EOD
+				
+			</table>
+EOD;
+
+
+
+
+///-----------------------------------------------------SELF EVALUATION--------------------------------------------------------------------------
+
+
+///-----------------------------------------------------DEPARTMENT HEAD---------------------------------------------------------------------------
+EOD;
+$tbl .= <<<EOD
+<br pagebreak="true"/>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px"><b>TRINITY UNIVERSITY OF ASIA</b></font></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px">Cathedral Heights, 275 E. Rodriguez, Sr. Avenue, Quezon City</font> </td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><b>DEPARTMENT HEAD EVALUATION</b></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">FACULTY PERFORMANCE EVALUATION ON TEACHING EFFECTIVENESS</td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">($sem, School Year $sy)</td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><br></td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0.5" cellpadding="2" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="15%">Faculty name:</td>
+					<td width="55%"><b> </b></td>
+					<td width="15%">Date printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				<tr > 
+					<td width="15%">College/Unit:</td>
+					<td width="55%" ><b> </b></td>
+					<td width="15%">Time printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				
+			</table>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="4" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td><br>
+					</td>
+				</tr>
+			</table>
+EOD;
+
+
+$dhEvalLetterSect = 'A';
+foreach($dhEvalSections as $index=>$key ) {
+	$dhEvalSectDesc = $dhEvalSections[$index]->SectDesc;
+	$dhEvalSectID = $dhEvalSections[$index]->SectID;
+	$dhEvalSectPct = $dhEvalSections[$index]->SectPct;
+	$dhEvalNoOfQuestions = $dhEvalSections[$index]->NoOfQuestions;
+	
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%" colspan="2"><font size="10px"><b>$selfEvalLetterSect . </b></font>	</td>
+					<td width="97%" colspan="4"><font size="10px"><b>$selfEvalSectDesc </b></font></td>
+				</tr>
+EOD;
+
+	foreach($dhEvalItems as $index=>$key ) {
+		$dhEvalItemIteIndex = $dhEvalItems[$index]->iteIndex;
+		$dhEvalItemItePrefix = $dhEvalItems[$index]->itePrefix;
+		$dhEvalItemIteText = $dhEvalItems[$index]->iteText;
+		$dhEvalItemCriIndex = $dhEvalItems[$index]->criIndex;
+		
+			if($dhEvalSectID == $dhEvalItemCriIndex) {
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td colspan="2" width="75%">$dhEvalItemItePrefix $dhEvalItemIteText</td>
+					<td width="10%">4.46</td>
+					<td width="10%"></td>
+				</tr>
+EOD;
+			}
+	} //for($i = 0; $i < 4; $i++)
+		
+
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+EOD;
+	
+	$dhEvalLetterSect++;	
+} //for($o = 0; $o < 4; $o++)
+
+$tbl .= <<<EOD
+				
+			</table>
+EOD;
+///----------------------------------------------------DEPARTMENT HEAD------------------------------------------------------------------------------
+
+
+
+
+///----------------------------------------------------DEAN------------------------------------------------------------------------------
+
+EOD;
+$tbl .= <<<EOD
+<br pagebreak="true"/>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px"><b>TRINITY UNIVERSITY OF ASIA</b></font></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><font size="10px">Cathedral Heights, 275 E. Rodriguez, Sr. Avenue, Quezon City</font> </td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><b>DEAN EVALUATION</b></td>
+					<td width="10%"></td>
+				</tr>
+
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">FACULTY PERFORMANCE EVALUATION ON TEACHING EFFECTIVENESS</td>
+					<td width="10%"></td>
+				</tr>
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center">($sem, School Year $sy)</td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="10%"></td>
+					<td width="80%" align="center"><br></td>
+					<td width="10%"></td>
+				</tr>
+				
+			</table>
+EOD;
+$tbl .= <<<EOD
+			<table border="0.5" cellpadding="2" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td width="15%">Faculty name:</td>
+					<td width="55%"><b> </b></td>
+					<td width="15%">Date printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				<tr > 
+					<td width="15%">College/Unit:</td>
+					<td width="55%" ><b> </b></td>
+					<td width="15%">Time printed:</td>
+					<td width="15%"><b> </b></td>
+				</tr>
+				
+			</table>
+EOD;
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="4" cellspacing="1" nobr="true" width="100%">
+				<tr > 
+					<td><br>
+					</td>
+				</tr>
+			</table>
+EOD;
+
+
+$deanEvalLetterSect = 'A';
+foreach($deanEvalSections as $index=>$key ) {
+	$deanEvalSectDesc = $deanEvalSections[$index]->SectDesc;
+	$deanEvalSectID = $deanEvalSections[$index]->SectID;
+	$deanEvalSectPct = $deanEvalSections[$index]->SectPct;
+	$deanEvalNoOfQuestions = $deanEvalSections[$index]->NoOfQuestions;
+	
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%" colspan="2"><font size="10px"><b>$deanEvalLetterSect . </b></font>	</td>
+					<td width="97%" colspan="4"><font size="10px"><b>$deanEvalSectDesc </b></font></td>
+				</tr>
+EOD;
+
+	foreach($deanEvalItems as $index=>$key ) {
+		$deanEvalItemIteIndex = $deanEvalItems[$index]->iteIndex;
+		$deanEvalItemItePrefix = $deanEvalItems[$index]->itePrefix;
+		$deanEvalItemIteText = $deanEvalItems[$index]->iteText;
+		$deanEvalItemCriIndex = $deanEvalItems[$index]->criIndex;
+		
+			if($deanEvalSectID == $deanEvalItemCriIndex) {
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td colspan="2" width="75%">$deanEvalItemItePrefix $deanEvalItemIteText</td>
+					<td width="10%">4.46</td>
+					<td width="10%"></td>
+				</tr>
+EOD;
+			}
+	} //for($i = 0; $i < 4; $i++)
+		
+
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+EOD;
+	
+	$dhEvalLetterSect++;	
+} //for($o = 0; $o < 4; $o++)
+
+$tbl .= <<<EOD
+				
+			</table>
+EOD;
+
+///----------------------------------------------------DEAN------------------------------------------------------------------------------
 
 
 $pdf->writeHTML($tbl, true, false, false, false, '');

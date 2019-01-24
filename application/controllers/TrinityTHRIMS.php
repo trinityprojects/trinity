@@ -133,7 +133,76 @@ class trinityTHRIMS extends MY_Controller {
 					$this->load->library('Pdf');		
 					$this->load->view('THRIMS/' . $reportFileName, $data);
 		} else if($reportFileName == 'evaluation-summary'){
-	
+
+
+					$studentEvalSections = $this->_getRecordsData($dataStud = array('*'), 
+						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('1', '7'), $join = null, $joinType = null, 
+						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['studentEvalSections'] = $studentEvalSections;	
+
+					
+					$studentEvalItems = $this->_getRecordsData($dataStudItem = array('*'), 
+						$tables = array('triune_eval_item'), $fieldName = array('EvalID', 'evaID1'), $where = array('1', '7'), $join = null, $joinType = null, 
+						$sortBy = array('iteIndex'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['studentEvalItems'] = $studentEvalItems;	
+
+
+
+
+					$selfEvalSections = $this->_getRecordsData($dataSelf = array('*'), 
+						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('2', '2'), $join = null, $joinType = null, 
+						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['selfEvalSections'] = $selfEvalSections;	
+
+					
+					$selfEvalItems = $this->_getRecordsData($dataSelfItem = array('*'), 
+						$tables = array('triune_eval_item'), $fieldName = array('EvalID', 'evaID1'), $where = array('2', '2'), $join = null, $joinType = null, 
+						$sortBy = array('iteIndex'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['selfEvalItems'] = $selfEvalItems;	
+
+
+
+					$dhEvalSections = $this->_getRecordsData($dataDh = array('*'), 
+						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('3', '3'), $join = null, $joinType = null, 
+						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['dhEvalSections'] = $dhEvalSections;	
+
+					
+					$dhEvalItems = $this->_getRecordsData($dataDhItem = array('*'), 
+						$tables = array('triune_eval_item'), $fieldName = array('EvalID', 'evaID1'), $where = array('3', '3'), $join = null, $joinType = null, 
+						$sortBy = array('iteIndex'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['dhEvalItems'] = $dhEvalItems;	
+
+
+					$deanEvalSections = $this->_getRecordsData($dataDean = array('*'), 
+						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('4', '4'), $join = null, $joinType = null, 
+						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['deanEvalSections'] = $deanEvalSections;	
+
+					
+					$deanEvalItems = $this->_getRecordsData($dataDeanItem = array('*'), 
+						$tables = array('triune_eval_item'), $fieldName = array('EvalID', 'evaID1'), $where = array('4', '4'), $join = null, $joinType = null, 
+						$sortBy = array('iteIndex'), $sortOrder = array('asc'), $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+					$data['deanEvalItems'] = $deanEvalItems;	
+
+
+					
 					$data['sy'] = $this->_getSchoolYearDesc($_SESSION['sy']);
 					$data['sem'] = $this->_getSemesterDesc($_SESSION['sem']);
 
