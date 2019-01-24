@@ -764,5 +764,37 @@ class MY_Controller extends CI_Controller {
 	
 	}
 	
+	//GET SCHOOL YEAR DESCRIPTION
+	public function _getSchoolYearDesc($SY) {
+		$SYRange = "20" . substr($SY, 0, 2) . "-" . "20" . substr($SY, -2);
+		if(substr($SY,0,1) == "9" OR substr($SY,0,1) == "8" OR substr($SY,0,1) == "7" OR substr($SY,0,1) == "6")
+		{
+			$SYRange = "19" . substr($SY, 0, 2) . "-" . "19" . substr($SY, -2);
+		}
+		return $SYRange;
+	}
+	
+	//GET SCHOOL YEAR DESCRIPTION
+	
+	
+	//GET SEMESTER DESCRIPTION
+	public function _getSemesterDesc($sem) {
+		$semDesc = '';
+		if($sem == 'A') {
+			$semDesc = 'First Semester';
+		} elseif($sem == 'B') {
+			$semDesc = 'Second Semester';
+		} elseif($sem == 'C') {
+			$semDesc = 'Summer';
+		}
+		
+		return $semDesc;
+		
+		
+	}
+	
+	//GET SEMESTER DESCRIPTION
+	
+	
 }
 

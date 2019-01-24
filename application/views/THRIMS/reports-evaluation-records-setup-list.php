@@ -6,14 +6,14 @@
 
 
     <div style="margin:5px 0;"></div>
-    <div class="easyui-panel" title="Employee Records Reports List" style="width:100%;max-width:100%;padding:5px 5px;"> 
+    <div class="easyui-panel" title="Employee Evaluation Reports List" style="width:100%;max-width:100%;padding:5px 5px;"> 
         <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
             <div style="margin-bottom:5px">
 
 
                 <div style="margin-bottom:1px" class="three-column-30">
                     <input class="easyui-combobox" name="reportsName" id="reportsName" style="width:100%;" prompt="REPORTS NAME:" data-options="
-                            url:'getReportsListEmployeeTHRIMS?reportType=employee',
+                            url:'getReportsListEmployeeTHRIMS?reportType=evaluation',
                             method:'get',
                             valueField:'reportFileName',
                             textField:'reportsName',

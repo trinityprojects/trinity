@@ -3,16 +3,19 @@ function submitForm(){
         onSubmit:function(){
 			var reportFileName = $('#reportsName').val();
 			var employeeNumber = $('#fullName').val();
+			alert(reportFileName);
 				jQuery.ajax({
 					url: 'THRIMS/showReportsDetails',
-					data: { 'reportFileName': reportFileName,
-							'employeeNumber': employeeNumber},
+					data: { 
+						'reportFileName': reportFileName,
+						'employeeNumber': employeeNumber
+					},
 					type: "POST",
 					success: function(response) {
 						$('div.level2').remove();
 
 						//$('.leveltwocontent').html(response);
-						$('.leveltwocontent').html('<div class="level1"><iframe style="width:100%; height:'+600+'px" src="' + window.location.origin + '/trinity/assets/pdf/employee-profile.pdf"></iframe></div>')						
+						$('.leveltwocontent').html('<div class="level1"><iframe style="width:100%; height:'+600+'px" src="' + window.location.origin + '/trinity/assets/pdf/' + reportFileName + '.pdf"></iframe></div>')						
 						console.log("the request is successful for content1!");
 					},
 								

@@ -1,8 +1,6 @@
 <div class="level2" style="width:100%;max-width:100%;height:200px;">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/icon.css">
-    <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/jquery.easyui.min.js"></script>
-	
+  <!--  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/icon.css">-->
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 
@@ -603,17 +601,6 @@
 											
 											<?php } //if(!empty($materials))?>
 										</div>
-
-			<div style="text-align:right;padding:5px 0">
-				<a href="#" class="easyui-menubutton" data-options="menu:'#pp1',iconCls:'icon-print'">Print</a>
-			</div>
-			<div id="pp1" style="width:250px;">
-			   <div>
-				  <a href="javascript:void(0)"  onclick="printForm.render('requestSet', 'requestSet.pdf', 'ID', $('#requestID').val())" style="width:150px">Print Set Request - PDF</a>
-			   </div>
-		    </div>
-			
-										
 									</div> <!--<div id="Estimates" class="tabcontentEstimates"> -->
 									
 									<div id="Actual" class="tabcontentEstimates" style="display: none">
@@ -1133,7 +1120,6 @@
 	
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/JavaScript-autoComplete-master/auto-complete.css">
     <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/JavaScript-autoComplete-master/auto-complete.js"></script>
-	<script src="<?php echo base_url();?>assets/scripts/print-download.js"></script>
 
     <script type="text/javascript">
 $('input.amount').keyup(function() {

@@ -145,16 +145,26 @@ $tbl.=<<<EOD
 
 <tr>
 <td width="30%" align="center" style="font-size:14px;" >Subject</td>
-<td width="50%" colspan="8" align="center" style="font-size:14px;">Periodic Ratings</td>
+<td width="50%" colspan="10" align="center" style="font-size:14px;">Periodic Ratings</td>
 <td width="20%" colspan="3"  align="center" style="font-size:14px;"></td>
+</tr>
+
+
+<tr align="center">
+<td> </td>
+<td colspan="6">First Semester</td>
+<td colspan="4">Second Semester</td>
+<td colspan="2"></td>
+<td> </td>
 </tr>
 
 <tr align="center">
 <td> </td>
-<td colspan="2">1st</td>
-<td colspan="2">2nd</td>
-<td colspan="2">3rd</td>
-<td colspan="2">4th</td>
+<td colspan="2">Midterm</td>
+<td colspan="2">Finals</td>
+<td colspan="2">Sem</td>
+<td colspan="2">Midterm</td>
+<td colspan="2">Finals</td>
 <td colspan="2">Final</td>
 <td>Action Taken </td>
 </tr>
@@ -164,8 +174,11 @@ $totalGrades1 = 0;
 $totalGrades2 = 0;
 $totalGrades3 = 0;
 
+$totalSemA = 0;
+
 $weightedAve1 = 0;
 $weightedAve2 = 0;
+$semAWeightedAve = 0;
 $weightedAve3 = 0;
 
 $totalWeight = 0;
@@ -175,11 +188,25 @@ foreach($resultsGrades as $index=>$key ) {
 	 $letterEquivalent1 = $resultsGrades[$index]->letterEquivalent1;
 	 $grades2 = number_format($resultsGrades[$index]->grades2, 0);
 	 $letterEquivalent2 = $resultsGrades[$index]->letterEquivalent2;
+
+	 $semA =  number_format((($grades1 + $grades2) / 2), 0);
+
+	 $semAEquivalent = '';
+	foreach($lE as $eRow) {
+		if( ($eRow->lowerScale <= $semA) && ($eRow->higherScale >= $semA) ){
+			
+			$semAEquivalent = $eRow->letterEquivalent;
+		}
+	}
+	 
 	 $grades3 = number_format($resultsGrades[$index]->grades3, 0);
 	 $letterEquivalent3 = $resultsGrades[$index]->letterEquivalent3;
 
 	 $totalGrades1 = $totalGrades1 + ($grades1 * $resultsGrades[$index]->weight);
 	 $totalGrades2 = $totalGrades2 + ($grades2 * $resultsGrades[$index]->weight);
+	 $totalSemA = $totalSemA + ($semA * $resultsGrades[$index]->weight);
+	 
+	 
 	 $totalGrades3 = $totalGrades3 + ($grades3 * $resultsGrades[$index]->weight);
 	 
 	 $totalWeight = $totalWeight + $resultsGrades[$index]->weight;
@@ -193,7 +220,10 @@ $tbl.=<<<EOD
 		<td align="center">$letterEquivalent1</td>
 		<td align="right">$grades2 </td>
 		<td align="center">$letterEquivalent2</td>
+		<td align="right">$semA </td>
+		<td align="center">$semAEquivalent</td>
 
+		
 		<td align="right">$grades3 </td>
 		<td align="center">$letterEquivalent3</td>
 		<td ></td>
@@ -210,6 +240,9 @@ EOD;
 
 $weightedAve1 = number_format(($totalGrades1 / $totalWeight), 2);
 $weightedAve2 = number_format(($totalGrades2 / $totalWeight), 2);
+$semAWeightedAve = number_format(($totalSemA / $totalWeight), 2);
+
+
 $weightedAve3 = number_format(($totalGrades3 / $totalWeight), 2);
 
 $tbl.=<<<EOD
@@ -218,7 +251,7 @@ $tbl.=<<<EOD
 		<td>GRADING SYSTEM AVERAGING </td>
 		<td colspan="2" align="right">$weightedAve1</td>
 		<td colspan="2" align="right">$weightedAve2</td>
-		<td colspan="2" align="right">$weightedAve3</td>
+		<td colspan="2" align="right">$semAWeightedAve</td>
 		<td colspan="2" align="right"></td>
 		<td colspan="3" align="right"></td>
 
@@ -432,10 +465,8 @@ $tbl.=<<<EOD
 
 <tr align="center">
 <td width="60%">TRAITS </td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
+<td>Sem A</td>
+<td>Sem B</td>
 </tr>
 EOD;
 
@@ -443,17 +474,14 @@ EOD;
 
 foreach($resultsTraits as $index=>$key ) {
 	 $traitsDescription = $resultsTraits[$index]->traitsDescription;
-	 $traitsScore1 = $resultsTraits[$index]->traitsScore1;
 	 $traitsScore2 = $resultsTraits[$index]->traitsScore2;
-	 $traitsScore3 = $resultsTraits[$index]->traitsScore3;
+	 $traitsScore4 = $resultsTraits[$index]->traitsScore4;
 
 $tbl.=<<<EOD
 	<tr>
 		<td>$traitsDescription</td>
-		<td>$traitsScore1</td>
 		<td>$traitsScore2</td>
-		<td>$traitsScore3</td>
-		<td></td>
+		<td>$traitsScore4</td>
 	</tr>
 EOD;
 }
@@ -612,6 +640,8 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 $filename= $studentNumber . $sectionCodeNS . ".pdf"; 
 $filelocation = "C:\\xampp\\htdocs\\trinity\\assets\\pdf";//windows
                //$filelocation = "/var/www/html/trinity/assets/pdf"; //Linux
+
+
 
 $fileNL = $filelocation."\\".$filename;//Windows
            //$fileNL = $filelocation."/".$filename; //Linux 

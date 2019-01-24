@@ -518,7 +518,7 @@ class trinityEGIS extends MY_Controller {
 			$selectField3 = "triune_subject_elementary.subjectDescription, triune_subject_elementary.weight, triune_subject_elementary.subjectCode, ";
 			$selectField3 = $selectField3 . "triune_grades_score_sheet_3_summary.initialGrade, triune_grades_score_sheet_3_summary.transmutedGrade, ";
 			$selectField3 = $selectField3 . "triune_subject_elementary.displaySequence";
-			$resultsGrades2 = $this->_getRecordsData($dataSelect3 = array($selectField3), 
+			$resultsGrades3 = $this->_getRecordsData($dataSelect3 = array($selectField3), 
 				$tables = array('triune_grades_score_sheet_3_summary', 'triune_subject_elementary'), 
 				$fieldName = array('sy','studentNumber'), $where = array($_SESSION['sy'], $studentNumber), 
 				$join = array('triune_subject_elementary ON triune_grades_score_sheet_3_summary.subjectCode = triune_subject_elementary.subjectCode'), 
@@ -660,7 +660,7 @@ class trinityEGIS extends MY_Controller {
 
 				$insertedRecord1 =$this->_insertRecords($tableName = 'triune_wip_grades_class_card', $insertData);        			 
 		}		
-
+		//echo $studentNumber . ", " . $sectionCode . ", " . "<br>";
 		foreach($resultsGrades2 as $row2) {
 				$letterEquivalent2 = null;
 				foreach($lE as $eRow) {
@@ -678,8 +678,8 @@ class trinityEGIS extends MY_Controller {
 
 				);
 				
-				//echo $studentNumber . ", " . $sectionCode . ", " . $row2->subjectCode . "<br>";
-				//print_r($grades2);
+				echo $studentNumber . ", " . $sectionCode . ", " . $row2->subjectCode . "<br>";
+				print_r($grades2);
 				
 				$this->_updateRecords($tableName = 'triune_wip_grades_class_card', 
 				$fieldName = array('studentNumber', 'sectionCode', 'subjectCode'), 
@@ -791,7 +791,12 @@ weight*/
 
 		
 		$this->load->library('Pdf');		
-        $this->load->view('EGIS/class-card-report', $data);
+		if($courseCode == '1005') {
+			$data['lE'] = $lE;
+			$this->load->view('EGIS/class-card-report-shs', $data);
+		} else {
+			$this->load->view('EGIS/class-card-report', $data);
+		}
 
     }	
 	
@@ -860,7 +865,6 @@ weight*/
 				
 				
 		}
-
 		$weight = array();
 		$this->db->trans_start();
 		$subjCtr = 1;
@@ -950,6 +954,7 @@ weight*/
 					$sortBy = array('studentNumber'), $sortOrder = array('asc'), $limit = null, 
 					$fieldNameLike = null, $like = null, 
 					$whereSpecial = null, $groupBy = null );
+					print_r($details);
 			} elseif($gradingPeriod == '2') {
 				$selectDetail = "triune_students_k12.studentNumber, triune_students_k12.lastName, triune_students_k12.firstName, ";
 				$selectDetail = $selectDetail . "triune_students_k12.middleName, triune_grades_score_sheet_2_summary.transmutedGrade, triune_grades_score_sheet_2_summary.subjectCode";
@@ -973,7 +978,6 @@ weight*/
 					$fieldNameLike = null, $like = null, 
 					$whereSpecial = null, $groupBy = null );
 			}
-			
 			$scoreField = 'subj' . $scoreCtr;
 			$recCtr = 0;
 			if(!empty($details)) {
@@ -1028,7 +1032,7 @@ weight*/
 		for($i = 0; $i < $totalItems; $i++) {
 			$totalWeightedAverage[$i] = ($totalScore[$i] / $totalWeight); 
 			
-			echo $studentNo[$i] . " " . $totalScore[$i] . " ---> " . $totalWeight . " >>>" . $totalWeightedAverage[$i] . "<br>";
+			//echo $studentNo[$i] . " " . $totalScore[$i] . " ---> " . $totalWeight . " >>>" . $totalWeightedAverage[$i] . "<br>";
 			$recordUpdate = array(
 				'weightedAverage' => $totalWeightedAverage[$i],
 			);

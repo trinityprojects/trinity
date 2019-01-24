@@ -478,7 +478,7 @@ $route['THRIMS/employeeRecords'] = 'trinityTHRIMS/showEmployeeRecordsTHRIMS';
 $route['THRIMS/showReportsDetails'] = 'trinityTHRIMS/showReportsDetailsTHRIMS';
 $route['THRIMS/gender'] = 'trinityTHRIMS/showGenderTHRIMS';
 $route['THRIMS/faculty'] = 'trinityTHRIMS/showFacultyEvaluationTHRIMS';
-
+$route['THRIMS/evaluationRecords'] = 'trinityTHRIMS/showEvaluationRecordsTHRIMS';
 
 
 $route['getAllEmployeeListTHRIMS'] = 'trinityDataTHRIMS/getAllEmployeeListTHRIMS'; 
@@ -528,6 +528,7 @@ $route['resetPassword'] = 'trinityDataAccount/resetPassword';
 $route['PERSONALDATA/personalData'] = 'trinityMain/sideMenu';
 $route['MYACCOUNT/myAccountInfo'] = 'trinityMyAccount/myAccountInfo';
 
+$route['rid-printReports'] = 'trinityReports/printReports'; 
 
 
 

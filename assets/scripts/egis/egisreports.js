@@ -4,7 +4,7 @@ function submitForm(){
 			var sectionCode = $('#sectionCode').val();
 			var studentNumber = $('#fullName').val();
 			var sectionCodeNS = sectionCode.split(' ').join('');
-			
+			//alert(studentNumber);	
 				jQuery.ajax({
 					url: 'EGIS/showClassCardDetails',
 					data: { 'sectionCode': sectionCode,
@@ -13,6 +13,7 @@ function submitForm(){
 					},
 					type: "POST",
 					success: function(response) {
+						//console.log(response);
 						$('div.level2').remove();
 
 						//$('.leveltwocontent').html(response);
@@ -50,6 +51,7 @@ function submitFormRankingBySection(){
 					},
 					type: "POST",
 					success: function(response) {
+						console.log(response);
 						$('div.level2').remove();
 
 						//$('.leveltwocontent').html(response);

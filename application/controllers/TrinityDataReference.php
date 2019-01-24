@@ -387,8 +387,9 @@ class trinityDataReference extends MY_Controller {
 	}
 
     public function getReportsListEmployeeTHRIMS() {
+		$reportType = $_GET['reportType'];
 		$results = $this->_getRecordsData($data = array('*'), 
-			$tables = array('triune_thrims_reports_list'), $fieldName = array('reportType'), $where = array('employee'), 
+			$tables = array('triune_thrims_reports_list'), $fieldName = array('reportType'), $where = array($reportType), 
 			$join = null, $joinType = null, $sortBy = array('reportsName'), $sortOrder = array('asc'), $limit = null, 
 			$fieldNameLike = null, $like = null, 
 			$whereSpecial = null, $groupBy = null );

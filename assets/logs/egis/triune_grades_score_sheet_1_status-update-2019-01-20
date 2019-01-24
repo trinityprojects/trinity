@@ -1,0 +1,10 @@
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 106
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 130
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 18
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 7
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 108
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 147
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 86
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 76
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 33
+UPDATE triune_grades_score_sheet_1_status SET status = '0', WHERE ID = 60

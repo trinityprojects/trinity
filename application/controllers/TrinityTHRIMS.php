@@ -78,58 +78,69 @@ class trinityTHRIMS extends MY_Controller {
 		$reportFileName = $_POST["reportFileName"];
 		$employeeNumber = $_POST["employeeNumber"];
 
-		$results = $this->_getRecordsData($dataSelect1 = array('*'), 
-			$tables = array('triune_employee_data'), $fieldName = array('employeeNumber'), $where = array($employeeNumber), $join = null, $joinType = null, 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
-			$whereSpecial = null, $groupBy = null );
+		if($reportFileName == 'employee-profile') {
+					$results = $this->_getRecordsData($dataSelect1 = array('*'), 
+						$tables = array('triune_employee_data'), $fieldName = array('employeeNumber'), $where = array($employeeNumber), $join = null, $joinType = null, 
+						$sortBy = null, $sortOrder = null, $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+						
+					$data['rows'] = $results;	
+
+					$data['yearsInService'] = $this->_getYearsMonthsDays($results[0]->dateHired);
+					$data['age'] = $this->_getYearsMonthsDays($results[0]->birthDate);
+					$data['spouseAge'] = $this->_getYearsMonthsDays($results[0]->spouseBirthDay);
+					$data['fatherAge'] = $this->_getYearsMonthsDays($results[0]->fatherBirthDay);
+					$data['motherAge'] = $this->_getYearsMonthsDays($results[0]->motherBirthDay);
+					
+					
+					$selectField = "triune_employee_job_title.jobTitleDescription, triune_employee_department.departmentDescription, ";
+					$selectField = $selectField . "triune_employee_job_status.jobStatusDescription, triune_employee_job_status.statusCategory, triune_employee_position_class.positionClass, ";
+					$selectField = $selectField . "triune_employment_career.startDate, triune_employment_career.expiryDate, triune_employment_career.employeeStatusID";
+
+					$resultsCareer = $this->_getRecordsData($dataSelect2 = array($selectField), 
+						$tables = array('triune_employment_career', 'triune_employee_job_title', 'triune_employee_department', 'triune_employee_job_status', 'triune_employee_position_class'), 
+						$fieldName = array('employeeNumber'), $where = array($results[0]->employeeNumber), 
+						$join = array('triune_employment_career.jobTitleID = triune_employee_job_title.jobTitleID', 'triune_employment_career.departmentID = triune_employee_department.departmentID', 'triune_employment_career.employeeStatusID = triune_employee_job_status.jobStatusID', 'triune_employment_career.positionClassID = triune_employee_position_class.positionClassID'), 
+						$joinType = array('left', 'left', 'left', 'left'), 
+						$sortBy = null, $sortOrder = null, $limit = null, 
+						$fieldNameLike = null, $like = null, 
+						$whereSpecial = null, $groupBy = null );
+						
+					$data['rowsCareer'] = $resultsCareer;	
+
+					$data['jobTitleDescription'] = $resultsCareer[0]->jobTitleDescription;
+					$data['gender'] = $results[0]->gender;
+					$data['ID'] = $results[0]->ID;
+					$data['jobStatusDescription'] = $resultsCareer[0]->jobStatusDescription;		
+					$data['departmentDescription'] = $resultsCareer[0]->departmentDescription;
+
+					$data['lastName'] = $results[0]->lastName; 
+					$data['firstName'] = $results[0]->firstName;
+					$data['middleName'] = $results[0]->middleName;
+					$data['positionClass'] = $resultsCareer[0]->positionClass;		
+					$data['tuaEmailAddress'] = $results[0]->tuaEmailAddress;
+					$data['civilStatus'] = $results[0]->civilStatus;
+					$data['emailAddress'] = $results[0]->emailAddress;
+					$data['dateHired'] = $results[0]->dateHired;
+					$data['mobileNumber'] = $results[0]->mobileNumber;
+					$data['telephoneNumber'] = $results[0]->telephoneNumber;
+					
+					$data['employeeNumber'] = $employeeNumber;
+					$data['reportFileName'] = $reportFileName;
+					
+				
+					$this->load->library('Pdf');		
+					$this->load->view('THRIMS/' . $reportFileName, $data);
+		} else if($reportFileName == 'evaluation-summary'){
+	
+					$data['sy'] = $this->_getSchoolYearDesc($_SESSION['sy']);
+					$data['sem'] = $this->_getSemesterDesc($_SESSION['sem']);
+
+					$this->load->library('Pdf');		
+					$this->load->view('THRIMS/' . $reportFileName, $data);
 			
-		$data['rows'] = $results;	
-
-		$data['yearsInService'] = $this->_getYearsMonthsDays($results[0]->dateHired);
-		$data['age'] = $this->_getYearsMonthsDays($results[0]->birthDate);
-		$data['spouseAge'] = $this->_getYearsMonthsDays($results[0]->spouseBirthDay);
-		$data['fatherAge'] = $this->_getYearsMonthsDays($results[0]->fatherBirthDay);
-		$data['motherAge'] = $this->_getYearsMonthsDays($results[0]->motherBirthDay);
-		
-		
-		$selectField = "triune_employee_job_title.jobTitleDescription, triune_employee_department.departmentDescription, ";
-		$selectField = $selectField . "triune_employee_job_status.jobStatusDescription, triune_employee_job_status.statusCategory, triune_employee_position_class.positionClass, ";
-		$selectField = $selectField . "triune_employment_career.startDate, triune_employment_career.expiryDate, triune_employment_career.employeeStatusID";
-
-		$resultsCareer = $this->_getRecordsData($dataSelect2 = array($selectField), 
-			$tables = array('triune_employment_career', 'triune_employee_job_title', 'triune_employee_department', 'triune_employee_job_status', 'triune_employee_position_class'), 
-			$fieldName = array('employeeNumber'), $where = array($results[0]->employeeNumber), 
-			$join = array('triune_employment_career.jobTitleID = triune_employee_job_title.jobTitleID', 'triune_employment_career.departmentID = triune_employee_department.departmentID', 'triune_employment_career.employeeStatusID = triune_employee_job_status.jobStatusID', 'triune_employment_career.positionClassID = triune_employee_position_class.positionClassID'), 
-			$joinType = array('left', 'left', 'left', 'left'), 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
-			$whereSpecial = null, $groupBy = null );
-			
-		$data['rowsCareer'] = $resultsCareer;	
-
-		$data['jobTitleDescription'] = $resultsCareer[0]->jobTitleDescription;
-		$data['gender'] = $results[0]->gender;
-		$data['ID'] = $results[0]->ID;
-		$data['jobStatusDescription'] = $resultsCareer[0]->jobStatusDescription;		
-		$data['departmentDescription'] = $resultsCareer[0]->departmentDescription;
-
-		$data['lastName'] = $results[0]->lastName; 
-		$data['firstName'] = $results[0]->firstName;
-		$data['middleName'] = $results[0]->middleName;
-		$data['positionClass'] = $resultsCareer[0]->positionClass;		
-		$data['tuaEmailAddress'] = $results[0]->tuaEmailAddress;
-		$data['civilStatus'] = $results[0]->civilStatus;
-		$data['emailAddress'] = $results[0]->emailAddress;
-		$data['dateHired'] = $results[0]->dateHired;
-		$data['mobileNumber'] = $results[0]->mobileNumber;
-		$data['telephoneNumber'] = $results[0]->telephoneNumber;
-		
-		$data['employeeNumber'] = $employeeNumber;
-		$data['reportFileName'] = $reportFileName;
-		
-		$this->load->library('Pdf');		
-        $this->load->view('THRIMS/' . $reportFileName, $data);
+		}
 
     }
 
@@ -144,4 +155,10 @@ class trinityTHRIMS extends MY_Controller {
     }
 	
 
+    public function showEvaluationRecordsTHRIMS() {
+        //echo "HELLO WORLD";
+        $this->load->view('THRIMS/reports-evaluation-records-setup-list');
+    }
+	
+	
 }
