@@ -62,7 +62,16 @@
             ">
             <div id="request-confirmation"> </div>
     </div>    
-    
+ 
+ 	<style type="text/css">
+		.textbox-text{
+			background: #fffec8;
+			font-weight: bold;
+			font-size: 20px
+		}
+		
+	</style>   
+ 
 	<script src="<?php echo base_url();?>assets/scripts/purchasing/asrscreaterequest.js"></script>
 
 

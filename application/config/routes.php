@@ -311,6 +311,7 @@ $route['getSupplyUnits'] = 'trinityDataReference/getSupplyUnits';
 $route['getAssetGroup'] = 'trinityDataReference/getAssetGroup'; 
 $route['getSuppliers'] = 'trinityDataReference/getSuppliers'; 
 $route['getOrgUnit'] = 'trinityDataReference/getOrgUnit'; 
+$route['getOrgUnitModule'] = 'trinityDataReference/getOrgUnitModule'; 
 $route['getRequestType'] = 'trinityDataReference/getRequestType'; 
 $route['getDepartmentK12'] = 'trinityDataReference/getDepartmentK12'; 
 $route['getFacultyListK12'] = 'trinityDataReference/getFacultyListK12'; 

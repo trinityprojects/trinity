@@ -3302,17 +3302,17 @@ class trinityDataEGIS extends MY_Controller {
     } //public function postSubjectGradesSummaryEGIS()	
 
     public function getMySectionScoreSheet1StatusEGISExcel() {
-		//$sectionCode = $_GET["sectionCode"];
-		//$subjectCode = $_GET["subjectCode"];
+		$sectionCode = $_GET["sectionCode"];
+		$subjectCode = $_GET["subjectCode"];
 
-		$sectionCode = "1005ABM2 2-ABM21";
-		$subjectCode = "HR2_ABM2";
+		//$sectionCode = "1005ABM2 2-ABM21";
+		//$subjectCode = "HR2_ABM2";
 		
 		$results = null;
 		
 		$gradingPeriod = $_SESSION['gP'];
 		
-		if($gradingPeriod == 1) {
+		if($gradingPeriod == '1') {
 		
 			$selectFields = "triune_grades_score_sheet_1_status.status";
 			
@@ -3321,7 +3321,7 @@ class trinityDataEGIS extends MY_Controller {
 				$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
 				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, 
 				$whereSpecial = null, $groupBy = null );
-		} else if($gradingPeriod == 2) {
+		} else if($gradingPeriod == '2') {
 			$selectFields = "triune_grades_score_sheet_2_status.status";
 			
 			$results = $this->_getRecordsData($dataSelect = array($selectFields), 
@@ -3329,7 +3329,7 @@ class trinityDataEGIS extends MY_Controller {
 				$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
 				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, 
 				$whereSpecial = null, $groupBy = null );
-		} else if($gradingPeriod == 3) {
+		} else if($gradingPeriod == '3') {
 			$selectFields = "triune_grades_score_sheet_3_status.status";
 			
 			$results = $this->_getRecordsData($dataSelect = array($selectFields), 
@@ -3337,7 +3337,7 @@ class trinityDataEGIS extends MY_Controller {
 				$fieldName = array('sy', 'sectionCode', 'subjectCode' ), $where = array($_SESSION['sy'], $sectionCode, $subjectCode), 
 				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, 
 				$whereSpecial = null, $groupBy = null );
-		} else if($gradingPeriod == 4) {
+		} else if($gradingPeriod == '4') {
 			$selectFields = "triune_grades_score_sheet_4_status.status";
 			
 			$results = $this->_getRecordsData($dataSelect = array($selectFields), 

@@ -67,6 +67,31 @@ class trinityDataReference extends MY_Controller {
 			echo json_encode($results);
 	}
 
+    public function getOrgUnitModule() {
+		$orgU = $_GET['orgUnitCode'];
+		
+		$orgUnit = explode(";", $orgU);
+		
+		$specialCond = "orgUnitCode IN (";
+		for($i = 0; $i < count($orgUnit); $i++) {
+			$specialCond = $specialCond . "'" . $orgUnit[$i] . "'";
+			if($i < (count($orgUnit) - 1)) {
+				$specialCond = $specialCond . ",";
+			}
+		}
+		$specialCond = $specialCond . ")";
+		
+		
+		$results = $this->_getRecordsData($data = array('orgUnitCode', 'orgUnitName'), 
+			$tables = array('triune_organization_unit'), $fieldName = null, $where = null, $join = null, $joinType = null, 
+			$sortBy = array('orgUnitCode'), $sortOrder = array('asc'), $limit = null, 
+			$fieldNameLike = null, $like = null, 
+			$whereSpecial = array($specialCond), $groupBy = null );
+
+			echo json_encode($results);
+	}
+	
+	
     public function getRequestType() {
 		$results = $this->_getRecordsData($data = array('requestTypeCode', 'requestTypeDescription'), 
 			$tables = array('triune_request_type_reference'), $fieldName = null, $where = null, $join = null, $joinType = null, 

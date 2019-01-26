@@ -90,7 +90,7 @@
 								<?php } ?>
 							<?php } ?>	
 
-							<div id="add-request-notes" onclick="displayRequestNotesBox()"><span>Add Request Notes</span></div>
+							<div id="add-request-notes" onclick="displayRequestNotesBox()"><span id="basic-btn">Add Request Notes</span></div>
 							<div class="panel-detail message-request-notes" id="message" >
 								<span id="message-author" onclick="hideRequestNotesBox()">(<?php echo $userNumber; ?>)</span>
 								<textarea style="background-color: white;" id="requestNotes" data-autoresize rows="1" class="autoExpand"></textarea>
@@ -169,7 +169,7 @@
 					
 					
 					<div id="add-instruction" onclick="displayInstructionBox();">
-					<span>
+					<span id="basic-btn">
 						<?php if(($requestStatus == 'U')) {?>
 							Add Recommendations
 						<?php } else { ?>
@@ -184,116 +184,165 @@
 					</div> 
 						
                 </div>
-                <div class="col-50">
-                    <label class="panel-label">Request Category: </label>
-						
-						<div class="panel-detail">
-							<br>
-						</div>
-
-						<?php if( ($requestStatus == 'I') ) { ?>
-
-							<div class="panel-detail">
-								<?php 
-								if(!empty($requestCategory)) {
-									foreach($requestCategory as $row) {
-								?>
-									<div class="panel-detail" id="message">
-										<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
-										<span id="message-detail"><?php echo $row->requestCategoryText;?></span>
-									</div>
-								<?php
-									}
-								}
-								?>
-							</div>
-						<?php }?>
-
-						<div class="panel-detail">
-						<?php if( ($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'E')  || ($requestStatus == 'I') ) { ?>
-							<?php if(($requestStatus == 'S')  ) { ?>
-								<?php if(!empty($supplierName)) {?>
-									<?php foreach($supplierName as $row) {
-											if($row->supplierBidStatus == 'CUR') {
-									?>
-										<div class="panel-detail" id="message">
-											<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
-											<?php if($row->supplierBidStatus == 'CUR') { ?>
-												<span id="message-detail"><b>CURRENT SUPPLIER:</b> </span>
-											<?php } else { ?>
-												<span id="message-detail"><b>CANDIDATE SUPPLIER:</b> </span>
-											
-											<?php } ?>
-											<span id="message-detail"><?php echo $row->supplierName;?></span>
-										</div>
-									<?php 
-											}
-										} 
-									?>
-								<?php } ?>
-							<?php } ?>
-							
-							<?php if(($requestStatus == 'E')  || ($requestStatus == 'I') ) { ?>
-								<?php if(!empty($supplierName)) {?>
-									<?php foreach($supplierName as $row) {
-									?>
-										<div class="panel-detail" id="message">
-											<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
-											<?php if($row->supplierBidStatus == 'CUR') { ?>
-												<span id="message-detail"><b>CURRENT SUPPLIER:</b> </span>
-											<?php } else { ?>
-												<span id="message-detail"><b>CANDIDATE SUPPLIER:</b> </span>
-											
-											<?php } ?>
-											<span id="message-detail"><?php echo $row->supplierName;?></span>
-										</div>
-									<?php 
-										} 
-									?>
-								<?php } ?>
-							<?php } ?>
-							
-							<br>
-							
-							<?php if( ($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'I')  ) { ?>
-							
-								<input type='radio' class="request-category" name="requestCategory" checked value='G'/>Regular
-								<input type='radio' class="request-category" name="requestCategory" value='R'/>Renewal
-								<input type='radio' class="request-category" name="requestCategory" value='B'/>Bidding
-								
-								<form id="supplierForm">
-								<div id="supplier-code">
-								<input class="easyui-combobox" name="supplierName"  id="supplierName" prompt="CURRENT SUPPLIER:" style="width:60%" data-options="
-										url:'getSuppliers',
-										method:'get',
-										valueField:'ID',
-										textField:'supplierName',
-										panelHeight:200,
-										required:true
-										">
-										
-								<?php if(  ($requestStatus == 'S') || ($requestStatus == 'I')  ) { ?>
-									<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitSupplier();" style="width:80px">Submit</a>						
-									<div id="suppliersList" class="col-100" style="border: 0; padding: 10px"></div>
-								<?php } ?>
-								
-
-								<div class="panel-detail" > 
-									<textarea  placeholder='Bid Specifications' style="background-color: white;" id="bid-requirements" data-autoresize rows="1" class="autoExpand"></textarea>
-								</div> 	
-
+				
+				<?php
+					if($requestStatus == 'E') {
+				?>
+						<div class="col-50">
+							<label class="panel-label">Status Remarks: </label>
+								<br>
+								<div class="panel-detail">
 								</div>
-								</form>
-							<?php } ?>
-						<?php } ?>
-			
+
+
+
+
+								<?php if(!empty($requestStatusRemarksDescription)) {?>
+									<?php foreach($requestStatusRemarksDescription as $row) {?>
+										<div class="panel-detail" id="message">
+											<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
+											<span id="message-detail"><?php echo $row->statusDescription;?></span>
+										</div> 	
+									<?php }?>
+								<?php } ?>
+								
+								<?php if($owner != 1) {?>
+									<?php if($requestStatus != 'C') {?>
+										<div class="panel-detail" id="message">
+											<div class="input_fields_wrap_remarks"></div>
+										</div>
+									<?php }?>
+								<?php }?>
+								<?php if( ($requestStatus == 'E') && ($userLevel == "SUPERVISOR") && (empty($fundsAvailability))) {?>
+
+										<a href="javascript:void(0)" class="link-btn" onclick="SetFundsStatus.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">SET FUND STATUS</a>
+								
+
+								<?php } ?>
+								
+
+						</div>
 						
 						
+						
+					<?php } else { ?>		
+						
+						
+						
+						
+						
+						
+						<div class="col-50">
+							<label class="panel-label">Request Category: </label>
+								
+								<div class="panel-detail">
+									<br>
+								</div>
+
+								<?php if( ($requestStatus == 'I') ) { ?>
+
+									<div class="panel-detail">
+										<?php 
+										if(!empty($requestCategory)) {
+											foreach($requestCategory as $row) {
+										?>
+											<div class="panel-detail" id="message">
+												<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
+												<span id="message-detail"><?php echo $row->requestCategoryText;?></span>
+											</div>
+										<?php
+											}
+										}
+										?>
+									</div>
+								<?php }?>
+
+								<div class="panel-detail">
+								<?php if( ($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'E')  || ($requestStatus == 'I') ) { ?>
+									<?php if(($requestStatus == 'S')  ) { ?>
+										<?php if(!empty($supplierName)) {?>
+											<?php foreach($supplierName as $row) {
+													if($row->supplierBidStatus == 'CUR') {
+											?>
+												<div class="panel-detail" id="message">
+													<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
+													<?php if($row->supplierBidStatus == 'CUR') { ?>
+														<span id="message-detail"><b>CURRENT SUPPLIER:</b> </span>
+													<?php } else { ?>
+														<span id="message-detail"><b>CANDIDATE SUPPLIER:</b> </span>
+													
+													<?php } ?>
+													<span id="message-detail"><?php echo $row->supplierName;?></span>
+												</div>
+											<?php 
+													}
+												} 
+											?>
+										<?php } ?>
+									<?php } ?>
+									
+									<?php if(($requestStatus == 'E')  || ($requestStatus == 'I') ) { ?>
+										<?php if(!empty($supplierName)) {?>
+											<?php foreach($supplierName as $row) {
+											?>
+												<div class="panel-detail" id="message">
+													<span id="message-author"><?php echo "(" . $row->updatedBy .") ";?></span>
+													<?php if($row->supplierBidStatus == 'CUR') { ?>
+														<span id="message-detail"><b>CURRENT SUPPLIER:</b> </span>
+													<?php } else { ?>
+														<span id="message-detail"><b>CANDIDATE SUPPLIER:</b> </span>
+													
+													<?php } ?>
+													<span id="message-detail"><?php echo $row->supplierName;?></span>
+												</div>
+											<?php 
+												} 
+											?>
+										<?php } ?>
+									<?php } ?>
+									
+									<br>
+									
+									<?php if( ($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'I')  ) { ?>
+									
+										<input type='radio' class="request-category" name="requestCategory" checked value='G'/>Regular
+										<input type='radio' class="request-category" name="requestCategory" value='R'/>Renewal
+										<input type='radio' class="request-category" name="requestCategory" value='B'/>Bidding
+										
+										<form id="supplierForm">
+										<div id="supplier-code">
+										<input class="easyui-combobox" name="supplierName"  id="supplierName" prompt="CURRENT SUPPLIER:" style="width:60%" data-options="
+												url:'getSuppliers',
+												method:'get',
+												valueField:'ID',
+												textField:'supplierName',
+												panelHeight:200,
+												required:true
+												">
+												
+										<?php if(  ($requestStatus == 'S') || ($requestStatus == 'I')  ) { ?>
+											<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitSupplier();" style="width:80px">Submit</a>						
+											<div id="suppliersList" class="col-100" style="border: 0; padding: 10px"></div>
+										<?php } ?>
+										
+
+										<div class="panel-detail" > 
+											<textarea  placeholder='Bid Specifications' style="background-color: white;" id="bid-requirements" data-autoresize rows="1" class="autoExpand"></textarea>
+										</div> 	
+
+										</div>
+										</form>
+									<?php } ?>
+								<?php } ?>
+					
+								
+								
 
 
-                </div>
-            </div>
-
+						</div>
+					</div>
+				<?php } ?>
+					
 			
 			
             <div class="row-details">
@@ -802,7 +851,7 @@
             <?php if( ($requestStatus == 'N') || ($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'U') || ($requestStatus == 'E') || ($requestStatus == 'I')) {?>
                 <div class="row-details">
                     <div class="col-50" style="height:150%; padding: 10px 10px">
-						<label class="panel-label">Attachments: <span onclick="showUploadedFiles();">SHOW Attachments</span> </label>
+						<label class="panel-label">Attachments: <span id="basic-btn" onclick="showUploadedFiles();">SHOW Attachments</span> </label>
 							<br>
 							<?php //if($owner == 1) { ?>
 									<div class="panel-detail" id="message">
@@ -860,6 +909,18 @@
                     <div class="col-50" style="height:150%; padding: 10px 10px; text-align: center">
 						<?php if(($requestStatus == 'N')) {?>		
 								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('For request #<?php echo $ID?> for Unit Approval','for_approval_request','A')" style="width:80px">Submit for Unit Approval</a>
+								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Item Review','for_item_review','U')" style="width:80px">For Item Review</a>
+								<div class="panel-detail">
+									<input class="easyui-combobox" name="departmentUnit"  id="departmentUnit" prompt="Department/Unit:" style="width:60%" data-options="
+											url:'getOrgUnitModule?orgUnitCode=ICTU;BAMU',
+											method:'get',
+											valueField:'orgUnitCode',
+											textField:'orgUnitName',
+											panelHeight:200,
+											required:true
+											">
+
+								</div>
 						<?php } ?>
 
 						<?php if(($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'U') || ($requestStatus == 'E')) {?>		
@@ -869,19 +930,7 @@
 							<?php }?>
 							<?php if($requestStatus == 'S') {?>
 								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Budget Approval','for_budget_approval','E')" style="width:80px">For Budget Approval</a>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Item Review','for_item_review','U')" style="width:80px">For Item Review</a>
 								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return</a>
-								<div class="panel-detail">
-									<input class="easyui-combobox" name="departmentUnit"  id="departmentUnit" prompt="Department/Unit:" style="width:60%" data-options="
-											url:'getOrgUnit',
-											method:'get',
-											valueField:'orgUnitCode',
-											textField:'orgUnitName',
-											panelHeight:200,
-											required:true
-											">
-
-								</div>
 							<?php }?>
 							<?php if(($requestStatus == 'U')) {?>
 								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Reviewed','reviewed_request','S')" style="width:80px">Backto PSU</a>
@@ -1412,7 +1461,6 @@ $('#ff').click(function(){
             dialog = dialog + "</div>";
 
 			
-alert(status);
 			var button;
 			
 			if(status == 'S') {
@@ -1692,8 +1740,8 @@ alert(status);
                 },
                 type: "POST",
                 success:function(data){
-alert(data);
-                    var resultValue = $.parseJSON(data);
+
+					var resultValue = $.parseJSON(data);
                     console.log(data);
                     //console.log("hoy");
                     if(resultValue['success'] == 1) {
@@ -2000,6 +2048,117 @@ alert(data);
                 error:function (){}
             }); //jQuery.ajax({
     }
+
+
+
+
+
+    function CustomSetFundsStatus(){
+        this.render = function(dialog,op,status){
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH+"px";
+            dialogbox.style.left = (winW/2) - (1000 * .5)+"px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+
+            var requestID = $('#requestID').val();           
+            var specialInstructions = $('#specialInstructions').val();
+            var requestStatusRemarksID = $('#requestStatusRemarksID').val();
+            var fundsAvailableAmount = $('#fundsAvailableAmount').val();
+			
+            dialog = dialog + "<div>";
+            dialog = dialog + "<div><b>Request ID: </b></div>";
+            dialog = dialog + "<div><u>" + requestID + "</u></div>";
+            dialog = dialog + "<div><b>Special Instructions: </b></div>";
+            dialog = dialog + "<div><u>" + specialInstructions + "</u></div>";
+            dialog = dialog + "<div><b>Status Remarks: </b></div>";
+            dialog = dialog + "<div><u>" + requestStatusRemarksID + "</u></div>";
+			if(requestStatusRemarksID == 45) {
+				dialog = dialog + "<div><b>Available Funds: </b></div>";
+				dialog = dialog + "<div><u>" + fundsAvailableAmount + "</u></div>";
+			}
+            dialog = dialog + "</div>";
+
+			if(requestStatusRemarksID != 45) {
+				fundsAvailableAmount = 0;
+			}
+
+			var button = '';
+			//alert(op + ' ' + status);
+			if(specialInstructions == '' || requestStatusRemarksID == '' || (requestStatusRemarksID == 45 && fundsAvailableAmount == '')  ) {
+				button = 'Please put your instruction... </button> <button onclick="SetFundsStatus.no()">Close</button>';				
+			} else {
+				button = '<button onclick="SetFundsStatus.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\',\''+requestStatusRemarksID+'\',\''+fundsAvailableAmount+'\')">Proceed</button> <button onclick="SetFundsStatus.no()">Close</button>';				
+			}
+
+            document.getElementById('dialogboxhead').innerHTML = "Please Confirm...";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = button;
+        }
+        this.no = function(){
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+        this.yes = function(op,status, requestID, specialInstructions,  requestStatusRemarksID, fundsAvailableAmount){
+            if(op == "update_request"){
+                setupFundStatusRequest(requestID, status, specialInstructions,  requestStatusRemarksID, fundsAvailableAmount);
+            }
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var SetFundsStatus = new CustomSetFundsStatus();
+
+    function setupFundStatusRequest(requestID, status, specialInstructions,  requestStatusRemarksID, fundsAvailableAmount) {
+            alert(requestID);
+            alert(status);
+			
+			jQuery.ajax({
+                url: "setupFundStatusRequestTBAMIMS",
+                data: {
+                    'ID':requestID,
+                    'requestStatus': status,
+                    'specialInstructions':specialInstructions,
+                    'requestStatusRemarksID':requestStatusRemarksID,
+                    'fundsAvailableAmount':fundsAvailableAmount,
+
+				},
+                type: "POST",
+                success:function(data){
+                   console.log(data);
+                    var resultValue = $.parseJSON(data);
+                    console.log(resultValue);
+                    //console.log(resultValue['quantt']);
+                    if(resultValue['success'] == 1) {
+                        $('div.level2').remove();
+                        $('#N').datagrid('reload');
+                        $('#A').datagrid('reload');
+                        $('#S').datagrid('reload');
+                        $('#E').datagrid('reload');
+                        $('#I').datagrid('reload');
+                        $('#R').datagrid('reload');
+                        $('#U').datagrid('reload');
+                        $('#C').datagrid('reload');
+                        $('#X').datagrid('reload');
+                        $('#tt').datagrid('reload');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                error:function (){}
+            }); //jQuery.ajax({
+    }
+
+
+
+
+
+
 
 	
 	

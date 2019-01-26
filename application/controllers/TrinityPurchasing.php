@@ -492,6 +492,36 @@ class trinityPurchasing extends MY_Controller {
 					$data['requestCategoryType'] = $row->requestCategoryText;
 				}
 			}
+
+
+		$data['userLevel'] = null;
+		$data['fundsAvailability'] = null;
+		if($data['requestStatus'] == 'E') {
+			$userLevel = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_user_privilege'), 
+			$fieldName = array('userNumber', 'sourceSystemID', 'elementValueID'), $where = array($data['userNumber'], 'ASRS', 'estimatedRequest'), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null,
+			$whereSpecial = null, $groupBy = null );
+			if(!empty($userLevel)) {
+				$data['userLevel'] = $userLevel[0]->userLevel;
+			}
+
+			$special = "requestStatusRemarksID IN ('45', '46')";
+			$funds = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_tbamims_status_remarks'), 
+			$fieldName = array('requestNumber'), $where = array($data['ID']), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null,
+			$whereSpecial = array($special), $groupBy = null );
+			if(!empty($funds)) {
+				$data['fundsAvailability'] = $funds[0]->requestStatusRemarksID;
+			}
+			
+			
+		}
+
+
+
+
 			
 
 		$this->load->view('ASRS/request-details', $data);

@@ -1,7 +1,7 @@
 <div class="level2" style="width:100%;max-width:100%;height:200px;">
-  <!--  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/icon.css">
-    <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/jquery.easyui.min.js"></script>-->
+    <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/jquery.easyui.min.js"></script>
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -605,8 +605,13 @@
 										</div>
 
 			<div style="text-align:right;padding:5px 0">
-				  <span id="basic-btn-print"><a href="javascript:void(0)"  onclick="printForm.render('requestSet', 'requestSet.pdf', 'ID', $('#requestID').val())" style="width:150px">Print Set Request - PDF</a></span>
+				<a href="#" class="easyui-menubutton" data-options="menu:'#pp1',iconCls:'icon-print'">Print</a>
 			</div>
+			<div id="pp1" style="width:250px;">
+			   <div>
+				  <a href="javascript:void(0)"  onclick="printForm.render('requestSet', 'requestSet.pdf', 'ID', $('#requestID').val())" style="width:150px">Print Set Request - PDF</a>
+			   </div>
+		    </div>
 			
 										
 									</div> <!--<div id="Estimates" class="tabcontentEstimates"> -->
