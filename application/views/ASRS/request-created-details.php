@@ -85,7 +85,7 @@
 								required:true
 								">
 		
-						<input class="easyui-combobox" name="assetName" id="assetName" prompt="ITEM NAME:" style="width:50%" data-options="
+						<input class="easyui-combobox" name="assetName" id="itemName" prompt="ITEM NAME:" style="width:50%" data-options="
 								url:'getAssetGroup',
 								method:'get',
 								valueField:'assetCode',

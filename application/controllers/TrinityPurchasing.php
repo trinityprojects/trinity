@@ -508,7 +508,7 @@ class trinityPurchasing extends MY_Controller {
 
 			$special = "requestStatusRemarksID IN ('45', '46')";
 			$funds = $this->_getRecordsData($rec = array('*'), 
-			$tables = array('triune_job_request_transaction_tbamims_status_remarks'), 
+			$tables = array('triune_job_request_transaction_asrs_status_remarks'), 
 			$fieldName = array('requestNumber'), $where = array($data['ID']), 
 			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null,
 			$whereSpecial = array($special), $groupBy = null );
@@ -520,6 +520,49 @@ class trinityPurchasing extends MY_Controller {
 		}
 
 
+            $data['requestStatusRemarksDescription'] = null;		
+			$remarksSelect = "triune_job_request_status.statusDescription, triune_job_request_status.ID, triune_job_request_transaction_asrs_status_remarks.updatedBy";
+			
+			$results27 = $this->_getRecordsData($rec = array($remarksSelect), 
+			$tables = array('triune_job_request_transaction_asrs_status_remarks', 'triune_job_request_status'), 
+			$fieldName = array('triune_job_request_transaction_asrs_status_remarks.requestNumber', 'triune_job_request_transaction_asrs_status_remarks.requestStatus'), 
+			$where = array($data['ID']), 
+			$join = array('triune_job_request_transaction_asrs_status_remarks.requestStatusRemarksID = triune_job_request_status.ID'), 
+			$joinType = array('inner'), $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+			$groupBy = null );
+			if(!empty($results27)) {
+				$data['requestStatusRemarksDescription'] = $results27;
+			}
+
+
+			$data['actualBudgetAmount'] = null;
+			$data['fundsAvailableAmount'] = null;
+			$results17 = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_asrs_actual_budget'), 
+			$fieldName = array('requestNumber', 'requestStatus'), 
+			$where = array($data['ID'], 'I'), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+			$groupBy = null );
+
+			if(!empty($results17)) {
+				$data['actualBudgetAmount'] = $results17[0]->actualBudgetAmount;
+				$data['fundsAvailableAmount'] = $results17[0]->fundsAvailableAmount;
+				
+			}
+
+			$results37 = $this->_getRecordsData($rec = array('*'), 
+			$tables = array('triune_job_request_transaction_asrs_actual_budget'), 
+			$fieldName = array('requestNumber', 'requestStatus'), 
+			$where = array($data['ID'], 'E'), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+			$groupBy = null );
+
+			if(!empty($results37)) {
+				$data['fundsAvailableAmount'] = $results37[0]->fundsAvailableAmount;
+			}
 
 
 			

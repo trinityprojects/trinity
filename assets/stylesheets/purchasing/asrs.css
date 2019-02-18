@@ -274,6 +274,28 @@ div.materials-estimate {
     text-decoration: none
 }
 
+
+#basic-btn-print {
+	text-decoration: none;
+    color: white;
+    background: gold;
+    padding: 5px 5px;
+    display: inline;
+    margin: 5px 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+}
+ 
+#basic-btn-print:hover {
+	text-decoration: none;
+    background: #90EE90;
+    text-decoration: none
+}
+
+
+
 .icon-small {
     height: 5%;
     width: 5%;

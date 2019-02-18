@@ -181,6 +181,11 @@
 					<div class="panel-detail message-instruction" id="message" > 
 						<span id="message-author" onclick="hideInstructionBox();"><?php echo "(" .$userNumber . ") "; ?></span>
 						<textarea  style="background-color: white;" id="specialInstructions" data-autoresize rows="1" class="autoExpand"></textarea>
+						<?php if( ($requestStatus == 'E') && ($userLevel == "ANNOTATOR") ) {?>
+							<a href="javascript:void(0)" class="link-btn" onclick="SetAnnotation.render('Request #<?php echo $ID?> New','update_request','N')" style="width:80px">Annotation</a>
+						<?php } ?>
+						
+						
 					</div> 
 						
                 </div>
@@ -215,7 +220,7 @@
 								<?php }?>
 								<?php if( ($requestStatus == 'E') && ($userLevel == "SUPERVISOR") && (empty($fundsAvailability))) {?>
 
-										<a href="javascript:void(0)" class="link-btn" onclick="SetFundsStatus.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">SET FUND STATUS</a>
+										<a href="javascript:void(0)" class="link-btn" onclick="SetFundsStatus.render('Request #<?php echo $ID?> Estimated','update_request','E')" style="width:80px">SET FUND STATUS </a>
 								
 
 								<?php } ?>
@@ -361,7 +366,7 @@
 								required:true
 								">
 
-						<input class="easyui-combobox" name="assetName" id="assetName" prompt="ITEM NAME:" style="width:50%" data-options="
+						<input class="easyui-combobox" name="assetName" id="itemName" prompt="ITEM NAME:" style="width:50%" data-options="
 								url:'getAssetGroup',
 								method:'get',
 								valueField:'assetCode',
@@ -389,8 +394,6 @@
 								<?php if($requestCategoryType == 'Bidding') {?>
 									<button class="tablinksEstimates" onclick="openTab(event, 'Bidding')">Bidding Information</button>
 								<?php } ?>
-							  <button class="tablinksEstimates" onclick="openTab(event, 'Actual')">Actual</button>
-							  <button class="tablinksEstimates" onclick="openTab(event, 'Asset')">Asset Assignment</button>
 							  <?php } ?>
 							</div>
 
@@ -450,7 +453,7 @@
 												</div>
 												<div style="float: left; width: 40%">
 													<span>
-														<?php echo trim($row->assetName); ?> 
+														<?php echo trim($row->itemName); ?> 
 													</span>
 												</div>    
 
@@ -541,6 +544,51 @@
 										
 										<?php if(($requestStatus == 'E') || ($requestStatus == 'I')) {?>
 
+													<div>
+														<div style="float: left; width: 3%">
+															<span><b>_</b></span>
+														</div> 
+														<div style="float: left; width: 7%">
+															<span><b>_</b> </span> 
+														</div>
+														<div style="float: left; width: 40%">
+															<span style="color: red; font-size: 15px; font-weight: bold">
+															   AVAILABLE FUNDS:
+															</span>
+														</div>    
+														
+														
+														<div style="float: left; width: 50%">
+															<span>
+															>>>
+															</span>
+															<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
+
+															
+															<?php if(($requestStatus == 'E') && ($userLevel == "SUPERVISOR") ) {?>
+																<?php if(empty($fundsAvailableAmount)) {?>
+																	<input style="font-size: 12px; " type="number" class="fundsAvailableAmount" id="fundsAvailableAmount" name="fundsAvailableAmount" size="5" maxlength="5" placeholder="Available Funds"/> 
+																	
+																<?php } else { ?>
+																	<?php echo number_format($fundsAvailableAmount, 2); ?>
+																<?php } ?>
+															<?php } //if(($requestStatus == 'E')) {?>
+															<?php if(($requestStatus == 'E') && ($userLevel == "DIRECTOR") ) {
+																	echo number_format($fundsAvailableAmount, 2);
+															} //if(($requestStatus == 'E')) {?>
+
+															
+															<?php if( ($requestStatus == 'I') || ($requestStatus == 'C')) {
+																	echo number_format($fundsAvailableAmount, 2);
+															} ?>
+															
+															
+															</span>
+														</div>    
+												
+													</div>
+										
+										
 											<div>
 												<div style="float: left; width: 3%">
 													<span><b>_</b></span>
@@ -562,13 +610,18 @@
 													<span id="totalAmount" style="color: red; font-size: 15px; font-weight: bold; float: right;">
 
 													
-													<?php if(($requestStatus == 'E') ) {?>
+													<?php if(($requestStatus == 'E') && ($userLevel == "DIRECTOR") ) {?>
 														<input style="font-size: 12px; " type="number" class="actualBudgetAmount" id="actualBudgetAmount" name="actualBudgetAmount" size="5" maxlength="5" placeholder="Actual Budget"/> 
 													<?php } //if(($requestStatus == 'E')) {?>
+													<?php if(($requestStatus == 'E') && ($userLevel == "SUPERVISOR") ) {
+															echo number_format($actualBudgetAmount, 2);
+													} //if(($requestStatus == 'E')) {?>
 													
-													<?php if( ($requestStatus == 'I')) {
+													<?php if( ($requestStatus == 'I') || ($requestStatus == 'C')) {
 															echo number_format($actualBudgetAmount, 2);
 													} ?>
+													
+													
 													
 													
 													</span>
@@ -623,6 +676,11 @@
 									
 									<?php } //if(!empty($itemsList))?>
 								</div>
+								
+			<div style="text-align:right;padding:5px 0">
+				  <span id="basic-btn-print"><a href="javascript:void(0)"  onclick="printForm.render('requestInProgress', 'requestInProgress.pdf', 'ID', $('#requestID').val())" style="width:150px">Print In Progress Request - PDF</a></span>
+			</div>
+								
 							</div> <!--<div id="Estimates" class="tabcontentEstimates"> -->
 
 							<?php if($requestCategoryType == 'Bidding') {?>
@@ -637,212 +695,6 @@
 									
 								</div>
 							<?php } ?>
-							
-							
-							<div id="Actual" class="tabcontentEstimates">
-							<?php if( ($requestStatus == 'I')) { ?>
-							
-										<div class="panel-detail">   
-										<?php if(!empty($itemsList)) {?>
-
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b><u>QTY</u></b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b><u>UNITS</u></b></span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span>
-														<b><u>ITEMS</u></b>
-													</span>
-													
-												</div> 
-
-													
-												<div style="float: left; width: 50%">
-													<span>
-														<b><u>Actual Unit Amount</u></b>
-													</span>
-													
-													<span style="float: right;">
-														<b><u>Actual Amount</u></b>
-													</span>
-													
-												</div>    
-
-											</div></br>
-										<?php } ?>
-	 
-	 
-								<?php 
-									$totalItemsAmountActual = 0;
-									$itemCtr = 0;
-									if(!empty($itemsList)) {
-										foreach($itemsList as $row) {
-								?>
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b><?php echo $row->quantity; ?></b></span>
-													<input type="hidden" name="quantityActual[]" value="<?php echo $row->quantity; ?> "/> 
-
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b><?php echo trim($row->unitCode); ?></b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span>
-														<?php echo trim($row->assetName); ?> 
-													</span>
-												</div>    
-
-												<div style="float: left; width: 50%">
-													<span>
-														<?php if($requestStatus == 'I') { ?>
-															<input type="number" class="amountActual" id="numericActual" name="amountActual[]" size="5" maxlength="5" placeholder="Amount Actual"/> 
-															<input type="hidden" name="itemsRecordIDActual[]" value="<?php echo $row->ID; ?>"/> 
-															<span id="itemTotalAmountActual<?php echo $itemCtr;?>" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-															</span>                        
-														<?php } elseif( ($requestStatus == 'I') && ($requestStatus == 'C')) { 
-																echo $row->actualAmount;
-														
-														 } ?>
-
-													</span>
-													
-													<?php if ( ($requestStatus == 'I') && ($requestStatus == 'C')) { ?>
-														<span style="color: red; font-size: 15px; font-weight: bold; float: right;">
-																<?php 
-																	echo number_format((floatval($row->actualAmount) * intval($row->quantity)), 2); 
-																	$totalItemsAmountActual += (floatval($row->actualAmount) * intval($row->quantity));
-																?> 
-														 </span>
-													<?php } ?>
-													
-													
-												</div>    
-													
-											</div></br>
-								
-								<?php 
-										$itemCtr++;
-										} 
-									}
-								?>
-								
-								<?php if(!empty($itemsList)) { ?>
-								
-										<div>
-											<div style="float: left; width: 3%">
-												<span><b>_</b></span>
-											</div> 
-											<div style="float: left; width: 7%">
-												<span><b>_</b> </span> 
-											</div>
-											<div style="float: left; width: 40%">
-												<span style="color: red; font-size: 15px; font-weight: bold">
-												   TOTAL AMOUNT:
-												</span>
-											</div>   
-
-											
-											
-											<div style="float: left; width: 50%">
-												<span>
-												>>>
-												</span>
-												<span id="totalAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-													<?php 
-													if( ($requestStatus == 'I') && ($requestStatus == 'C')) {
-														echo number_format($totalItemsAmountActual, 2);
-													} else {		
-														echo "0.00";
-													} ?>
-												</span>
-											</div>    
-										
-										</div>
-										
-										
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b>_</b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b>_</b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span style="color: red; font-size: 15px; font-weight: bold">
-													   ACTUAL BUDGET:
-													</span>
-												</div>    
-												
-												
-												<div style="float: left; width: 50%">
-													<span>
-													>>>
-													</span>
-													<span id="totalAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-													<?php if( ($requestStatus == 'I') ) { 
-															echo number_format($actualBudgetAmount, 2);
-													} ?>
-													</span>
-												</div>    
-										
-											</div>
-
-
-											<div>
-												<div style="float: left; width: 3%">
-													<span><b>_</b></span>
-												</div> 
-												<div style="float: left; width: 7%">
-													<span><b>_</b> </span> 
-												</div>
-												<div style="float: left; width: 40%">
-													<span style="color: red; font-size: 15px; font-weight: bold">
-													   DIFFERENCE:
-													</span>
-												</div>    
-												
-												
-												<div style="float: left; width: 50%">
-													<span>
-													>>>
-													</span>
-													<span id="differenceAmountActual" style="color: red; font-size: 15px; font-weight: bold; float: right;">
-														<?php 
-														if(  ($requestStatus == 'I') && ($requestStatus == 'C')) {
-															echo number_format(($totalItemsAmountActual - $actualBudgetAmount), 2);
-														} else {
-															echo "0.00";
-														} ?>
-													</span>
-												</div>    
-										
-											</div>
-
-
-											
-										
-									<?php } else { //if(!empty($materials))?>
-											<div>
-												<span> NO MATERIALS NEEDED </span>
-											</div>
-									
-									<?php } //if(!empty($materials))?>
-								</div>							
-							
-							
-							<?php } ?>
-							</div>
-							<div id="Asset" class="tabcontentEstimates">
-								<div class="panel-detail">   
-								</div>
-							</div>
-				
 				
 				<?php } ?>
                 </div>
@@ -923,22 +775,39 @@
 								</div>
 						<?php } ?>
 
-						<?php if(($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'U') || ($requestStatus == 'E')) {?>		
+						<?php if(($requestStatus == 'A') || ($requestStatus == 'S') || ($requestStatus == 'U') || ($requestStatus == 'E') || ($requestStatus == 'I') ) {?>		
 							<?php if(($requestStatus == 'A')) {?>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Submission','submit_request','S')" style="width:80px">For Submission to PSU</a>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return</a>
+									<?php if($owner != 1) {?>
+										<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Submission','submit_request','S')" style="width:80px">For Submission to PSU</a>
+										<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return</a>
+									<?php } ?>
 							<?php }?>
 							<?php if($requestStatus == 'S') {?>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Budget Approval','for_budget_approval','E')" style="width:80px">For Budget Approval</a>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return</a>
+									<?php if($owner != 1) {?>
+										<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> for Budget Approval','for_budget_approval','E')" style="width:80px">For Budget Approval</a>
+										<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return</a>
+									<?php }?>
 							<?php }?>
 							<?php if(($requestStatus == 'U')) {?>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Reviewed','reviewed_request','S')" style="width:80px">Backto PSU</a>
+									<?php if($owner != 1) {?>
+										<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Reviewed','reviewed_request','S')" style="width:80px">Backto PSU</a>
+									<?php } ?>
 							<?php }?>
 							<?php if(($requestStatus == 'E')) {?>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> with Budget','with_budget','I')" style="width:80px">Approved with Budget</a>
-								<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return (with instruction)</a>
+								<?php if(($userLevel == 'DIRECTOR') && (!empty($fundsAvailability))) {?>
+										<?php if($owner != 1) {?>
+											<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> with Budget','with_budget','I')" style="width:80px">Approved with Budget</a>
+											<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Return','return_request','R')" style="width:80px">Return (with instruction)</a>
+										<?php } ?>
+								<?php } ?>
 							<?php }?>
+
+							<?php if(($requestStatus == 'I')) {?>
+								<?php if($owner != 1) {?>
+									<a href="javascript:void(0)" class="link-btn" onclick="Confirm.render('Request #<?php echo $ID?> Completed','request_completed','C')" style="width:80px">COMPLETED</a>
+								<?php } ?>
+							<?php }?>
+
 							
 							
 								<br>
@@ -1164,6 +1033,7 @@
 	
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/JavaScript-autoComplete-master/auto-complete.css">
     <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/JavaScript-autoComplete-master/auto-complete.js"></script>
+	<script src="<?php echo base_url();?>assets/scripts/print-download.js"></script>
 
     <script type="text/javascript">
 $('input.amount').keyup(function() {
@@ -2118,7 +1988,7 @@ $('#ff').click(function(){
             alert(status);
 			
 			jQuery.ajax({
-                url: "setupFundStatusRequestTBAMIMS",
+                url: "setupFundStatusRequestASRS",
                 data: {
                     'ID':requestID,
                     'requestStatus': status,
@@ -2157,6 +2027,88 @@ $('#ff').click(function(){
 
 
 
+    function CustomSetAnnotation(){
+        this.render = function(dialog,op,status){
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH+"px";
+            dialogbox.style.left = (winW/2) - (1000 * .5)+"px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+
+            var requestID = $('#requestID').val();           
+            var specialInstructions = $('#specialInstructions').val();
+			
+            dialog = dialog + "<div>";
+            dialog = dialog + "<div><b>Request ID: </b></div>";
+            dialog = dialog + "<div><u>" + requestID + "</u></div>";
+            dialog = dialog + "<div><b>Special Instructions: </b></div>";
+            dialog = dialog + "<div><u>" + specialInstructions + "</u></div>";
+            dialog = dialog + "</div>";
+
+			var button = '';
+			//alert(op + ' ' + status);
+			if(specialInstructions == '') {
+				button = 'Please put your instruction... </button> <button onclick="SetAnnotation.no()">Close</button>';				
+			} else {
+				button = '<button onclick="SetAnnotation.yes(\''+op+'\',\''+status+'\',\''+requestID+'\',\''+specialInstructions+'\')">Proceed</button> <button onclick="SetAnnotation.no()">Close</button>';				
+			}
+
+            document.getElementById('dialogboxhead').innerHTML = "Please Confirm...";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = button;
+        }
+        this.no = function(){
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+        this.yes = function(op,status, requestID, specialInstructions){
+            if(op == "update_request"){
+                setupAnnotation(requestID, status, specialInstructions);
+            }
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var SetAnnotation = new CustomSetAnnotation();
+
+    function setupAnnotation(requestID, status, specialInstructions) {
+			jQuery.ajax({
+                url: "setupAnnotationASRS",
+                data: {
+                    'ID':requestID,
+                    'requestStatus': status,
+                    'specialInstructions':specialInstructions,
+				},
+                type: "POST",
+                success:function(data){
+                   console.log(data);
+                    var resultValue = $.parseJSON(data);
+                    console.log(resultValue);
+                    //console.log(resultValue['quantt']);
+                    if(resultValue['success'] == 1) {
+                        $('div.level2').remove();
+                        $('#N').datagrid('reload');
+                        $('#A').datagrid('reload');
+                        $('#S').datagrid('reload');
+                        $('#E').datagrid('reload');
+                        $('#I').datagrid('reload');
+                        $('#R').datagrid('reload');
+                        $('#U').datagrid('reload');
+                        $('#C').datagrid('reload');
+                        $('#X').datagrid('reload');
+                        $('#tt').datagrid('reload');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                error:function (){}
+            }); //jQuery.ajax({
+    }
 
 
 
@@ -2578,18 +2530,20 @@ function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
 		var ID = $('#requestID').val();
 		var quantity = $('#quantity').val();
 		var unitCode = $('#unitCode').val();
-		var assetName = $('#assetName').val();
+		var itemName = $('#itemName').val();
 		var unitCodeText = $('#unitCode').combobox('getText');
-		var assetNameText = $('#assetName').combobox('getText');
+		var itemNameText = $('#itemName').combobox('getText');
+	
+	
 		jQuery.ajax({
 			url: "insertRequestItemsASRS",
 			data: { 
 				'ID': ID, 
 				'quantity': quantity, 
 				'unitCode': unitCode, 
-				'assetName': assetName, 
+				'itemName': itemName, 
 				'unitCodeText': unitCodeText, 
-				'assetNameText': assetNameText, 
+				'itemNameText': itemNameText, 
 			},
 			type: "POST",
 			success:function(data){

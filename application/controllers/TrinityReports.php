@@ -89,7 +89,6 @@ class trinityReports extends MY_Controller {
 			$sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 			$data['statusRemarks'] = $statusRemarks;
-			
 
 			$selectField5 = "triune_job_request_transaction_tbamims_materials.quantity, triune_job_request_materials_tbamims.particulars, triune_job_request_materials_tbamims.units, ";
 			$selectField5 = $selectField5 . "triune_job_request_transaction_tbamims_materials.materialsAmount, triune_job_request_transaction_tbamims_materials.actualAmount";
@@ -101,10 +100,72 @@ class trinityReports extends MY_Controller {
 
 			$data['materials'] = $materials;
 			
+			$this->load->library('Pdf');
+			$this->load->view('TrinityReports/requestSet', $data);
+			
+		} elseif($type == 'requestInProgress') {
+			
+			$selectField1 = "triune_job_request_transaction_asrs.sy, triune_job_request_transaction_asrs.requestPurpose, triune_job_request_transaction_asrs.requestRemarks, ";
+			$selectField1 = $selectField1 . "triune_job_request_transaction_asrs.requestStatus, triune_job_request_transaction_asrs.requestType, triune_job_request_transaction_asrs.departmentUnit, ";
+			$selectField1 = $selectField1 . "triune_job_request_transaction_asrs.unitReviewer, triune_job_request_transaction_asrs.returnedFrom, triune_job_request_transaction_asrs.dateNeeded, ";
+			$selectField1 = $selectField1 . "triune_job_request_transaction_asrs.dateCreated, triune_job_request_transaction_asrs.dateClosed, triune_job_request_transaction_asrs.userName, ";
+			$selectField1 = $selectField1 . "triune_job_request_transaction_asrs.workstationID, triune_job_request_transaction_asrs.timeStamp, triune_job_request_transaction_asrs.updatedBy";
+			
+			$jobRequest = $this->_getRecordsData($dataSelect1 = array($selectField1),
+			$tables = array('triune_job_request_transaction_asrs'), 
+			$fieldName = array('triune_job_request_transaction_asrs.ID'), $where = array($fiedlValArr[0]), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, 
+			$like = null, $whereSpecial = null, $groupBy = null );
+
+			$data['jobRequest'] = $jobRequest;
+		
+
+			$selectField2 = "concat(triune_employee_data.lastName, ', ', triune_employee_data.firstName, ' ', triune_employee_data.middleName) as fullName, ";
+			$selectField2 = $selectField2 . "triune_employee_data.currentDepartment";
+			$requestor = $this->_getRecordsData($dataSelect2 = array($selectField2),
+			$tables = array('triune_user', 'triune_employee_data'), 
+			$fieldName = array('triune_user.userName'), $where = array($jobRequest[0]->userName), 
+			$join = array('triune_user.userNumber = triune_employee_data.employeeNumber'), 
+			$joinType = array('inner'), $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+			$data['requestor'] = $requestor;
+
+			
+			$selectField3 = "*";
+			$instructions = $this->_getRecordsData($dataSelect3 = array($selectField3),
+			$tables = array('triune_job_request_transaction_asrs_special_instructions'), 
+			$fieldName = array('triune_job_request_transaction_asrs_special_instructions.requestNumber'), $where = array($fiedlValArr[0]), 
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+			$data['instructions'] = $instructions;
+
+			
+			$selectField4 = "triune_job_request_status.statusDescription, triune_job_request_transaction_asrs_status_remarks.updatedBy, triune_job_request_transaction_asrs_status_remarks.userName";
+			$statusRemarks = $this->_getRecordsData($dataSelect4 = array($selectField4),
+			$tables = array('triune_job_request_transaction_asrs_status_remarks', 'triune_job_request_status'), 
+			$fieldName = array('triune_job_request_transaction_asrs_status_remarks.requestNumber'), $where = array($fiedlValArr[0]), 
+			$join = array('triune_job_request_transaction_asrs_status_remarks.requestStatusRemarksID = triune_job_request_status.ID'), $joinType = array('inner'), 
+			$sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+			$data['statusRemarks'] = $statusRemarks;
+			
+
+			$selectField5 = "*";
+			$items = $this->_getRecordsData($dataSelect5 = array($selectField5),
+			$tables = array('triune_job_request_transaction_asrs_items'), 
+			$fieldName = array('triune_job_request_transaction_asrs_items.requestNumber'), $where = array($fiedlValArr[0]), 
+			$join = null, $joinType = null, 
+			$sortBy = null, $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
+
+			$data['items'] = $items;
+			
 
 			
 			$this->load->library('Pdf');
-			$this->load->view('TrinityReports/requestSet', $data);
+			$this->load->view('TrinityReports/requestInProgress', $data);
+
+
+
 			
 		}
 		

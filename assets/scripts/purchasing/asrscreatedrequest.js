@@ -165,8 +165,8 @@ $('#ff').click(function(){
             } else {
 				var quantity = $('#quantity').val();
 				var unitCode = $('#unitCode').val();
-				var assetName = $('#assetName').val();
-				checkDataItemsViaAJAX(quantity, unitCode, assetName)
+				var itemName = $('#itemName').val();
+				checkDataItemsViaAJAX(quantity, unitCode, itemName)
             }
 
         }
@@ -176,11 +176,11 @@ $('#ff').click(function(){
 
 
 
-function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
+function checkDataItemsViaAJAX(quantity, unitCode, itemName) {
 	
     jQuery.ajax({
         url: "validateRequestItemsASRS",
-        data:'quantity='+quantity+'&unitCode='+unitCode+'&assetName='+assetName,
+        data:'quantity='+quantity+'&unitCode='+unitCode+'&itemName='+itemName,
         type: "POST",
         success:function(data){
             console.log(data);
@@ -195,7 +195,7 @@ function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
                 var obj = $.parseJSON(data);
                 var quantity = obj['quantity'];
                 var unitCode = obj['unitCode'];
-                var assetName = obj['assetName'];
+                var itemName = obj['itemName'];
 
                 $notExistMessage = '';
                 /*if(quantityNotExist != undefined) {
@@ -224,18 +224,19 @@ function checkDataItemsViaAJAX(quantity, unitCode, assetName) {
 		var ID = $('#ID').val();
 		var quantity = $('#quantity').val();
 		var unitCode = $('#unitCode').val();
-		var assetName = $('#assetName').val();
+		var itemName = $('#itemName').val();
 		var unitCodeText = $('#unitCode').combobox('getText');
-		var assetNameText = $('#assetName').combobox('getText');
+		var itemNameText = $('#itemName').combobox('getText');
+		
 		jQuery.ajax({
 			url: "insertRequestItemsASRS",
 			data: { 
 				'ID': ID, 
 				'quantity': quantity, 
 				'unitCode': unitCode, 
-				'assetName': assetName, 
+				'itemName': itemName, 
 				'unitCodeText': unitCodeText, 
-				'assetNameText': assetNameText, 
+				'itemNameText': itemNameText, 
 			},
 			type: "POST",
 			success:function(data){

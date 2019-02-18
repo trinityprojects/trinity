@@ -305,6 +305,8 @@ $route['validatePBACMemberASRS'] = 'trinityDataPurchasing/validatePBACMemberASRS
 $route['insertPBACMemberASRS'] = 'trinityDataPurchasing/insertPBACMemberASRS'; 
 $route['deletePBACMemberASRS'] = 'trinityDataPurchasing/deletePBACMemberASRS'; 
 
+$route['setupFundStatusRequestASRS'] = 'trinityDataPurchasing/setupFundStatusRequestASRS'; 
+$route['setupAnnotationASRS'] = 'trinityDataPurchasing/setupAnnotationASRS'; 
 
 
 $route['getSupplyUnits'] = 'trinityDataReference/getSupplyUnits'; 

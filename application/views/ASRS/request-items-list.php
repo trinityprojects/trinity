@@ -18,7 +18,7 @@
 			<td style="text-align: right; padding: 5px"> <?php echo $ctr; ?> </td>
 			<td style="text-align: right; padding: 5px; "><?php echo $row->quantity; ?> </td>
 			<td style="padding: 5px; "><?php echo $row->unitCode; ?> </td>
-			<td style="padding: 5px; "><?php echo $row->assetName; ?> </td>
+			<td style="padding: 5px; "><?php echo $row->itemName; ?> </td>
 			<?php if($accessType != 'readOnly') { ?>
 			<td style="text-align: center; padding: 5px; " > <span onclick="removeItem('<?php echo $ID; ?>', '<?php echo $row->ID; ?>')"  >X</span>
 			<?php } ?>

@@ -12,8 +12,8 @@ function CustomPrintForm(){
 
          var url = 'rid-printReports';
          alert(type);
-         //alert(url);
-         //alert(report);
+         alert(url);
+         alert(report);
          jQuery.ajax({
              url: url,
              data: {

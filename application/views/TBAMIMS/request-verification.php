@@ -183,7 +183,7 @@
 							<div class="panel-detail message-instruction" id="message" > 
 								<span id="message-author" onclick="hideInstructionBox();"><?php echo "(" .$userNumber . ") "; ?></span>
 								<textarea  style="background-color: white;" id="specialInstructions" data-autoresize rows="1" class="autoExpand"></textarea>
-								<?php if( ($requestStatus == 'N') && ($userLevel == "SUPERVISOR") ) {?>
+								<?php if( ($requestStatus == 'N' || $requestStatus == 'E') && ($userLevel == "ANNOTATOR") ) {?>
 									<a href="javascript:void(0)" class="link-btn" onclick="SetAnnotation.render('Request #<?php echo $ID?> New','update_request','N')" style="width:80px">Annotation</a>
 								<?php } ?>
 							</div> 
