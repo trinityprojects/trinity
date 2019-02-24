@@ -38,6 +38,7 @@
                             ">
                 </div>
 
+				
 				<div style="text-align:center;padding:5px 0" class="three-column-20">
 					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Search</a>
 				</div>

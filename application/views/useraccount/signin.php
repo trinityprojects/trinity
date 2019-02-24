@@ -58,7 +58,13 @@
                                             </div>
                                             <?php echo form_submit(array('value'=>'LOGIN', 'class'=>'btn btn-lg btn-primary btn-block')); ?>
                                             <?php echo form_close(); ?>
-                                            <p>Click <a href="<?php echo site_url();?>user-acct/sign-up">SignUp</a> to create your account.</p>
+                                            <p>
+											For <i><u>employee</u></i>, <i><u>student</u></i>, <i><u>alumni</u></i>, or <i><u>guest</u></i>, click <a href="<?php echo site_url();?>user-acct/sign-up">SignUp</a> to create your account.
+											<br><br>
+											For <i><u>student applicant</u></i>, click <a href="<?php echo site_url();?>user-acct/application-form">Application Form</a> to create your account.
+
+											</p>
+											
                                             <p><a href="<?php echo site_url();?>user-acct/forgot-password">Forgot password</a></p>
 											<input type="hidden" id="email-sent" value="<?php echo $this->session->flashdata('emailSent'); ?>">
                                         </div>

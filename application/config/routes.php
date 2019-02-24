@@ -50,41 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-/*
-$route['default_controller'] = 'triuneAuth/loginView';
-$route['auth/login'] = 'triuneAuth/loginControl';
-$route['auth/register'] = 'triuneAuth/registrationView';
-$route['auth/checkUser'] = 'triuneAuth/checkUserName';
-$route['auth/create'] = 'triuneAuth/createToken';
-$route['auth/forgot'] = 'triuneAuth/forgotPassword';
-$route['auth/hello'] = 'triuneAuth/index';
-$route['main'] = 'triuneAuth/mainView';
-$route['main/jobRequest'] = 'triuneMain/jobRequest';
-$route['bamjrs/create'] = 'triuneJRS/BAMCreateRequest';
-$route['bamjrs/getCreateConfirmation'] = 'triuneJRS/BAMCreateRequestConfirmation';
-$route['bamjrs/getCreatedRequest'] = 'triuneJRS/BAMCreatedRequest';
-$route['bamjrs/getMyRequestList'] = 'triuneJRS/BAMMyRequestList';
-$route['bamjrs/getNewRequestList'] = 'triuneJRS/BAMNewRequestList';
-$route['bamjrs/getNewRequestVerification'] = 'triuneJRS/BAMNewRequestVerification';
-
-$route['main/humanResource'] = 'triuneHRIS/HRISView';
-
-
-$route['getLocationCode'] = 'triuneData/getLocationCode'; 
-$route['getFloor'] = 'triuneData/getFloor'; 
-$route['getRoomNumber'] = 'triuneData/getRoomNumber'; 
-$route['getBAMJRSMyRequestList'] = 'triuneData/getBAMJRSMyRequestList'; 
-$route['getBAMJRSRequestList'] = 'triuneData/getBAMJRSRequestList'; 
-
-$route['setRequestBAM'] = 'triuneData/setRequestBAM'; 
-$route['updateRequestBAM'] = 'triuneData/updateBAMRequestStatus'; 
-$route['insertRequestBAM'] = 'triuneData/insertRequestBAM'; 
-
-$route['uploadFile'] = 'triuneFile/uploadFile'; 
-*/
 $route['default_controller'] = 'trinityAuth/signInView';
 $route['user-acct/sign-in'] = 'trinityAuth/signInView';
 $route['user-acct/sign-up'] = 'trinityAuth/signUpView';
+$route['user-acct/application-form'] = 'trinityAuth/applicationFormView';
 $route['user-acct/check-user'] = 'trinityAuth/checkUserName';
 $route['user-acct/create-account'] = 'trinityAuth/createAccount';
 $route['user-acct/forgot-password'] = 'trinityAuth/forgotPassword';
@@ -533,6 +502,7 @@ $route['MYACCOUNT/myAccountInfo'] = 'trinityMyAccount/myAccountInfo';
 
 $route['rid-printReports'] = 'trinityReports/printReports'; 
 
+$route['rid-getComboGridData'] = 'trinityCombogrid/cgetComboGridData';
 
 
 $route['404_override'] = '';

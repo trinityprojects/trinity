@@ -246,3 +246,20 @@ div#guest-input {
     color: #333333;
     background-color: rgba(255,255,255,.5);
 }
+
+div#box {
+    background-color: lightgrey;
+    width: 100%;
+    border: 2px solid #4169E1;
+    padding: 2px;
+    margin: 2px;
+}
+
+div#box-white {
+    background-color: white;
+    width: 100%;
+    border: 1px solid #4169E1;
+    border-radius: 5px;
+	padding: 5px;
+    margin: 2px;
+}

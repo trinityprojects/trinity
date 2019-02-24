@@ -10,12 +10,17 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
 	<!-- page specific plugin styles -->
+
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/stylesheets/trinity.css" />
 	<!-- basic scripts -->
 	<script type="text/javascript" src="<?php echo base_url();?>assets/scripts/jquery-3.3.1.min.js"></script>
 	<script src="<?php echo base_url();?>assets/scripts/bootstrap.js"></script>
 
-	
+	<!-- EASY UI -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/thirdparty/easyui/themes/icon.css">
+    <script type="text/javascript" src="<?php echo base_url();?>assets/thirdparty/easyui/jquery.easyui.min.js"></script>
+
 	
 </head>
  
@@ -54,120 +59,66 @@ echo form_open_multipart('user-acct/create-account', $attributes);
 
 
 <div class="col-12 row-space-25" ></div>
-<div class="col-2"></div>
+<div class="col-3"></div>
 
 
-<div class="col-8 ">
+<div class="col-6 ">
             <div class="row border form-panel">
 
-                    <div class="col-lg-6 col-md-12 ">
-
-
-
-                            <div class="col-lg-12 justify-content-center align-items-center">
-                                    <h3><em id="capitalize"><?php echo $_SESSION['organizationalAppName'];?></em></h3>
-                                    <h6>Please enter the required information below.</h6>     
-
-
-                                    
-                                        <!--START ------------------------------ userName TextBox  -------------------------------------------START -->
-                                        <div class="input-group col-md-10 input-group-md">
-                                            <div class="input-group-prepend">
-                                                    <div class="input-group-text bg-transparent">
-                                                    <i class="fa fa-user" style="color: gold"></i>
-                                                    </div>
-                                            </div>
-                                            <input name="userName" value="<?php echo $this->session->flashdata('userName'); ?>" data-validation="alphanumeric" id="userName" placeholder='User Name' class='form-control'  data-validation-error-msg="Username is not valid" data-validation-error-msg-container="#messageValidationLocationUserName" onBlur="checkUserAvailability()" onFocus="clearValidationMessages()" >
-                                            <span class="input-group-append">
-                                                <div class="input-group-text bg-transparent">
-                                                    <i class="fa fa-user-plus" id="iconAvailable" style="display:none; color:green"></i>
-                                                    <i class="fa fa-user-times" id="iconNotAvailable" style="display:none; color:red" ></i>
-                                                </div>
-                                            </span>
-                                            <span class="input-group-append">
-                                                <i class="textBoxMessageAvailableMd" id='messageAvailable' > Username <br> Available.</i>
-                                                <i class="textBoxMessageNotAvailableMd" id='messageNotAvailable' > Username <br> Not Available.</i>
-                                            </span>
-                                        </div>
-                                        <span>
-                                        <i><img src="<?php echo base_url();?>assets/images/LoaderIcon.gif" class ="progressImageRight" id="iconLoader"  /></i>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationUserName"></b>
-                                        </span>
-                                        <!--END ------------------------------ userName TextBox  -------------------------------------------END -->
-
-
-                                        <!--START ------------------------------ emailAddress TextBox  -------------------------------------------START -->
-                                        <div class="input-group col-md-10 input-group-md">
-                                            <div class="input-group-prepend">
-                                                    <div class="input-group-text bg-transparent">
-                                                    <i class="fa fa-envelope" style="color: gold"></i>
-                                                    </div>
-                                            </div>
-                                            <input name="emailAddress" value="<?php echo $this->session->flashdata('emailAddress'); ?>" data-validation="email" id="emailAddress" placeholder='Email Address' class='form-control'  data-validation-error-msg="Please enter a valid Email Address" data-validation-error-msg-container="#messageValidationLocationEmailAddress" onBlur="" onFocus="" >
-                                        </div>
-                                        <span>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationEmailAddress"></b>
-                                        </span>
-                                        <!--END ------------------------------ emailAddress TextBox  -------------------------------------------END -->
-
-                                        <!--START ------------------------------ lastName TextBox  -------------------------------------------START -->
-                                        <div class="input-group col-md-10 input-group-md">
-                                            <input name="lastName" value="<?php echo $this->session->flashdata('lastName'); ?>" data-validation="alphanumeric" id="lastName" placeholder='Last Name' class='form-control'  data-validation-allowing=" .,-ñÑ" data-validation-error-msg="Please enter Last Name" data-validation-error-msg-container="#messageValidationLocationLastName" onBlur="" onFocus="" >
-                                        </div>
-                                        <span>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationLastName"></b>
-                                        </span>
-                                        <!--END ------------------------------ lastName TextBox  -------------------------------------------END -->
-
-                                        <!--START ------------------------------ firstName TextBox  -------------------------------------------START -->
-                                        <div class="input-group col-md-10 input-group-md">
-                                            <input name="firstName" value="<?php echo $this->session->flashdata('firstName'); ?>" data-validation="alphanumeric" id="firstName" placeholder='First Name' class='form-control'  data-validation-allowing=" .,-ñÑ" data-validation-error-msg="Please enter First Name" data-validation-error-msg-container="#messageValidationLocationFirstName" onBlur="" onFocus="" >
-                                        </div>
-                                        <span>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationFirstName"></b>
-                                        </span>
-                                        <!--END ------------------------------ firstName TextBox  -------------------------------------------END -->
-
-                                        <!--START ------------------------------ middleName TextBox  -------------------------------------------START -->
-                                        <div class="input-group col-md-10 input-group-md">
-                                            <input name="middleName" value="<?php echo $this->session->flashdata('middleName'); ?>" data-validation="alphanumeric" id="middleName" placeholder='Middle Name' class='form-control'  data-validation-allowing=" .,-ñÑ" data-validation-error-msg="Please enter Middle Name" data-validation-error-msg-container="#messageValidationLocationMiddleName" onBlur="" onFocus="" >
-                                        </div>
-                                        <span>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationMiddleName"></b>
-                                        </span>
-                                        <!--END ------------------------------ middleName TextBox  -------------------------------------------END -->
-
-
-                                        <!--START ------------------------------ birthDate TextBox  -------------------------------------------START -->
-                                        <div class="input-group col-md-10 input-group-md">
-                                            <input name="birthDate" value="<?php echo $this->session->flashdata('birthDate'); ?>" type="text" class="form-control" id="birthDate" placeholder="Birth Date (yyyy-mm-dd)" data-validation="date" data-validation-error-msg="Please enter valid date (yyyy-mm-dd)" data-validation-error-msg-container="#messageValidationLocationBirthDate" >
-                                        </div>
-                                        <span>
-                                        <b class="jQueryFormValidationMessage" id="messageValidationLocationBirthDate"></b>
-                                        </span>
-                                        <!--END ------------------------------ birthDate TextBox  -------------------------------------------END -->
-
-
-                                       <!-- <div class="form-group row">
-                                            <div class="col-sm-5">
-                                            <input name="studentNumber" value="<?php echo $this->session->flashdata('studentNumber'); ?>" type="text" class="form-control" id="studentNumber" placeholder="Student Number" data-validation="number" data-validation-allowing="-" data-validation-error-msg="Please enter valid Student Number" data-validation-error-msg-container="#messageValidationLocationStudentNumber" >
-                                            <span>
-                                                <b class="jQueryFormValidationMessage" id="messageValidationLocationStudentNumber"></b>
-                                            </span>
-                                            </div>
-                                            <div class="col-sm-5">
-                                            <input name="birthDate" value="<?php echo $this->session->flashdata('birthDate'); ?>" type="text" class="form-control" id="birthDate" placeholder="Birth Date (yyyy-mm-dd)" data-validation="date" data-validation-error-msg="Please enter valid date (yyyy-mm-dd)" data-validation-error-msg-container="#messageValidationLocationBirthDate" >
-                                            <span>
-                                                <b class="jQueryFormValidationMessage" id="messageValidationLocationBirthDate"></b>
-                                            </span>
-                                            </div>
-                                        </div>-->
-
-
-                                </div><!--<div class="col-lg-12 justify-content-center align-items-center">-->
-                </div><!--<div class="col-lg-6 col-md-12 ">-->
-                <div class="col-lg-6 col-md-12"  >
+                <div class="col-lg-12 col-md-12"  >
                                     <div class="row-space-25" ></div>
+									
+									<div id="box-white">
+    <div class="easyui-panel" title="PURCHASE BOOK NOTE ENTRY" style="width:100%;max-width:100%;height:150px;padding:15px 15px;">
+        <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+									
+					<input prompt="1st Choice:" id="courseOne" style="width:50%" data-options="required:true" ></input>
+					<script>
+						$(function(){
+							$('#courseOne').combogrid({
+								panelWidth:300,
+								url: 'rid-getComboGridData?fieldCol=activeEnRepFlag&fieldVal=1&whereSpecialCol=courseGroup::courseDescription::shortCourseDescription&whereSpecialData=&sorting=courseDescription::asc&tableName=triune_college_courses&dataSelect=courseCode::courseGroup::courseDescription::shortCourseDescription',
+								idField:'courseCode',
+								textField:'courseCode',
+								fitColumns:true,
+								mode:'remote',
+								columns:[[
+									{field:'courseDescription',title:'courseDescription',width:25},
+									{field:'shortCourseDescription',title:'shortCourseDescription',width:50},
+								]],
+								onChange: function(rec) {
+								}
+							});
+						});
+					</script>
+					
+					
+                <div style="margin-bottom:1px" class="three-column-30">
+                    <input class="easyui-combobox" name="reportsName" id="reportsName" style="width:100%;" prompt="REPORTS NAME:" data-options="
+                            url:'getReportsListEmployeeTHRIMS?reportType=evaluation',
+                            method:'get',
+                            valueField:'reportFileName',
+                            textField:'reportsName',
+                            onSelect: function(rec){
+                                var url = 'getEmployeeListTHRIMS';
+                                $('#fullName').textbox('clear');
+                                $('#fullName').combobox('reload', url);
+                            },
+                            panelHeight:'200px',
+                            required:true
+                            ">
+                </div>
+
+</div>
+</form>												
+									</div>
+									
+									
+									<div id="box-white">
+
+												
+									</div>
+									
                                     <div class="input-group col-md-10 input-group-md" >
                                         <input name="userCategory" value="S" type="radio" id="student" ><label id="radio-label">Student/Alumni</label>
                                         <input name="userCategory" value="E" type="radio" id="employee"><label id="radio-label">Employee</label>
@@ -327,9 +278,13 @@ echo form_open_multipart('user-acct/create-account', $attributes);
 
 
 
-<div class="col-2" ></div>
+<div class="col-3" ></div>
 <div class="col-12 row-space-25" ></div>
-                               
+<br>
+<br>                              
+<br>                              
+<br>                              
+                              
 <script type="text/javascript" src="<?php echo base_url();?>assets/scripts/jquery-3.3.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 <script>

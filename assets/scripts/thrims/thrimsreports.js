@@ -15,7 +15,7 @@ function submitForm(){
 						$('div.level2').remove();
 
 						//$('.leveltwocontent').html(response);
-						$('.leveltwocontent').html('<div class="level1"><iframe style="width:100%; height:'+600+'px" src="' + window.location.origin + '/trinity/assets/pdf/' + reportFileName + '.pdf"></iframe></div>')						
+						$('.leveltwocontent').html('<div class="level1"><iframe style="width:100%; height:'+700+'px" src="' + window.location.origin + '/trinity/assets/pdf/' + reportFileName + '.pdf"></iframe></div>')						
 						console.log("the request is successful for content1!");
 					},
 								

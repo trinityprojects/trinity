@@ -78,8 +78,6 @@ class trinityTHRIMS extends MY_Controller {
 		$reportFileName = $_POST["reportFileName"];
 		$employeeNumber = $_POST["employeeNumber"];
 
-		//$reportFileName = 'evaluation-summary';
-		//$employeeNumber = '92-0615-003';
 		
 		if($reportFileName == 'employee-profile') {
 					$results = $this->_getRecordsData($dataSelect1 = array('*'), 
@@ -228,10 +226,13 @@ class trinityTHRIMS extends MY_Controller {
 					$selectField1 = $selectField1 . "triune_eval_sections.EvalID,triune_eval_sections.EvalID1,triune_eval_sections.SectID,
 					triune_eval_sections.SectDesc,triune_eval_sections.SectPct,triune_eval_sections.NoOfQuestions ";
 
+
+	
+
 					$selfEvalSections = $this->_getRecordsData($dataSelect2 = array($selectField1),
 						$tables = array('triune_eval_evafield','triune_faculty_profile', 'triune_eval_sections'),
 						$fieldName = array('triune_eval_evafield.EmpID','triune_eval_evafield.YearId','triune_eval_evafield.Semid','triune_eval_sections.EvalID','triune_eval_sections.EvalID1'),
-						$where = array($employeeNumber,$_SESSION['sy'],$_SESSION['sem'],4,4),
+						$where = array($employeeNumber,$_SESSION['sy'],$_SESSION['sem'],2,2),
 						$join = array('triune_faculty_profile.FCode = triune_eval_evafield.EmpID', 'triune_eval_sections.EvalID = triune_eval_evafield.EvaId'),
 						$joinType = array('left', 'left'),
 						$sortBy = array('triune_eval_sections.SectID'), $sortOrder = array('asc'), $limit = null,
@@ -255,7 +256,7 @@ class trinityTHRIMS extends MY_Controller {
 					$deanEvalSections = $this->_getRecordsData($dataSelect2 = array($selectField1),
 						$tables = array('triune_eval_evafield','triune_faculty_profile', 'triune_eval_sections'),
 						$fieldName = array('triune_eval_evafield.EmpID','triune_eval_evafield.YearId','triune_eval_evafield.Semid','triune_eval_sections.EvalID','triune_eval_sections.EvalID1'),
-						$where = array($employeeNumber,$_SESSION['sy'],$_SESSION['sem'],2,2),
+						$where = array($employeeNumber,$_SESSION['sy'],$_SESSION['sem'],4,4),
 						$join = array('triune_faculty_profile.FCode = triune_eval_evafield.EmpID', 'triune_eval_sections.EvalID = triune_eval_evafield.EvaId'),
 						$joinType = array('left', 'left'),
 						$sortBy = array('triune_eval_sections.SectID'), $sortOrder = array('asc'), $limit = null,
@@ -267,33 +268,6 @@ class trinityTHRIMS extends MY_Controller {
 				$data['FName'] = $results[0]->FName;
 				$data['MName'] = $results[0]->MName;
 
-					$studentEval_sections = $this->_getRecordsData($dataStud_sections= array('*'), 
-						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('1', '7'), $join = null, $joinType = null, 
-						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
-						$fieldNameLike = null, $like = null, 
-						$whereSpecial = null, $groupBy = null );
-					$data['studentEval_sections'] = $studentEval_sections;	
-
-					$selfEval_sections = $this->_getRecordsData($dataself_sections= array('*'), 
-						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('4', '4'), $join = null, $joinType = null, 
-						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
-						$fieldNameLike = null, $like = null, 
-						$whereSpecial = null, $groupBy = null );
-					$data['selfEval_sections'] = $selfEval_sections;	
-
-					$dhEval_sections = $this->_getRecordsData($datadh_sections= array('*'), 
-						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('3', '3'), $join = null, $joinType = null, 
-						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
-						$fieldNameLike = null, $like = null, 
-						$whereSpecial = null, $groupBy = null );
-					$data['dhEval_sections'] = $dhEval_sections;	
-					
-					$deanEval_sections = $this->_getRecordsData($datadean_sections= array('*'), 
-						$tables = array('triune_eval_sections'), $fieldName = array('EvalID', 'EvalID1'), $where = array('2', '2'), $join = null, $joinType = null, 
-						$sortBy = array('SectID'), $sortOrder = array('asc'), $limit = null, 
-						$fieldNameLike = null, $like = null, 
-						$whereSpecial = null, $groupBy = null );
-					$data['deanEval_sections'] = $deanEval_sections;	
 				
 					$studentEvalItems = $this->_getRecordsData($dataStudItem = array('*'), 
 						$tables = array('triune_eval_item'), $fieldName = array('EvalID', 'evaID1'), $where = array('1', '7'), $join = null, $joinType = null, 
@@ -356,18 +330,6 @@ class trinityTHRIMS extends MY_Controller {
 					$data['sy'] = $this->_getSchoolYearDesc($_SESSION['sy']);
 					$data['sem'] = $this->_getSemesterDesc($_SESSION['sem']);
 
-
-					$dhEval = $this->_getRecordsData($datadh= array('*'), 
-						$tables = array('triune_oface_department_head'), 
-						$fieldName = array('Code'), 
-						$where = array($employeeNumber),
-						$join = null, $joinType = null, 
-						$sortBy = array('Code'), $sortOrder = array('asc'), $limit = null, 
-						$fieldNameLike = null, $like = null, 
-						$whereSpecial = null, $groupBy = null );
-					$data['dhEval'] = $dhEval;	
-
-
 					$departmentDescription = $this->_getRecordsData($datadepartment = array('DESCRIPTION'),
 						$tables = array('triune_faculty_profile','triune_course_category'),
 						$fieldName = array('triune_faculty_profile.FCode'),
@@ -409,9 +371,9 @@ class trinityTHRIMS extends MY_Controller {
 		}
 
 	}
-		
 	
-	
+
+
     public function showGenderTHRIMS() {
         //echo "HELLO WORLD";
         $this->load->view('THRIMS/references-gender');

@@ -126,10 +126,19 @@ class trinityAuth extends MY_Controller {
 		header("Access-Control-Allow-Origin: *");
         $data = array();
         $data['title'] = "REGISTRATION";
-		//$this->load->view('useraccount/header', $data);
 		$this->load->view('useraccount/signup', $data);
-		//$this->load->view('useraccount/footer', $data);
 	}
+
+
+	public function applicationFormView() 	{
+		header("Access-Control-Allow-Origin: *");
+        $data = array();
+        $data['title'] = "APPLICATION";
+		$this->load->view('useraccount/applicationForm', $data);
+	}
+	
+
+
 
 
 	public function checkUserName() {

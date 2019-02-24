@@ -132,14 +132,25 @@ $tbl .= <<<EOD
 				</tr>
 			
 			</table>
-
-		
 EOD;
+
+
+
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" width="100%">
+
+			<br><br><br>
+EOD;
+
+
 
 for($o = 0; $o < 1; $o++) {
 	
 $tbl .= <<<EOD
-				
+				<tr >  
+					<td width="3%" colspan="2">	</td>
+					<td width="25%" colspan="4">STUDENT EVALUATION</td>
+				</tr>
 EOD;
 
 	$letter = 'A';
@@ -218,9 +229,47 @@ EOD;
 		$percent =substr(($total*$studEvalSectPct/ 100), 0, 4);
 		$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
 		
- {
+		//foreach($studentEvalType as $index=>$key ) {
+		//	$studEvalTypeTypePct = $studentEvalType[$index]->TypePct;
+		//}
+		//$q+=1;
+			
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td width="25%">$letter. $studEvalSectDesc</td>
+					<td width="40%"></td> 
+					<td width="15%"> $average  x   $studEvalSectPct%    =    </td>
+					<td width="15%">$totalAverage</td>
+				</tr>
+
+
+EOD;
+		if($i == 3) {
 	
-	} //if($i == 3)
+	
+		
+			
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="5"></td>
+					<td>
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+
+				
+EOD;
+		} //if($i == 3)
 		$q+=$studEvalNoOfQuestions;
 		$total1+=$totalAverage;
 		$letter++;
@@ -233,17 +282,47 @@ EOD;
 		$percentSumary=substr(($totalAve*$studentEvalType/ 100), 0, 4); 
 		$studtotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
 		
+$tbl .= <<<EOD
+
 		
+		<tr style="line-height:5%;" > 
+			<td colspan="4"></td>
+			<td colspan="2">
+		<hr />
+		</td>
+		</tr>
+
+		<tr > 
+
+		<td colspan="5"></td>
+		<td colspan="3">
+		<table border="1" >
+			<tr><td><b>$totalAve x $studentEvalType% = $studtotalSumary </b></td></tr>
+		</table>	
+		</td>
+		</tr>
+
+
+	
+</table>
+
+	
+			
+EOD;
+
 ///-----------------------------------------------------SELF EVALUATION--------------------------------------------------------------------------
 
 $tbl .= <<<EOD
-		
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
 EOD;
 
 
 for($o = 0; $o < 1; $o++) {
 $tbl .= <<<EOD
-				
+				<tr > 
+					<td width="3%" colspan="2">	</td>
+					<td width="25%" colspan="4">SELF EVALUATION</td>
+				</tr>
 EOD;
 	$letter = 'A';
 	$total1=0;
@@ -317,11 +396,42 @@ EOD;
 		$average=substr(number_format((float)$total, 2, '.', ''), 0, 4);
 		$percent =substr(($total*$selfEvalSectPct/ 100), 0, 4);
 		$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
-	
- {
+		
 
 
+		
+	//for($i = 0; $i < 4; $i++) {
 
+		
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td width="30%">$letter. $selfEvalSectDesc</td>
+					<td width="35%"></td>
+					<td width="15%">$average  x  $selfEvalSectPct%  =  </td>
+					<td width="15%">$totalAverage</td>
+				</tr>
+EOD;
+		if($i == 3) {
+
+
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="5"></td>
+					<td>
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+EOD;
 		} //if($i == 3)
 
 		$q+=$selfEvalNoOfQuestions;
@@ -333,9 +443,24 @@ $totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
 $percentSumary=substr(($totalAve*$selfEvalType/ 100), 0, 4); 
 $selftotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
 $tbl .= <<<EOD
-		
+		<tr style="line-height:5%;" > 
+			<td colspan="4"></td>
+			<td colspan="2">
+		<hr />
+		</td>
+		</tr>
 
-			
+		<tr > 
+		
+		<td colspan="5"></td>
+		<td>
+		<table border="1" >
+			<tr><td><b>$totalAve x $selfEvalType% = $selftotalSumary</b></td></tr>
+		</table>	
+		</td>
+		</tr>
+
+			</table>
 EOD;
 
 
@@ -343,13 +468,16 @@ EOD;
 ///-----------------------------------------------------DEPARTMENT EVALUATION--------------------------------------------------------------------------
 
 $tbl .= <<<EOD
-		
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
 EOD;
 
 
 for($o = 0; $o < 1; $o++) {
 $tbl .= <<<EOD
-				
+				<tr > 
+					<td width="3%" colspan="2">	</td>
+					<td width="25%" colspan="4">DEPARTMENT EVALUATION</td>
+				</tr>
 EOD;
 	$letter = 'A';
 	$total1=0;
@@ -422,11 +550,42 @@ EOD;
 		$average=substr(number_format((float)$total, 2, '.', ''), 0, 4);
 		$percent =substr(($total*$dhEvalSectPct/ 100), 0, 4);
 		$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
-	
- {
+			
+	//for($i = 0; $i < 4; $i++) {
+
+		
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td width="30%">$letter. $dhEvalSectDesc</td>
+					<td width="35%"></td>
+					<td width="15%">$average  x  $dhEvalSectPct%  = </td>
+					<td width="15%">$totalAverage</td>
+				</tr>
+EOD;
+		if($i == 3) {
 
 
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="5"></td>
+					<td>
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
 
+				
+				
+EOD;
 		} //if($i == 3)
 		$q+=$dhEvalNoOfQuestions;
 		$total1+=$totalAverage;
@@ -436,20 +595,44 @@ EOD;
 $totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
 $percentSumary=substr(($totalAve*$dhEvalType/ 100), 0, 4); 
 $dhtotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
+	
+$tbl .= <<<EOD
+		<tr style="line-height:5%;" > 
+		<td colspan="4"></td>
+		<td colspan="2">
+		<hr />
+		</td>
+		</tr>
 
+		<tr > 
+
+		<td colspan="5"></td>
+		<td>
+		<table border="1" >
+			<tr><td><b>$totalAve x $dhEvalType% = $dhtotalSumary</b></td></tr>
+		</table>	
+		</td>
+		</tr>
+		
+	</table>
+		
+EOD;
 
 
 
 ///-----------------------------------------------------DEANS EVALUATION--------------------------------------------------------------------------
 
 $tbl .= <<<EOD
-	
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
 EOD;
 
 
 for($o = 0; $o < 1; $o++) {
 $tbl .= <<<EOD
-			
+				<tr > 
+					<td width="3%" colspan="2">	</td>
+					<td width="25%" colspan="4">DEANS EVALUATION</td>
+				</tr>
 EOD;
 	$letter = 'A';
 	$total1=0;
@@ -511,6 +694,8 @@ EOD;
 		$A49 = substr(($deanEvalSections[$index]->A49), 0, 4);
 		$A50 = substr(($deanEvalSections[$index]->A50), 0, 4);
 
+
+	//for($i = 0; $i < 4; $i++) {
 		$answer = array($A1, $A2, $A3, $A4 ,$A5 ,$A6, $A7,$A8, $A9, $A10, $A11, $A12,$A13,$A14,
 		$A15,$A16,$A17,$A18,$A19,$A20,$A21,$A22,$A23,$A24,$A25,$A26,$A27,$A28,$A29,$A30,$A31,$A32,$A33,
 		$A34,$A35,$A36,$A37,$A38,$A39,$A40,$A41,$A42,$A43,$A44,$A45,$A46,$A47,$A48,$A49,$A50);
@@ -521,9 +706,36 @@ EOD;
 		$percent =substr(($total*$deanEvalSectPct/ 100), 0, 4);
 		$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
 		
- {
+$tbl .= <<<EOD
+				<tr > 
+					<td width="3%">	</td>
+					<td width="2%">	</td>
+					<td width="30%">$letter. $deanEvalSectDesc</td>
+					<td width="35%"></td>
+					<td width="15%">$average  x  $deanEvalSectPct%  = </td>
+					<td width="15%">$totalAverage</td>
+				</tr>
+EOD;
+		if($i == 3) {
 
 
+$tbl .= <<<EOD
+				<tr style="line-height:5%;" > 
+					<td colspan="4"></td>
+					<td colspan="2">
+					<hr />
+					</td>
+				</tr>
+				<tr > 
+					<td colspan="5"></td>
+					<td>
+					<table border="1" >
+						<tr><td></td></tr>
+					</table>	
+					</td>
+				</tr>
+				
+EOD;
 
 		} //if($i == 3)
 		$q+=$deanEvalNoOfQuestions;
@@ -535,6 +747,27 @@ $totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
 
 $percentSumary=substr(($totalAve*$deanEvalType/ 100), 0, 4); 
 $deantotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
+	
+$tbl .= <<<EOD
+		<tr style="line-height:5%;" > 
+		<td colspan="4"></td>
+		<td colspan="2">
+		<hr />
+		</td>
+		</tr>
+
+		<tr > 
+
+		<td colspan="5"></td>
+		<td>
+		<table border="1" >
+			<tr><td><b>$totalAve x $deanEvalType% = $deantotalSumary</b></td></tr>
+		</table>	
+		</td>
+		</tr>
+
+		</table>
+EOD;
 
 $overallRating=($studtotalSumary+$selftotalSumary+$dhtotalSumary+$deantotalSumary);
 
@@ -561,11 +794,114 @@ elseif($overallRating < 2.00 AND $overallRating >= 1.00)
 }
 
 
+$tbl .= <<<EOD
+			<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+				<tr>
+					<td width="60%"> 
+						<table border="1" cellpadding="1" cellspacing="1" nobr="true" width="100%">
+								<table border="0" cellpadding="0" cellspacing="0" nobr="true" width="100%">
+									<tr>
+										<td colspan="5">
+											<font size="6px"> Legend</font>
+										</td>
+									</tr>
+									
+									<tr>
+										<td >
+										</td>
+										<td colspan="2">
+											<font size="6px"><b>Descriptive Rating</b></font>
+										</td>
+										<td colspan="2">
+											<font size="6px"><b>Weight Equivalent</b></font>
+										</td>
+									</tr>
+
+									<tr>
+										<td >
+										</td>
+										<td colspan="2">
+											<font size="6px">Excellent</font>
+										</td>
+										<td colspan="2">
+											<font size="6px">4.50 - 5.00</font>
+										</td>
+									</tr>
+
+									<tr>
+										<td >
+										</td>
+										<td colspan="2">
+											<font size="6px">Very Satisfactory</font>
+										</td>
+										<td colspan="2">
+											<font size="6px">4.00 - 4.49</font>
+										</td>
+									</tr>
+
+									<tr>
+										<td >
+										</td>
+										<td colspan="2">
+											<font size="6px">Satisfactory </font>
+										</td>
+										<td colspan="2">
+											<font size="6px">3.00 - 3.99</font>
+										</td>
+									</tr>
+
+									<tr>
+										<td >
+										</td>
+										<td colspan="2">
+											<font size="6px">Needs Improvement</font>
+										</td>
+										<td colspan="2">
+											<font size="6px">2.00 - 2.99</font>
+										</td>
+									</tr>
+
+									<tr>
+										<td >
+										</td>
+										<td colspan="2">
+											<font size="6px">Poor</font>
+										</td>
+										<td colspan="2">
+											<font size="6px">1.00 - 1.99</font>
+										</td>
+									</tr>
+								</table>
+						</table>
+					</td>
+
+
+					<td width="23%"> </td>
+					
+					<td width="17%"> 
+						<table border="1" >
+							<tr><td><b>Overall Rating = $overallRating </b></td></tr>
+						</table>	
+						
+						<table>
+							<tr><td><br><br><br><br></td></tr>
+							<tr>
+								<td align="center">
+									<u><b>Dr. Wilfred U. Tiu</b></u><br><i>President</i>
+								</td>
+							</tr>
+						</table>
+						
+					</td>
+				</tr>
+			</table>
+EOD;
+
 
 $tbl .= <<<EOD
 			<table border="0" cellpadding="4" cellspacing="1" nobr="true" width="100%">
-				<tr > <br>
-					<td colspan="4"><font size="8px"> 
+				<tr > 
+					<td colspan="4"><font size="10px"> <br><br><br>
 						Please be advised that you have been rated <b>$ratingdesc</b> in the FACULTY PERFORMANCE EVALUATION.
 						The following is the summary of your ratings. </font>
 					</td>
@@ -573,921 +909,37 @@ $tbl .= <<<EOD
 			</table>
 EOD;
 
-
-
-//////--------------
-
-for($o = 0; $o < 1; $o++) {
-	
-	$tbl .= <<<EOD
-					<tr >  <br>
-						<td width="3%" colspan="2">	</td>
-						<td width="25%" colspan="4">STUDENT EVALUATION</td>
-					</tr>
-EOD;
-	
-		$total1=0;
-		$q=0;
-	
-if( count($studentEvalSections) == 0 )
-		{
-
-		$letter = 'A';
-					foreach($studentEval_sections as $index=>$key ) {
-						$studEval_SectDesc = $studentEval_sections[$index]->SectDesc;
-						$studEval_SectID = $studentEval_sections[$index]->SectID;
-						$studEval_SectPct = $studentEval_sections[$index]->SectPct;
-						$studEval_NoOfQuestions = $studentEval_sections[$index]->NoOfQuestions;
-	$tbl .= <<<EOD
-					
-		
-	<tr > 
-		<td width="3%">	</td>
-		<td width="2%">	</td>
-		<td width="30%">$letter. $studEval_SectDesc</td>
-		<td width="35%"></td> 
-		<td width="15%"> 0.00  x   $studEval_SectPct%    =    </td>
-		<td width="15%">0.00</td>
-	</tr>
-
-	
-EOD;
-$letter++;		
-					}	
-					
-	} else {
-
-		$letter = 'A';
-	  
-		foreach($studentEvalSections as $index=>$key ) {
-			$studEvalSectDesc = $studentEvalSections[$index]->SectDesc;
-			$studEvalSectID = $studentEvalSections[$index]->SectID;
-			$studEvalSectPct = $studentEvalSections[$index]->SectPct;
-			$studEvalNoOfQuestions = $studentEvalSections[$index]->NoOfQuestions;
-	
-		
-			$A1 = substr(($studentEvalSections[$index]->A1), 0, 4);
-			$A2 = substr(($studentEvalSections[$index]->A2), 0, 4);
-			$A3 = substr(($studentEvalSections[$index]->A3), 0, 4);
-			$A4 = substr(($studentEvalSections[$index]->A4), 0, 4);
-			$A5 = substr(($studentEvalSections[$index]->A5), 0, 4);
-			$A6 = substr(($studentEvalSections[$index]->A6), 0, 4);
-			$A7 = substr(($studentEvalSections[$index]->A7), 0, 4);
-			$A8 = substr(($studentEvalSections[$index]->A8), 0, 4);
-			$A9 = substr(($studentEvalSections[$index]->A9), 0, 4);
-			$A10 = substr(($studentEvalSections[$index]->A10), 0, 4);
-			$A11 = substr(($studentEvalSections[$index]->A11), 0, 4);
-			$A12 = substr(($studentEvalSections[$index]->A12), 0, 4);
-			$A13 = substr(($studentEvalSections[$index]->A13), 0, 4);
-			$A14 = substr(($studentEvalSections[$index]->A14), 0, 4);
-			$A15 = substr(($studentEvalSections[$index]->A15), 0, 4);
-			$A16 = substr(($studentEvalSections[$index]->A16), 0, 4);
-			$A17 = substr(($studentEvalSections[$index]->A17), 0, 4);
-			$A18 = substr(($studentEvalSections[$index]->A18), 0, 4);
-			$A19 = substr(($studentEvalSections[$index]->A19), 0, 4);
-			$A20 = substr(($studentEvalSections[$index]->A20), 0, 4);
-			$A21 = substr(($studentEvalSections[$index]->A21), 0, 4);
-			$A22 = substr(($studentEvalSections[$index]->A22), 0, 4);
-			$A23 = substr(($studentEvalSections[$index]->A23), 0, 4);
-			$A24 = substr(($studentEvalSections[$index]->A24), 0, 4);
-			$A25 = substr(($studentEvalSections[$index]->A25), 0, 4);
-			$A26 = substr(($studentEvalSections[$index]->A26), 0, 4);
-			$A27 = substr(($studentEvalSections[$index]->A27), 0, 4);
-			$A28 = substr(($studentEvalSections[$index]->A28), 0, 4);
-			$A29 = substr(($studentEvalSections[$index]->A29), 0, 4);
-			$A30 = substr(($studentEvalSections[$index]->A30), 0, 4);
-			$A31 = substr(($studentEvalSections[$index]->A31), 0, 4);
-			$A32 = substr(($studentEvalSections[$index]->A32), 0, 4);
-			$A33 = substr(($studentEvalSections[$index]->A33), 0, 4);
-			$A34 = substr(($studentEvalSections[$index]->A34), 0, 4);
-			$A35 = substr(($studentEvalSections[$index]->A35), 0, 4);
-			$A36 = substr(($studentEvalSections[$index]->A36), 0, 4);
-			$A37 = substr(($studentEvalSections[$index]->A37), 0, 4);
-			$A38 = substr(($studentEvalSections[$index]->A38), 0, 4);
-			$A39 = substr(($studentEvalSections[$index]->A39), 0, 4);
-			$A40 = substr(($studentEvalSections[$index]->A40), 0, 4);
-			$A41 = substr(($studentEvalSections[$index]->A41), 0, 4);
-			$A42 = substr(($studentEvalSections[$index]->A42), 0, 4);
-			$A43 = substr(($studentEvalSections[$index]->A43), 0, 4);
-			$A44 = substr(($studentEvalSections[$index]->A44), 0, 4);
-			$A45 = substr(($studentEvalSections[$index]->A45), 0, 4);
-			$A46 = substr(($studentEvalSections[$index]->A46), 0, 4);
-			$A47 = substr(($studentEvalSections[$index]->A47), 0, 4);
-			$A48 = substr(($studentEvalSections[$index]->A48), 0, 4);
-			$A49 = substr(($studentEvalSections[$index]->A49), 0, 4);
-			$A50 = substr(($studentEvalSections[$index]->A50), 0, 4);
-			
-	
-			
-			$answer = array($A1, $A2, $A3, $A4 ,$A5 ,$A6, $A7,$A8, $A9, $A10, $A11, $A12,$A13,$A14,
-			$A15,$A16,$A17,$A18,$A19,$A20,$A21,$A22,$A23,$A24,$A25,$A26,$A27,$A28,$A29,$A30,$A31,$A32,$A33,
-			$A34,$A35,$A36,$A37,$A38,$A39,$A40,$A41,$A42,$A43,$A44,$A45,$A46,$A47,$A48,$A49,$A50);
-	
-	
-			$output = array_slice($answer, $q,$studEvalNoOfQuestions); 
-			$total= substr(array_sum($output)/($studEvalNoOfQuestions), 0, 4);
-			$average=substr(number_format((float)$total, 2, '.', ''), 0, 4);
-			$percent =substr(($total*$studEvalSectPct/ 100), 0, 4);
-			$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
-			
-			//foreach($studentEvalType as $index=>$key ) {
-			//	$studEvalTypeTypePct = $studentEvalType[$index]->TypePct;
-			//}
-			//$q+=1;
-				
 $tbl .= <<<EOD
-					<tr > 
-						<td width="3%">	</td>
-						<td width="2%">	</td>
-						<td width="25%">$letter. $studEvalSectDesc</td>
-						<td width="40%"></td> 
-						<td width="15%"> $average  x   $studEvalSectPct%    =    </td>
-						<td width="15%">$totalAverage</td>
-					</tr>
-	
-	
-EOD;
-
-			if($i == 3) {
-		
+			<table width="100%">
 			
-			
-				
-$tbl .= <<<EOD
-					<tr style="line-height:5%;" > 
-						<td colspan="4"></td>
-						<td colspan="2">
-						<hr />
-						</td>
-					</tr>
-					<tr > 
-						<td colspan="5"></td>
-						<td>
-						<table border="1" >
-							<tr><td></td></tr>
-						</table>	
-						</td>
-					</tr>
-	
-					
-EOD;
-			} //if($i == 3)
-			$q+=$studEvalNoOfQuestions;
-			$total1+=$totalAverage;
-			$letter++;
-		
-		
-	
-		} //for($i = 0; $i < 4; $i++)
-	} //for($o = 0; $o < 4; $o++)
-			$totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
-			$percentSumary=substr(($totalAve*$studentEvalType/ 100), 0, 4); 
-			$studtotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
-			
-$tbl .= <<<EOD
-	
-			
-			<tr style="line-height:5%;" > 
-				<td colspan="4"></td>
-				<td colspan="2">
-			<hr />
-			</td>
-			</tr>
-	
-			<tr > 
-	
-			<td colspan="5"></td>
-			<td colspan="3">
-			<table border="1" >
-				<tr><td><b>$totalAve x $studentEvalType% = $studtotalSumary </b></td></tr>
-			</table>	
-			</td>
-			</tr>
-	
-	
-		
-</table>
-	
-		
-				
-EOD;
-}
-
-	///-----------------------------------------------------SELF EVALUATION--------------------------------------------------------------------------
-	
-$tbl .= <<<EOD
-				<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
-EOD;
-	
-	
-	for($o = 0; $o < 1; $o++) {
-$tbl .= <<<EOD
-					<tr > 
-						<td width="3%" colspan="2">	</td>
-						<td width="25%" colspan="4">SELF EVALUATION</td>
-					</tr>
-EOD;
-		
-		$total1=0;
-		$q=0;
-	
-		if( count($selfEvalSections) == 0 )
-		{
-
-		$letter = 'A';
-					foreach($selfEval_sections as $index=>$key ) {
-						$selfEval_SectDesc = $selfEval_sections[$index]->SectDesc;
-						$selfEval_SectID = $selfEval_sections[$index]->SectID;
-						$selfEval_SectPct = $selfEval_sections[$index]->SectPct;
-						$selfEval_NoOfQuestions = $selfEval_sections[$index]->NoOfQuestions;
-	$tbl .= <<<EOD
-					
-		
-	<tr > 
-		<td width="3%">	</td>
-		<td width="2%">	</td>
-		<td width="30%">$letter. $selfEval_SectDesc</td>
-		<td width="35%"></td> 
-		<td width="15%"> 0.00  x   $selfEval_SectPct%    =    </td>
-		<td width="15%">0.00</td>
-	</tr>
-
-	
-EOD;
-$letter++;		
-					}	
-					
-	} else {
-		$letter = 'A';
-		foreach($selfEvalSections as $index=>$key ) {
-			$selfEvalSectDesc = $selfEvalSections[$index]->SectDesc;
-			$selfEvalSectID = $selfEvalSections[$index]->SectID;
-			$selfEvalSectPct = $selfEvalSections[$index]->SectPct;
-			$selfEvalNoOfQuestions = $selfEvalSections[$index]->NoOfQuestions;
-			$A1 = substr(($selfEvalSections[$index]->A1), 0, 4);
-			$A2 = substr(($selfEvalSections[$index]->A2), 0, 4);
-			$A3 = substr(($selfEvalSections[$index]->A3), 0, 4);
-			$A4 = substr(($selfEvalSections[$index]->A4), 0, 4);
-			$A5 = substr(($selfEvalSections[$index]->A5), 0, 4);
-			$A6 = substr(($selfEvalSections[$index]->A6), 0, 4);
-			$A7 = substr(($selfEvalSections[$index]->A7), 0, 4);
-			$A8 = substr(($selfEvalSections[$index]->A8), 0, 4);
-			$A9 = substr(($selfEvalSections[$index]->A9), 0, 4);
-			$A10 = substr(($selfEvalSections[$index]->A10), 0, 4);
-			$A11 = substr(($selfEvalSections[$index]->A11), 0, 4);
-			$A12 = substr(($selfEvalSections[$index]->A12), 0, 4);
-			$A13 = substr(($selfEvalSections[$index]->A13), 0, 4);
-			$A14 = substr(($selfEvalSections[$index]->A14), 0, 4);
-			$A15 = substr(($selfEvalSections[$index]->A15), 0, 4);
-			$A16 = substr(($selfEvalSections[$index]->A16), 0, 4);
-			$A17 = substr(($selfEvalSections[$index]->A17), 0, 4);
-			$A18 = substr(($selfEvalSections[$index]->A18), 0, 4);
-			$A19 = substr(($selfEvalSections[$index]->A19), 0, 4);
-			$A20 = substr(($selfEvalSections[$index]->A20), 0, 4);
-			$A21 = substr(($selfEvalSections[$index]->A21), 0, 4);
-			$A22 = substr(($selfEvalSections[$index]->A22), 0, 4);
-			$A23 = substr(($selfEvalSections[$index]->A23), 0, 4);
-			$A24 = substr(($selfEvalSections[$index]->A24), 0, 4);
-			$A25 = substr(($selfEvalSections[$index]->A25), 0, 4);
-			$A26 = substr(($selfEvalSections[$index]->A26), 0, 4);
-			$A27 = substr(($selfEvalSections[$index]->A27), 0, 4);
-			$A28 = substr(($selfEvalSections[$index]->A28), 0, 4);
-			$A29 = substr(($selfEvalSections[$index]->A29), 0, 4);
-			$A30 = substr(($selfEvalSections[$index]->A30), 0, 4);
-			$A31 = substr(($selfEvalSections[$index]->A31), 0, 4);
-			$A32 = substr(($selfEvalSections[$index]->A32), 0, 4);
-			$A33 = substr(($selfEvalSections[$index]->A33), 0, 4);
-			$A34 = substr(($selfEvalSections[$index]->A34), 0, 4);
-			$A35 = substr(($selfEvalSections[$index]->A35), 0, 4);
-			$A36 = substr(($selfEvalSections[$index]->A36), 0, 4);
-			$A37 = substr(($selfEvalSections[$index]->A37), 0, 4);
-			$A38 = substr(($selfEvalSections[$index]->A38), 0, 4);
-			$A39 = substr(($selfEvalSections[$index]->A39), 0, 4);
-			$A40 = substr(($selfEvalSections[$index]->A40), 0, 4);
-			$A41 = substr(($selfEvalSections[$index]->A41), 0, 4);
-			$A42 = substr(($selfEvalSections[$index]->A42), 0, 4);
-			$A43 = substr(($selfEvalSections[$index]->A43), 0, 4);
-			$A44 = substr(($selfEvalSections[$index]->A44), 0, 4);
-			$A45 = substr(($selfEvalSections[$index]->A45), 0, 4);
-			$A46 = substr(($selfEvalSections[$index]->A46), 0, 4);
-			$A47 = substr(($selfEvalSections[$index]->A47), 0, 4);
-			$A48 = substr(($selfEvalSections[$index]->A48), 0, 4);
-			$A49 = substr(($selfEvalSections[$index]->A49), 0, 4);
-			$A50 = substr(($selfEvalSections[$index]->A50), 0, 4);
-			
-			
-			
-			$answer = array($A1, $A2, $A3, $A4 ,$A5 ,$A6, $A7,$A8, $A9, $A10, $A11, $A12,$A13,$A14,
-			$A15,$A16,$A17,$A18,$A19,$A20,$A21,$A22,$A23,$A24,$A25,$A26,$A27,$A28,$A29,$A30,$A31,$A32,$A33,
-			$A34,$A35,$A36,$A37,$A38,$A39,$A40,$A41,$A42,$A43,$A44,$A45,$A46,$A47,$A48,$A49,$A50);
-	
-	
-			$output = array_slice($answer, $q,$selfEvalNoOfQuestions); 
-			$total= substr(array_sum($output)/($selfEvalNoOfQuestions), 0, 4);
-			$average=substr(number_format((float)$total, 2, '.', ''), 0, 4);
-			$percent =substr(($total*$selfEvalSectPct/ 100), 0, 4);
-			$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
-			
-	
-	
-			
-		//for($i = 0; $i < 4; $i++) {
-	
-			
-$tbl .= <<<EOD
-					<tr > 
-						<td width="3%">	</td>
-						<td width="2%">	</td>
-						<td width="30%">$letter. $selfEvalSectDesc</td>
-						<td width="35%"></td>
-						<td width="15%">$average  x  $selfEvalSectPct%  =  </td>
-						<td width="15%">$totalAverage</td>
-					</tr>
-EOD;
-			if($i == 3) {
-	
-	
-$tbl .= <<<EOD
-					<tr style="line-height:5%;" > 
-						<td colspan="4"></td>
-						<td colspan="2">
-						<hr />
-						</td>
-					</tr>
-					<tr > 
-						<td colspan="5"></td>
-						<td>
-						<table border="1" >
-							<tr><td></td></tr>
-						</table>	
-						</td>
-					</tr>
-EOD;
-			} //if($i == 3)
-	
-			$q+=$selfEvalNoOfQuestions;
-			$total1+=$totalAverage;
-			$letter++;		
-		} //for($i = 0; $i < 4; $i++)
-	} //for($o = 0; $o < 4; $o++)
-	$totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
-	$percentSumary=substr(($totalAve*$selfEvalType/ 100), 0, 4); 
-	$selftotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
-$tbl .= <<<EOD
-			<tr style="line-height:5%;" > 
-				<td colspan="4"></td>
-				<td colspan="2">
-			<hr />
-			</td>
-			</tr>
-	
-			<tr > 
-			
-			<td colspan="5"></td>
-			<td>
-			<table border="1" >
-				<tr><td><b>$totalAve x $selfEvalType% = $selftotalSumary</b></td></tr>
-			</table>	
-			</td>
-			</tr>
-	
-				</table>
-EOD;
-	
-	}	
-	
-	///-----------------------------------------------------DEPARTMENT EVALUATION--------------------------------------------------------------------------
-
-$tbl .= <<<EOD
-				<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
-EOD;
-	
-	
-	for($o = 0; $o < 1; $o++) {
-$tbl .= <<<EOD
-					<tr > 
-						<td width="3%" colspan="2">	</td>
-						<td width="35%" colspan="4">DEPARTMENT HEADS EVALUATION</td>
-					</tr>
-EOD;
-		
-		$total1=0;
-		$q=0;
-
-
-
-		if( count($dhEvalSections) == 0 )
-		{
-
-		$letter = 'A';
-					foreach($dhEval_sections as $index=>$key ) {
-						$dhEval_SectDesc = $dhEval_sections[$index]->SectDesc;
-						$dhEval_SectID = $dhEval_sections[$index]->SectID;
-						$dhEval_SectPct = $dhEval_sections[$index]->SectPct;
-						$dhEval_NoOfQuestions = $dhEval_sections[$index]->NoOfQuestions;
-	$tbl .= <<<EOD
-					
-		
-	<tr > 
-		<td width="3%">	</td>
-		<td width="2%">	</td>
-		<td width="30%">$letter. $dhEval_SectDesc</td>
-		<td width="35%"></td> 
-		<td width="15%"> 0.00  x   $dhEval_SectPct%    =    </td>
-		<td width="15%">0.00</td>
-	</tr>
-
-	
-EOD;
-$letter++;		
-					}	
-					
-	} else {
-		$letter = 'A';
-		foreach($dhEvalSections as $index=>$key ) {
-			$dhEvalSectDesc = $dhEvalSections[$index]->SectDesc;
-			$dhEvalSectID = $dhEvalSections[$index]->SectID;
-			$dhEvalSectPct = $dhEvalSections[$index]->SectPct;
-			$dhEvalNoOfQuestions = $dhEvalSections[$index]->NoOfQuestions;
-			$A1 = substr(($dhEvalSections[$index]->A1), 0, 4);
-			$A2 = substr(($dhEvalSections[$index]->A2), 0, 4);
-			$A3 = substr(($dhEvalSections[$index]->A3), 0, 4);
-			$A4 = substr(($dhEvalSections[$index]->A4), 0, 4);
-			$A5 = substr(($dhEvalSections[$index]->A5), 0, 4);
-			$A6 = substr(($dhEvalSections[$index]->A6), 0, 4);
-			$A7 = substr(($dhEvalSections[$index]->A7), 0, 4);
-			$A8 = substr(($dhEvalSections[$index]->A8), 0, 4);
-			$A9 = substr(($dhEvalSections[$index]->A9), 0, 4);
-			$A10 = substr(($dhEvalSections[$index]->A10), 0, 4);
-			$A11 = substr(($dhEvalSections[$index]->A11), 0, 4);
-			$A12 = substr(($dhEvalSections[$index]->A12), 0, 4);
-			$A13 = substr(($dhEvalSections[$index]->A13), 0, 4);
-			$A14 = substr(($dhEvalSections[$index]->A14), 0, 4);
-			$A15 = substr(($dhEvalSections[$index]->A15), 0, 4);
-			$A16 = substr(($dhEvalSections[$index]->A16), 0, 4);
-			$A17 = substr(($dhEvalSections[$index]->A17), 0, 4);
-			$A18 = substr(($dhEvalSections[$index]->A18), 0, 4);
-			$A19 = substr(($dhEvalSections[$index]->A19), 0, 4);
-			$A20 = substr(($dhEvalSections[$index]->A20), 0, 4);
-			$A21 = substr(($dhEvalSections[$index]->A21), 0, 4);
-			$A22 = substr(($dhEvalSections[$index]->A22), 0, 4);
-			$A23 = substr(($dhEvalSections[$index]->A23), 0, 4);
-			$A24 = substr(($dhEvalSections[$index]->A24), 0, 4);
-			$A25 = substr(($dhEvalSections[$index]->A25), 0, 4);
-			$A26 = substr(($dhEvalSections[$index]->A26), 0, 4);
-			$A27 = substr(($dhEvalSections[$index]->A27), 0, 4);
-			$A28 = substr(($dhEvalSections[$index]->A28), 0, 4);
-			$A29 = substr(($dhEvalSections[$index]->A29), 0, 4);
-			$A30 = substr(($dhEvalSections[$index]->A30), 0, 4);
-			$A31 = substr(($dhEvalSections[$index]->A31), 0, 4);
-			$A32 = substr(($dhEvalSections[$index]->A32), 0, 4);
-			$A33 = substr(($dhEvalSections[$index]->A33), 0, 4);
-			$A34 = substr(($dhEvalSections[$index]->A34), 0, 4);
-			$A35 = substr(($dhEvalSections[$index]->A35), 0, 4);
-			$A36 = substr(($dhEvalSections[$index]->A36), 0, 4);
-			$A37 = substr(($dhEvalSections[$index]->A37), 0, 4);
-			$A38 = substr(($dhEvalSections[$index]->A38), 0, 4);
-			$A39 = substr(($dhEvalSections[$index]->A39), 0, 4);
-			$A40 = substr(($dhEvalSections[$index]->A40), 0, 4);
-			$A41 = substr(($dhEvalSections[$index]->A41), 0, 4);
-			$A42 = substr(($dhEvalSections[$index]->A42), 0, 4);
-			$A43 = substr(($dhEvalSections[$index]->A43), 0, 4);
-			$A44 = substr(($dhEvalSections[$index]->A44), 0, 4);
-			$A45 = substr(($dhEvalSections[$index]->A45), 0, 4);
-			$A46 = substr(($dhEvalSections[$index]->A46), 0, 4);
-			$A47 = substr(($dhEvalSections[$index]->A47), 0, 4);
-			$A48 = substr(($dhEvalSections[$index]->A48), 0, 4);
-			$A49 = substr(($dhEvalSections[$index]->A49), 0, 4);
-			$A50 = substr(($dhEvalSections[$index]->A50), 0, 4);
-			
-			
-	
-			$answer = array($A1, $A2, $A3, $A4 ,$A5 ,$A6, $A7,$A8, $A9, $A10, $A11, $A12,$A13,$A14,
-			$A15,$A16,$A17,$A18,$A19,$A20,$A21,$A22,$A23,$A24,$A25,$A26,$A27,$A28,$A29,$A30,$A31,$A32,$A33,
-			$A34,$A35,$A36,$A37,$A38,$A39,$A40,$A41,$A42,$A43,$A44,$A45,$A46,$A47,$A48,$A49,$A50);
-	
-	
-			$output = array_slice($answer, $q,$dhEvalNoOfQuestions); 
-			$total= substr(array_sum($output)/($dhEvalNoOfQuestions), 0, 4);
-			$average=substr(number_format((float)$total, 2, '.', ''), 0, 4);
-			$percent =substr(($total*$dhEvalSectPct/ 100), 0, 4);
-			$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
-				
-	//for($i = 0; $i < 4; $i++) {
-	
-			
-$tbl .= <<<EOD
-					<tr > 
-						<td width="3%">	</td>
-						<td width="2%">	</td>
-						<td width="30%">$letter. $dhEvalSectDesc</td>
-						<td width="35%"></td>
-						<td width="15%">$average  x  $dhEvalSectPct%  = </td>
-						<td width="15%">$totalAverage</td>
-					</tr>
-EOD;
-			if($i == 3) {
-	
-	
-$tbl .= <<<EOD
-					<tr style="line-height:5%;" > 
-						<td colspan="4"></td>
-						<td colspan="2">
-						<hr />
-						</td>
-					</tr>
-					<tr > 
-						<td colspan="5"></td>
-						<td>
-						<table border="1" >
-							<tr><td></td></tr>
-						</table>	
-						</td>
-					</tr>
-	
-					
-					
-EOD;
-			} //if($i == 3)
-			$q+=$dhEvalNoOfQuestions;
-			$total1+=$totalAverage;
-		$letter++;		
-		} //for($i = 0; $i < 4; $i++)
-	} //for($o = 0; $o < 4; $o++)
-	$totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
-	$percentSumary=substr(($totalAve*$dhEvalType/ 100), 0, 4); 
-	$dhtotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
-		
-$tbl .= <<<EOD
-			<tr style="line-height:5%;" > 
-			<td colspan="4"></td>
-			<td colspan="2">
-			<hr />
-			</td>
-			</tr>
-	
-			<tr > 
-	
-			<td colspan="5"></td>
-			<td>
-			<table border="1" >
-				<tr><td><b>$totalAve x $dhEvalType% = $dhtotalSumary</b></td></tr>
-			</table>	
-			</td>
-			</tr>
-			
-		</table>
-			
-EOD;
-	
-	}
-
-	
-	///-----------------------------------------------------DEANS EVALUATION--------------------------------------------------------------------------
-	
-$tbl .= <<<EOD
-				<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
-EOD;
-	
-	
-	for($o = 0; $o < 1; $o++) {
-$tbl .= <<<EOD
-					<tr > 
-						<td width="3%" colspan="2">	</td>
-						<td width="25%" colspan="4">DEANS EVALUATION</td>
-					</tr>
-EOD;
-		
-		$total1=0;
-		$q=0;
-		if( count($deanEvalSections) == 0 )
-		{
-
-		$letter = 'A';
-					foreach($deanEval_sections as $index=>$key ) {
-						$deanEval_SectDesc = $deanEval_sections[$index]->SectDesc;
-						$deanEval_SectID = $deanEval_sections[$index]->SectID;
-						$deanEval_SectPct = $deanEval_sections[$index]->SectPct;
-						$deanEval_NoOfQuestions = $deanEval_sections[$index]->NoOfQuestions;
-	$tbl .= <<<EOD
-					
-		
-	<tr > 
-		<td width="3%">	</td>
-		<td width="2%">	</td>
-		<td width="30%">$letter. $deanEval_SectDesc</td>
-		<td width="35%"></td> 
-		<td width="15%"> 0.00  x   $deanEval_SectPct%    =    </td>
-		<td width="15%">0.00</td>
-	</tr>
-
-	
-EOD;
-$letter++;		
-					}	
-					
-	} else {
-		$letter = 'A';
-		foreach($deanEvalSections as $index=>$key ) {
-			$deanEvalSectDesc = $deanEvalSections[$index]->SectDesc;
-			$deanEvalSectID = $deanEvalSections[$index]->SectID;
-			$deanEvalSectPct = $deanEvalSections[$index]->SectPct;
-			$deanEvalNoOfQuestions = $deanEvalSections[$index]->NoOfQuestions;
-			$A1 = substr(($deanEvalSections[$index]->A1), 0, 4);
-			$A2 = substr(($deanEvalSections[$index]->A2), 0, 4);
-			$A3 = substr(($deanEvalSections[$index]->A3), 0, 4);
-			$A4 = substr(($deanEvalSections[$index]->A4), 0, 4);
-			$A5 = substr(($deanEvalSections[$index]->A5), 0, 4);
-			$A6 = substr(($deanEvalSections[$index]->A6), 0, 4);
-			$A7 = substr(($deanEvalSections[$index]->A7), 0, 4);
-			$A8 = substr(($deanEvalSections[$index]->A8), 0, 4);
-			$A9 = substr(($deanEvalSections[$index]->A9), 0, 4);
-			$A10 = substr(($deanEvalSections[$index]->A10), 0, 4);
-			$A11 = substr(($deanEvalSections[$index]->A11), 0, 4);
-			$A12 = substr(($deanEvalSections[$index]->A12), 0, 4);
-			$A13 = substr(($deanEvalSections[$index]->A13), 0, 4);
-			$A14 = substr(($deanEvalSections[$index]->A14), 0, 4);
-			$A15 = substr(($deanEvalSections[$index]->A15), 0, 4);
-			$A16 = substr(($deanEvalSections[$index]->A16), 0, 4);
-			$A17 = substr(($deanEvalSections[$index]->A17), 0, 4);
-			$A18 = substr(($deanEvalSections[$index]->A18), 0, 4);
-			$A19 = substr(($deanEvalSections[$index]->A19), 0, 4);
-			$A20 = substr(($deanEvalSections[$index]->A20), 0, 4);
-			$A21 = substr(($deanEvalSections[$index]->A21), 0, 4);
-			$A22 = substr(($deanEvalSections[$index]->A22), 0, 4);
-			$A23 = substr(($deanEvalSections[$index]->A23), 0, 4);
-			$A24 = substr(($deanEvalSections[$index]->A24), 0, 4);
-			$A25 = substr(($deanEvalSections[$index]->A25), 0, 4);
-			$A26 = substr(($deanEvalSections[$index]->A26), 0, 4);
-			$A27 = substr(($deanEvalSections[$index]->A27), 0, 4);
-			$A28 = substr(($deanEvalSections[$index]->A28), 0, 4);
-			$A29 = substr(($deanEvalSections[$index]->A29), 0, 4);
-			$A30 = substr(($deanEvalSections[$index]->A30), 0, 4);
-			$A31 = substr(($deanEvalSections[$index]->A31), 0, 4);
-			$A32 = substr(($deanEvalSections[$index]->A32), 0, 4);
-			$A33 = substr(($deanEvalSections[$index]->A33), 0, 4);
-			$A34 = substr(($deanEvalSections[$index]->A34), 0, 4);
-			$A35 = substr(($deanEvalSections[$index]->A35), 0, 4);
-			$A36 = substr(($deanEvalSections[$index]->A36), 0, 4);
-			$A37 = substr(($deanEvalSections[$index]->A37), 0, 4);
-			$A38 = substr(($deanEvalSections[$index]->A38), 0, 4);
-			$A39 = substr(($deanEvalSections[$index]->A39), 0, 4);
-			$A40 = substr(($deanEvalSections[$index]->A40), 0, 4);
-			$A41 = substr(($deanEvalSections[$index]->A41), 0, 4);
-			$A42 = substr(($deanEvalSections[$index]->A42), 0, 4);
-			$A43 = substr(($deanEvalSections[$index]->A43), 0, 4);
-			$A44 = substr(($deanEvalSections[$index]->A44), 0, 4);
-			$A45 = substr(($deanEvalSections[$index]->A45), 0, 4);
-			$A46 = substr(($deanEvalSections[$index]->A46), 0, 4);
-			$A47 = substr(($deanEvalSections[$index]->A47), 0, 4);
-			$A48 = substr(($deanEvalSections[$index]->A48), 0, 4);
-			$A49 = substr(($deanEvalSections[$index]->A49), 0, 4);
-			$A50 = substr(($deanEvalSections[$index]->A50), 0, 4);
-	
-	
-		//for($i = 0; $i < 4; $i++) {
-			$answer = array($A1, $A2, $A3, $A4 ,$A5 ,$A6, $A7,$A8, $A9, $A10, $A11, $A12,$A13,$A14,
-			$A15,$A16,$A17,$A18,$A19,$A20,$A21,$A22,$A23,$A24,$A25,$A26,$A27,$A28,$A29,$A30,$A31,$A32,$A33,
-			$A34,$A35,$A36,$A37,$A38,$A39,$A40,$A41,$A42,$A43,$A44,$A45,$A46,$A47,$A48,$A49,$A50);
-	
-			$output = array_slice($answer, $q,$deanEvalNoOfQuestions); 
-			$total= substr(array_sum($output)/($deanEvalNoOfQuestions), 0, 4);
-			$average=substr(number_format((float)$total, 2, '.', ''), 0, 4);
-			$percent =substr(($total*$deanEvalSectPct/ 100), 0, 4);
-			$totalAverage =substr(number_format((float)$percent , 2, '.', ''), 0, 4);
-			
-$tbl .= <<<EOD
-					<tr > 
-						<td width="3%">	</td>
-						<td width="2%">	</td>
-						<td width="30%">$letter. $deanEvalSectDesc</td>
-						<td width="35%"></td>
-						<td width="15%">$average  x  $deanEvalSectPct%  = </td>
-						<td width="15%">$totalAverage</td>
-					</tr>
-EOD;
-			if($i == 3) {
-	
-	
-$tbl .= <<<EOD
-					<tr style="line-height:5%;" > 
-						<td colspan="4"></td>
-						<td colspan="2">
-						<hr />
-						</td>
-					</tr>
-					<tr > 
-						<td colspan="5"></td>
-						<td>
-						<table border="1" >
-							<tr><td></td></tr>
-						</table>	
-						</td>
-					</tr>
-					
-EOD;
-	
-			} //if($i == 3)
-			$q+=$deanEvalNoOfQuestions;
-			$total1+=$totalAverage;
-		$letter++;		
-		} //for($i = 0; $i < 4; $i++)
-	} //for($o = 0; $o < 4; $o++)
-	$totalAve=substr(number_format((float)$total1 , 2, '.', ''), 0, 4);
-	
-	$percentSumary=substr(($totalAve*$deanEvalType/ 100), 0, 4); 
-	$deantotalSumary=substr(number_format((float)$percentSumary , 2, '.', ''), 0, 4);
-		
-$tbl .= <<<EOD
-			<tr style="line-height:5%;" > 
-			<td colspan="4"></td>
-			<td colspan="2">
-			<hr />
-			</td>
-			</tr>
-	
-			<tr > 
-	
-			<td colspan="5"></td>
-			<td>
-			<table border="1" >
-				<tr><td><b>$totalAve x $deanEvalType% = $deantotalSumary</b></td></tr>
-			</table>	
-			</td>
-			</tr>
-	
-			</table>
-EOD;
-
-	}
-
-	
-	$overallRating=($studtotalSumary+$selftotalSumary+$dhtotalSumary+$deantotalSumary);
-	
-	
-	if($overallRating >= 4.50)
-	{
-		$ratingdesc = "Excellent";
-	}
-	elseif($overallRating < 4.50 AND $overallRating >= 4.00)
-	{
-		$ratingdesc = "Very Satisfactory";
-	}
-	elseif($overallRating < 4.00 AND $overallRating >= 3.00)
-	{
-		$ratingdesc = "Satisfactory";
-	}
-	elseif($overallRating < 3.00 AND $overallRating >= 2.00)
-	{
-		$ratingdesc = "Needs Improvement";
-	}
-	elseif($overallRating < 2.00 AND $overallRating >= 1.00)
-	{
-		$ratingdesc = "Poor";
-	}
-	
-	
-	$tbl .= <<<EOD
-				<table border="0" cellpadding="1" cellspacing="1" nobr="true" width="100%">
-					<tr>
-						<td width="60%"> 
-							<table border="1" cellpadding="1" cellspacing="1" nobr="true" width="100%">
-									<table border="0" cellpadding="0" cellspacing="0" nobr="true" width="100%">
-										<tr>
-											<td colspan="5">
-												<font size="6px"> Legend</font>
-											</td>
-										</tr>
-										
-										<tr>
-											<td >
-											</td>
-											<td colspan="2">
-												<font size="6px"><b>Descriptive Rating</b></font>
-											</td>
-											<td colspan="2">
-												<font size="6px"><b>Weight Equivalent</b></font>
-											</td>
-										</tr>
-	
-										<tr>
-											<td >
-											</td>
-											<td colspan="2">
-												<font size="6px">Excellent</font>
-											</td>
-											<td colspan="2">
-												<font size="6px">4.50 - 5.00</font>
-											</td>
-										</tr>
-	
-										<tr>
-											<td >
-											</td>
-											<td colspan="2">
-												<font size="6px">Very Satisfactory</font>
-											</td>
-											<td colspan="2">
-												<font size="6px">4.00 - 4.49</font>
-											</td>
-										</tr>
-	
-										<tr>
-											<td >
-											</td>
-											<td colspan="2">
-												<font size="6px">Satisfactory </font>
-											</td>
-											<td colspan="2">
-												<font size="6px">3.00 - 3.99</font>
-											</td>
-										</tr>
-	
-										<tr>
-											<td >
-											</td>
-											<td colspan="2">
-												<font size="6px">Needs Improvement</font>
-											</td>
-											<td colspan="2">
-												<font size="6px">2.00 - 2.99</font>
-											</td>
-										</tr>
-	
-										<tr>
-											<td >
-											</td>
-											<td colspan="2">
-												<font size="6px">Poor</font>
-											</td>
-											<td colspan="2">
-												<font size="6px">1.00 - 1.99</font>
-											</td>
-										</tr>
-									</table>
-							</table>
-						</td>
-	
-	
-						<td width="23%"> </td>
-						
-						<td width="17%"> 
-							<table border="1" >
-								<tr><td><b>Overall Rating = $overallRating </b></td></tr>
-							</table>	
-							
-							<table>
-								<tr><td><br><br><br><br></td></tr>
-								<tr>
-									<td align="center">
-										<u><b>Dr. Wilfred U. Tiu</b></u><br><i>President</i>
-									</td>
-								</tr>
-							</table>
-							
-						</td>
-					</tr>
-				</table>
-EOD;
-	
-	
-
-	
-	$tbl .= <<<EOD
-				<table width="100%">
-				
-					<tr><td colspan="3"><br><hr /><b align="center">Acknowledgement</b></td></tr>		
-					<tr>
-						<td colspan="3"> 
-							<font size="7px">This is to acknowledge that I have received a copy of my performance evaluation, and that it was discussed with me by my Dean / Department Head.</font>
-						</td>
-					</tr>
-	
-					<tr>
-						<td>
-							<br><br><hr /><i align="center">Signature over printed name</i>
-						</td>
-						<td></td>
-						<td>
-							<br><br><hr /><i align="center">Date</i>
-						</td>
-					</tr>
-					
-					<tr>
-					<td colspan="3">
-					<br><font size="7px"><i>
-					cc: Dean<br>HRD
-					</i></font>
+				<tr><td colspan="3"><br><hr /><b align="center">Acknowledgement</b></td></tr>		
+				<tr>
+					<td colspan="3"> 
+						<font size="7px">This is to acknowledge that I have received a copy of my performance evaluation, and that it was discussed with me by my Dean / Department Head.</font>
 					</td>
-					</tr>
-				</table>
+				</tr>
+
+				<tr>
+					<td>
+						<br><br><hr /><i align="center">Signature over printed name</i>
+					</td>
+					<td></td>
+					<td>
+						<br><br><hr /><i align="center">Date</i>
+					</td>
+				</tr>
 				
+				<tr>
+				<td colspan="3">
+				<br><font size="7px"><i>
+				cc: Dean<br>HRD
+				</i></font>
+				</td>
+				</tr>
+			</table>
+			
 EOD;
-	
 
-
-
-/////----------------
 ///----------------------------------------STUDENT EVALUATION-----------------------------------------------------------------------
 $tbl .= <<<EOD
 <br pagebreak="true"/>
@@ -1570,8 +1022,6 @@ EOD;
 
 $studEvalLetterSect = 'A';
 
-			
-
 foreach($studentEvalSections as $index=>$key ) {
 	$studEvalSectDesc = $studentEvalSections[$index]->SectDesc;
 	$studEvalSectID = $studentEvalSections[$index]->SectID;
@@ -1630,22 +1080,12 @@ foreach($studentEvalSections as $index=>$key ) {
 	$A50 = substr(($studentEvalSections[$index]->A50), 0, 4);		
 		
 	
-		
-	
-
 $tbl .= <<<EOD
-			
-
-
-			<tr > 
-								<td width="3%" colspan="2"><font size="10px"><b>$studEvalLetterSect . </b></font>	</td>
-								<td width="97%" colspan="4"><font size="10px"><b>$studEvalSectDesc </b></font></td>
-							</tr>
+				<tr > 
+					<td width="3%" colspan="2"><font size="10px"><b>$studEvalLetterSect . </b></font>	</td>
+					<td width="97%" colspan="4"><font size="10px"><b>$studEvalSectDesc </b></font></td>
+				</tr>
 EOD;
-			
-			
-
-
 $noquestion=0;
 $total=0;
 	foreach($studentEvalItems as $index=>$key ) {
@@ -2124,6 +1564,7 @@ $tbl .= <<<EOD
 				
 			</table>
 EOD;
+
 
 
 
@@ -2869,7 +2310,6 @@ EOD;
 	$commentNumbers++;	
 	}
 } //for($o = 0; $o < 4; $o++)
-
 $tbl .= <<<EOD
 				
 			</table>
@@ -2885,11 +2325,11 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
     
 
 $filename= "evaluation-summary.pdf"; 
-$filelocation = "C:\\xampp\\htdocs\\trinity\\assets\\pdf";//windows
-              //$filelocation = "/var/www/project/custom"; //Linux
+//$filelocation = "C:\\xampp\\htdocs\\trinity\\assets\\pdf";//windows
+               $filelocation = "/var/www/html/trinity/assets/pdf"; //Linux
 
-$fileNL = $filelocation."\\".$filename;//Windows
-           // $fileNL = $filelocation."/".$filename; //Linux
+//$fileNL = $filelocation."\\".$filename;//Windows
+            $fileNL = $filelocation."/".$filename; //Linux
 
 $pdf->Output($fileNL,'F');	
 	
